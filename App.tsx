@@ -9,7 +9,9 @@ const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{headerShown: false}}>
         <Stack.Screen
           name="Main"
           component={MainScreen}

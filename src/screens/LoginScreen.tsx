@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Text} from 'react-native';
+import {Button} from 'react-native';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
@@ -22,17 +22,4 @@ const Wrapper = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
-`;
-
-const UserInfoBar = styled.View`
-  width: 100%;
-  height: 50px;
-  justify-content: center;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #00adb5;
-  padding: 10px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 `;
