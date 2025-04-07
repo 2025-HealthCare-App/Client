@@ -1,14 +1,13 @@
 import React from 'react';
-import {Button} from 'react-native';
-import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
+import {TouchableOpacity} from 'react-native'; // ✅ 이거 꼭 필요!
+import styled from 'styled-components/native';
 
 const MainScreen = ({navigation}: {navigation: any}) => {
   return (
     <Wrapper>
-      <Button
-        title="Go to LoginScreen"
-        onPress={() => navigation.navigate('Login')}
-      />
+      <MainButton onPress={() => navigation.navigate('Login')}>
+        <ButtonText>Go to Login</ButtonText>
+      </MainButton>
     </Wrapper>
   );
 };
@@ -16,10 +15,23 @@ const MainScreen = ({navigation}: {navigation: any}) => {
 export default MainScreen;
 
 const Wrapper = styled.View`
-  height: 100vh;
-  width: 100%;
   flex: 1;
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
+`;
+
+const MainButton = styled(TouchableOpacity)`
+  background-color: #000000;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  width: 120px;
+`;
+
+const ButtonText = styled.Text`
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
 `;
