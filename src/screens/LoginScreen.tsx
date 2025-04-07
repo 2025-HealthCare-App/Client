@@ -1,17 +1,19 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Button, Text} from 'react-native';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
 
-const MainPage = () => {
+const LoginScreen = ({navigation}: {navigation: any}) => {
   return (
     <Wrapper>
-      <Text>안녕하세요</Text>
-      <UserInfoBar />
+      <Button
+        title="Go to MainScreen"
+        onPress={() => navigation.navigate('Main')}
+      />
     </Wrapper>
   );
 };
 
-export default MainPage;
+export default LoginScreen;
 
 const Wrapper = styled.View`
   height: 100vh;
