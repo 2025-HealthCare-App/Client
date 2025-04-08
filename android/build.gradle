@@ -6,10 +6,18 @@ buildscript {
         targetSdkVersion = 34
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.22"
+        FLIPPER_VERSION = "0.125.0"
     }
     repositories {
         google()
         mavenCentral()
+
+        maven {
+            url 'https://maven.google.com'
+        }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
