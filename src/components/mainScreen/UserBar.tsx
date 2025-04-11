@@ -22,7 +22,7 @@ const UserBar = () => {
       <QuestContainer>
         <Image
           source={require('../../images/quest.png')}
-          style={{width: 30, height: 30, zIndex: 999}}
+          style={{width: 25, height: 25, zIndex: 999}}
         />
       </QuestContainer>
     </Wrapper>
@@ -37,10 +37,11 @@ const Wrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
 `;
 
 const UserInfoContainer = styled.View`
-  width: 180px;
+  width: 200px;
   height: 100%;
   flex-direction: row;
   align-items: center;
@@ -65,8 +66,8 @@ const PointTextContainer = styled.View`
   align-items: center;
 `;
 const PointText = styled.Text`
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 13px;
+  /* font-weight: ; */
   color: white;
   font-family: 'Pretendard';
 `;
