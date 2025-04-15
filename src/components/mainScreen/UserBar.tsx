@@ -37,7 +37,7 @@ const Wrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 15px;
 `;
 
 const UserInfoContainer = styled.View`

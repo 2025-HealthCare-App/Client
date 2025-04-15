@@ -1,7 +1,8 @@
 import React from 'react';
+import TextTicker from 'react-native-text-ticker';
 import styled from 'styled-components/native';
 
-const TextTicker = () => {
+const StyledTextTicker = () => {
   return (
     <Wrapper>
       <TextTicker
@@ -23,9 +24,10 @@ const TextTicker = () => {
   );
 };
 
-export default TextTicker;
+export default StyledTextTicker;
 
 const Wrapper = styled.View`
+  width: 100%;
   justify-content: center;
   align-items: center;
 `;

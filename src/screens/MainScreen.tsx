@@ -1,14 +1,17 @@
 import React from 'react';
-import {Image} from 'react-native'; // ✅ 이거 꼭 필요!
 import styled from 'styled-components/native';
 import UserBar from '../components/mainScreen/UserBar';
-import TextTicker from '../components/mainScreen/TextTicker';
+import StyledTextTicker from '../components/mainScreen/StyledTextTicker';
+import MainContents from '../components/mainScreen/MainContents';
+import BottomBar from '../components/common/BottomBar';
 
 const MainScreen = ({navigation}: {navigation: any}) => {
   return (
     <Wrapper>
       <UserBar />
-      <TextTicker />
+      <StyledTextTicker />
+      <MainContents />
+      <BottomBar />
     </Wrapper>
   );
 };
@@ -20,6 +23,6 @@ const Wrapper = styled.View`
   justify-content: flex-start;
   align-items: center;
   background-color: #222831;
-  padding: 20px 0;
-  gap: 10px;
+  padding: 30px 0;
+  gap: 15px;
 `;
