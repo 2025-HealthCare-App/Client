@@ -43,10 +43,10 @@ export default BottomBar;
 
 const Wrapper = styled.View`
   width: 100%;
-  /* height: 7%; */
-  padding: 5px 10px;
+  height: 63px;
+  padding-bottom: 10px;
+  padding-top: 15px;
   background-color: #222831;
-  border-top: 1px solid #ffffff;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
@@ -65,6 +65,7 @@ const SectionIcon = styled(Image)`
   width: 20px;
   height: 20px;
   object-fit: contain;
+  object-position: center;
 `;
 const SectionText = styled.Text`
   color: #ffffff;
