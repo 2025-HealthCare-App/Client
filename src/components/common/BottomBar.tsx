@@ -1,29 +1,35 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Image, Text} from 'react-native';
+import {Image} from 'react-native';
 import styled from 'styled-components/native';
 
 const BottomBar = () => {
+  const navigation = useNavigation();
+  const handleNavigation = (screen: string) => {
+    navigation.navigate(screen);
+  };
+
   return (
     <Wrapper>
-      <Section>
+      <Section onPress={() => handleNavigation('Main')}>
         <SectionIcon
           source={require('../../images/navigation-icons/HomeIcon.png')}
         />
         <SectionText>홈</SectionText>
       </Section>
-      <Section>
+      <Section onPress={() => handleNavigation('Statistics')}>
         <SectionIcon
           source={require('../../images/navigation-icons/StatisticsIcon.png')}
         />
         <SectionText>통계</SectionText>
       </Section>
-      <Section>
+      <Section onPress={() => handleNavigation('Character')}>
         <SectionIcon
           source={require('../../images/navigation-icons/CharacterIcon.png')}
         />
         <SectionText>캐릭터</SectionText>
       </Section>
-      <Section>
+      <Section onPress={() => handleNavigation('Community')}>
         <SectionIcon
           source={require('../../images/navigation-icons/CommunityIcon.png')}
         />
@@ -49,7 +55,7 @@ const Wrapper = styled.View`
   bottom: 0;
 `;
 
-const Section = styled.View`
+const Section = styled.TouchableOpacity`
   flex-direction: column;
   justify-content: center;
   align-items: center;

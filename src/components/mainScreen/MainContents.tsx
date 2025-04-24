@@ -7,7 +7,7 @@ const MainContents = () => {
     <Wrapper>
       <GoalContainer>
         <GoalTitle>
-          <TitleText>이번주 목표</TitleText>
+          <TitleText>3월 2주차 목표</TitleText>
           {/* <QuestionMark source={require('../../images/question-mark.png')} /> */}
           <QuestionMarkWrapper>
             <QuestionMark>?</QuestionMark>
@@ -18,6 +18,11 @@ const MainContents = () => {
             <RealGoalBar />
           </GoalBar>
         </GoalBarContainer>
+        {/* <GoalSetButton>
+          <GoalSetButtonInner>
+            <GoalSetText>이번주 목표를 설정하세요! &gt;</GoalSetText>
+          </GoalSetButtonInner>
+        </GoalSetButton> */}
       </GoalContainer>
       <CharacterContainer>
         <Image
@@ -46,6 +51,7 @@ const Wrapper = styled.View`
   background-color: #393e46;
   border-radius: 15px;
   padding: 50px 0;
+  font-family: 'Pretendard';
 `;
 
 const GoalContainer = styled.View`
@@ -65,6 +71,7 @@ const TitleText = styled.Text`
   font-size: 14px;
   color: #ffffff;
   text-align: center;
+  font-weight: bold;
 `;
 // const QuestionMark = styled(Image)`
 //   width: 14px;
@@ -104,6 +111,30 @@ const RealGoalBar = styled.View`
   height: 100%;
   background-color: #ff9292;
   border-radius: 20px;
+`;
+const GoalSetButton = styled.TouchableOpacity`
+  width: 50%;
+  height: 40px;
+  background-color: #cdd800;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 0;
+`;
+const GoalSetButtonInner = styled.View`
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid #ffffff;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+`;
+const GoalSetText = styled.Text`
+  font-size: 11px;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #ffffff;
+  text-align: center;
 `;
 
 const CharacterContainer = styled.View`
