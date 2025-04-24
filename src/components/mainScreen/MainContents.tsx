@@ -26,7 +26,7 @@ const MainContents = () => {
       </GoalContainer>
       <CharacterContainer>
         <Image
-          source={require('../../images/character1.png')}
+          source={require('../../images/characters/character1.png')}
           style={{width: 300, height: 300}}
           // resizeMode="contain"
         />
@@ -49,7 +49,7 @@ const Wrapper = styled.View`
   justify-content: space-between;
   align-items: center;
   background-color: #393e46;
-  border-radius: 15px;
+  border-radius: 18px;
   padding: 50px 0;
   font-family: 'Pretendard';
 `;
