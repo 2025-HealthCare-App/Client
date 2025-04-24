@@ -6,20 +6,28 @@ const BottomBar = () => {
   return (
     <Wrapper>
       <Section>
-        <SectionIcon source={require('../../images/HomeIcon.png')} />
+        <SectionIcon
+          source={require('../../images/navigation-icons/HomeIcon.png')}
+        />
         <SectionText>홈</SectionText>
       </Section>
       <Section>
-        <SectionIcon source={require('../../images/HomeIcon.png')} />
-        <SectionText>홈</SectionText>
+        <SectionIcon
+          source={require('../../images/navigation-icons/StatisticsIcon.png')}
+        />
+        <SectionText>통계</SectionText>
       </Section>
       <Section>
-        <SectionIcon source={require('../../images/HomeIcon.png')} />
-        <SectionText>홈</SectionText>
+        <SectionIcon
+          source={require('../../images/navigation-icons/CharacterIcon.png')}
+        />
+        <SectionText>캐릭터</SectionText>
       </Section>
       <Section>
-        <SectionIcon source={require('../../images/HomeIcon.png')} />
-        <SectionText>홈</SectionText>
+        <SectionIcon
+          source={require('../../images/navigation-icons/CommunityIcon.png')}
+        />
+        <SectionText>커뮤니티</SectionText>
       </Section>
     </Wrapper>
   );
