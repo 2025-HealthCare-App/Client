@@ -67,7 +67,7 @@ const PointTextContainer = styled.View`
 `;
 const PointText = styled.Text`
   font-size: 13px;
-  /* font-weight: ; */
+  font-weight: bold;
   color: white;
   font-family: 'Pretendard';
 `;
@@ -86,7 +86,7 @@ const UserName = styled.Text`
   color: #ffffff;
   font-weight: bold;
   font-family: 'Pretendard';
-  /* 여기서 글자수 제한 !! */
+  /* TODO: 여기서 글자수 제한 !! */
 `;
 
 const QuestContainer = styled.View`
