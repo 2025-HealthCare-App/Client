@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
-import SpeechBubble from '../components/StatisticsScreen/SpeechBubble';
-import {Image} from 'react-native';
+import CharacterComment from '../components/StatisticsScreen/CharacterComment';
+import Activity from '../components/StatisticsScreen/Activity';
 
 const StatisticsScreen = ({navigation}: {navigation: any}) => {
   return (
@@ -11,15 +11,25 @@ const StatisticsScreen = ({navigation}: {navigation: any}) => {
         <Title>나의 운동</Title>
       </Header>
       <Main>
-        <CharacterCommentContainer>
-          <CharacterAndKm>
-            <CharacterImg
-              source={require('../images/characters/character1.png')}
-            />
-            <KmText>5km</KmText>
-          </CharacterAndKm>
-          <SpeechBubble />
-        </CharacterCommentContainer>
+        <CharacterComment />
+        <Section id="graph">
+          <SemiTitle>주간 그래프</SemiTitle>
+          <GraphContainer>
+            <Line />
+            <Line />
+            <Line />
+            <Line />
+          </GraphContainer>
+        </Section>
+        <Section id="activities">
+          <SemiTitle>최근 활동</SemiTitle>
+          <ActivitiesContainer>
+            <Activity />
+            <Activity />
+            <Activity />
+            <Activity />
+          </ActivitiesContainer>
+        </Section>
       </Main>
       <BottomBar />
     </Wrapper>
@@ -53,35 +63,34 @@ const Title = styled.Text`
 
 const Main = styled.ScrollView`
   width: 100%;
-  padding: 0px 20px;
+  padding: 30px 20px;
   background-color: #393e46;
-  height: 90%;
   border-radius: 18px;
-  padding-top: 30px;
 `;
 
-const CharacterCommentContainer = styled.View`
+const Section = styled.View`
   width: 100%;
-  height: 70px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  margin-bottom: 40px;
+  gap: 15px;
 `;
-
-const CharacterAndKm = styled.View`
-  width: 50px;
-  height: 100%;
-  justify-content: space-between;
-  align-items: center;
-`;
-const CharacterImg = styled(Image)`
-  width: 55px;
-  height: 55px;
-`;
-const KmText = styled.Text`
-  font-size: 12px;
+const SemiTitle = styled.Text`
+  font-size: 15px;
   color: #ffffff;
   font-weight: bold;
-  text-align: center;
+`;
+
+const GraphContainer = styled.View`
+  width: 100%;
+  height: 200px;
+  justify-content: space-between;
+`;
+const Line = styled.View`
+  width: 100%;
+  height: 0.7px;
+  background-color: #687b97;
+`;
+
+const ActivitiesContainer = styled.View`
+  width: 100%;
+  gap: 15px;
 `;

@@ -16,17 +16,17 @@ const BalloonWrapper = styled.View`
 
 const BalloonTail = styled.View`
   position: absolute;
-  left: -10px;
-  top: 20px;
+  left: -20px;
+  top: 30px;
   width: 0;
   height: 0;
   border-top-width: 5px;
   border-bottom-width: 5px;
-  border-right-width: 10px;
+  border-right-width: 20px; /* 말풍선 꼬리의 너비 */
   border-style: solid;
   border-top-color: transparent;
   border-bottom-color: transparent;
-  border-right-color: #3cb3b3;
+  border-right-color: #02adb5;
 `;
 
 const BalloonText = styled.Text`
