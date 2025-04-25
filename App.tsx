@@ -14,7 +14,7 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Statistics"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{headerShown: false, animation: 'none'}}>
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
