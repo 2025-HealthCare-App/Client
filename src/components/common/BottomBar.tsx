@@ -44,11 +44,12 @@ export default BottomBar;
 const Wrapper = styled.View`
   width: 100%;
   height: 63px;
+  padding: 0px 15px;
   padding-bottom: 10px;
   padding-top: 15px;
   background-color: #222831;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   /* 맨 밑으로 고정 */
   position: absolute;
