@@ -31,7 +31,7 @@ const Activity = () => {
 
 export default Activity;
 
-const Wrapper = styled.View`
+const Wrapper = styled.TouchableOpacity`
   width: 100%;
   height: 140px;
   background-color: #ffffff;

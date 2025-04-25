@@ -43,8 +43,8 @@ const MainContents = () => {
 export default MainContents;
 
 const Wrapper = styled.View`
-  width: 92%;
-  height: 80%;
+  width: 100%;
+  height: 85%;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;

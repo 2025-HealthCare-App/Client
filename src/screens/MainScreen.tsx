@@ -19,10 +19,12 @@ const MainScreen = ({navigation}: {navigation: any}) => {
 export default MainScreen;
 
 const Wrapper = styled.View`
-  flex: 1;
-  justify-content: flex-start;
+  height: 100%;
+  justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding: 30px 0;
+  padding: 0px 20px;
+  padding-bottom: 70px; /* bottomBar 높이만큼 여백 추가 */
+  padding-top: 20px;
   gap: 15px;
 `;

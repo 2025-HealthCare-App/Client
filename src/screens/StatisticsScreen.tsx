@@ -29,6 +29,9 @@ const StatisticsScreen = ({navigation}: {navigation: any}) => {
             <Activity />
             <Activity />
           </ActivitiesContainer>
+          <PlusButton onPress={() => navigation.navigate('Activity')}>
+            <PlusButtonText>더보기</PlusButtonText>
+          </PlusButton>
         </Section>
       </Main>
       <BottomBar />
@@ -45,7 +48,6 @@ const Wrapper = styled.View`
   background-color: #222831;
   padding: 0px 20px;
   padding-bottom: 70px; /* bottomBar 높이만큼 여백 추가 */
-  /* gap: 5px; */
 `;
 
 const Header = styled.View`
@@ -63,6 +65,7 @@ const Title = styled.Text`
 
 const Main = styled.ScrollView`
   width: 100%;
+  height: 90%;
   padding: 30px 20px;
   background-color: #393e46;
   border-radius: 18px;
@@ -93,4 +96,17 @@ const Line = styled.View`
 const ActivitiesContainer = styled.View`
   width: 100%;
   gap: 15px;
+`;
+const PlusButton = styled.TouchableOpacity`
+  width: 100%;
+  height: 40px;
+  background-color: #858585;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+`;
+const PlusButtonText = styled.Text`
+  font-size: 13px;
+  color: #ffffff;
+  text-align: center;
 `;
