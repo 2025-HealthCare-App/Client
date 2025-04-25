@@ -1,8 +1,10 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 
 const MainContents = () => {
+  const navigation = useNavigation();
   return (
     <Wrapper>
       <GoalContainer>
@@ -33,7 +35,9 @@ const MainContents = () => {
       </CharacterContainer>
       <StartButton>
         <TextContainer>
-          <StartButtonText>START</StartButtonText>
+          <StartButtonText onPress={() => navigation.navigate('Running')}>
+            START
+          </StartButtonText>
         </TextContainer>
       </StartButton>
     </Wrapper>
