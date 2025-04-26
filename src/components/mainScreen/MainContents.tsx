@@ -1,38 +1,49 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import GoalModal from './GoalModal';
 
 const MainContents = () => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false); // ✨ 모달 상태 추가
+
   return (
     <Wrapper>
+      {/* 모달 */}
+      <GoalModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+
       <GoalContainer>
         <GoalTitle>
           <TitleText>3월 2주차 목표</TitleText>
-          {/* <QuestionMark source={require('../../images/question-mark.png')} /> */}
           <QuestionMarkWrapper>
             <QuestionMark>?</QuestionMark>
           </QuestionMarkWrapper>
         </GoalTitle>
-        <GoalBarContainer>
+
+        {/* <GoalBarContainer>
           <GoalBar>
             <RealGoalBar />
           </GoalBar>
-        </GoalBarContainer>
-        {/* <GoalSetButton>
+        </GoalBarContainer> */}
+
+        <GoalSetButton onPress={() => setModalVisible(true)}>
           <GoalSetButtonInner>
             <GoalSetText>이번주 목표를 설정하세요! &gt;</GoalSetText>
           </GoalSetButtonInner>
-        </GoalSetButton> */}
+        </GoalSetButton>
       </GoalContainer>
+
       <CharacterContainer>
         <Image
           source={require('../../images/characters/character1.png')}
           style={{width: 300, height: 300}}
-          // resizeMode="contain"
         />
       </CharacterContainer>
+
       <StartButton>
         <TextContainer>
           <StartButtonText onPress={() => navigation.navigate('Running')}>
