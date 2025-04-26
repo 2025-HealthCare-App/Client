@@ -196,4 +196,5 @@ const RealGoalText = styled.Text`
   font-size: 20px;
   color: #222831;
   font-weight: bold;
+  text-decoration: underline;
 `;
