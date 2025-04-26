@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 
 const RunningScreen = () => {
+  const [isRunning, setIsRunning] = useState(true);
+
+  const handleRunningButtonPress = () => {
+    setIsRunning(!isRunning);
+  };
+
   return (
-    <Wrapper>
-      <RecordsContainer>
+    <Wrapper isRunning={isRunning}>
+      <RecordsContainer isRunning={isRunning}>
         <Category>
           <Value>3.93</Value>
           <CategoryText>Km</CategoryText>
@@ -26,13 +32,23 @@ const RunningScreen = () => {
           <TimeText>Time</TimeText>
         </TimeContainer>
         <CharacterContainer>
-          <Point>+ 142 P</Point>
+          <Point isRunning={isRunning}>+ 142 P</Point>
           <CharacterImage
             source={require('../images/characters/character1.png')}
           />
         </CharacterContainer>
         <ButtonContainer>
-          <RunningButton />
+          {isRunning ? (
+            <RunningButton option="pause" onPress={handleRunningButtonPress} />
+          ) : (
+            <>
+              <RunningButton option="stop" onPress={handleRunningButtonPress} />
+              <RunningButton
+                option="start"
+                onPress={handleRunningButtonPress}
+              />
+            </>
+          )}
         </ButtonContainer>
       </Main>
     </Wrapper>
@@ -41,23 +57,25 @@ const RunningScreen = () => {
 
 export default RunningScreen;
 
-const Wrapper = styled.View`
+const Wrapper = styled.View<{isRunning: boolean}>`
   height: 100%;
   width: 100%;
   padding: 50px 25px;
-  background-color: #cdd800;
+  background-color: ${({isRunning}) => (isRunning ? '#CDD800' : '#ffffff')};
   gap: 20px;
 `;
 
-const RecordsContainer = styled.View`
+const RecordsContainer = styled.View<{isRunning: boolean}>`
   width: 100%;
   height: 12%;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #b6bf00;
+  background-color: ${({isRunning}) => (isRunning ? '#b6bf00' : '#F4F4F4')};
   justify-content: center;
   align-items: center;
   border-radius: 15px;
+
+  elevation: 7;
 `;
 const Category = styled.View`
   width: 33%;
@@ -80,6 +98,7 @@ const CategoryText = styled.Text`
 const Main = styled.View`
   height: 85%;
   justify-content: space-between;
+  align-items: center;
   /* border: 1px solid #ffffff; */
   gap: 10px;
 `;
@@ -104,20 +123,22 @@ const CharacterContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-const Point = styled.Text`
-  color: #fff;
+const Point = styled.Text<{isRunning: boolean}>`
+  color: ${({isRunning}) => (isRunning ? '#ffffff' : '#8D8D8D')};
   font-size: 17px;
   font-style: normal;
   font-weight: 700;
 `;
 const CharacterImage = styled(Image)`
-  width: 300px;
-  height: 300px;
+  width: 270px;
+  height: 270px;
   object-fit: contain;
 `;
 
 const ButtonContainer = styled.View`
   height: 20%;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 70px;
 `;
