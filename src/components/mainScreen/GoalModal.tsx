@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
+import {PanResponder, Animated, Dimensions} from 'react-native';
 
 interface GoalModalProps {
   modalVisible: boolean;
@@ -8,6 +9,30 @@ interface GoalModalProps {
 }
 
 const GoalModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
+  const [realGoalBarWidth, setRealGoalBarWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(270); // GoalBar 전체 폭
+  const [goalKm, setGoalKm] = useState(0); // 현재 목표 거리 표시용
+  const screenWidth = Dimensions.get('window').width;
+
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (_, gestureState) => {
+        const newWidth = Math.min(
+          Math.max(gestureState.moveX - (screenWidth - containerWidth) / 2, 0),
+          containerWidth,
+        );
+        setRealGoalBarWidth(newWidth);
+
+        // 비율 계산 (0~100km)
+        const ratio = newWidth / containerWidth;
+        const km = Math.round(ratio * 100); // 최대 100km 기준
+        setGoalKm(km);
+      },
+    }),
+  ).current;
+
   return (
     <Modal
       transparent={true}
@@ -25,15 +50,27 @@ const GoalModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
               한 번 정한 목표는 다음주까지 수정할 수 없어요!
             </ModalText>
           </ModalTop>
-          <GoalBarContainer>
+          <GoalBarContainer
+            onLayout={event => {
+              const {width} = event.nativeEvent.layout;
+              setContainerWidth(width);
+            }}>
             <GoalBar>
-              <RealGoalBar />
+              <RealGoalBar style={{width: realGoalBarWidth}}>
+                <Thumb
+                  {...panResponder.panHandlers}
+                  style={{left: realGoalBarWidth - 10}}
+                />
+              </RealGoalBar>
             </GoalBar>
+
             <GoalTextContainer>
               <GoalText>0km</GoalText>
               <GoalText>100km</GoalText>
             </GoalTextContainer>
           </GoalBarContainer>
+
+          <RealGoalText>{goalKm}Km</RealGoalText>
           <CloseButton onPress={() => setModalVisible(false)}>
             <CloseButtonText>확인</CloseButtonText>
           </CloseButton>
@@ -91,7 +128,15 @@ const ModalText = styled.Text`
   color: #c1c1c1;
 `;
 
-const CloseButton = styled(Pressable)`
+// const CloseButton = styled(Pressable)`
+//   width: 82px;
+//   height: 40px;
+//   background-color: #cdd800;
+//   border-radius: 5px;
+//   justify-content: center;
+//   align-items: center;
+// `;
+const CloseButton = styled.TouchableOpacity`
   width: 82px;
   height: 40px;
   background-color: #cdd800;
@@ -136,4 +181,19 @@ const GoalText = styled.Text`
   font-size: 10px;
   color: #646464;
   text-align: center;
+`;
+
+const Thumb = styled(Animated.View)`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #d06363;
+  top: -3.5px; /* RealGoalBar보다 살짝 위로 */
+`;
+
+const RealGoalText = styled.Text`
+  font-size: 20px;
+  color: #222831;
+  font-weight: bold;
 `;
