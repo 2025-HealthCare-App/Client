@@ -155,7 +155,7 @@ const TestScreen = () => {
           <>
             <Polyline
               coordinates={route}
-              strokeWidth={4}
+              strokeWidth={8}
               strokeColor="#007AFF"
             />
             <Marker coordinate={route[route.length - 1]} />

@@ -40,10 +40,13 @@ const Wrapper = styled.TouchableOpacity<{option: 'pause' | 'start' | 'stop'}>`
   border-radius: 100px;
   justify-content: center;
   align-items: center;
-  border: 5px solid #ffffff;
+  border: 5px solid #222831;
+  background-color: #222831;
+  elevation: 7;
 `;
 
 const PauseShape = styled.View`
+  z-index: 2;
   width: 17%;
   height: 23%;
   flex-direction: row;
