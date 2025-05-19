@@ -1,15 +1,8 @@
-import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -25,15 +18,20 @@ const RunningScreen = () => {
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
   const [distance, setDistance] = useState(0); // meters
-  const [prevLocation, setPrevLocation] = useState(null);
-  const [route, setRoute] = useState([]);
-  const watchId = useRef(null);
-  const mapRef = useRef(null);
+  const [prevLocation, setPrevLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [route, setRoute] = useState<
+    Array<{latitude: number; longitude: number}>
+  >([]);
+  const watchId = useRef<number | null>(null);
+  const mapRef = useRef<MapView | null>(null);
 
   // 거리 계산 함수 (Haversine)
-  const getDistance = (lat1, lon1, lat2, lon2) => {
+  const getDistance = (lat1: any, lon1: any, lat2: any, lon2: any) => {
     const R = 6371e3;
-    const toRad = deg => (deg * Math.PI) / 180;
+    const toRad = (deg: number) => (deg * Math.PI) / 180;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a =
@@ -144,7 +142,7 @@ const RunningScreen = () => {
         Geolocation.clearWatch(watchId.current);
       }
     };
-  }, []);
+  });
   //////////////////////////////////////////////////////
 
   const handleRunningButtonPress = () => {
@@ -171,12 +169,7 @@ const RunningScreen = () => {
         <TimeContainer>
           <Time>39:03</Time>
         </TimeContainer>
-        {/* <CharacterContainer>
-          <Point isRunning={isRunning}>+ 142 P</Point>
-          <CharacterImage
-            source={require('../images/characters/character1.png')}
-          />
-        </CharacterContainer> */}
+
         <MapView
           ref={mapRef}
           style={{width: '100%', height: '100%'}}
