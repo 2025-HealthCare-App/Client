@@ -17,10 +17,11 @@ import {map, filter} from 'rxjs/operators';
 
 const TestScreen = () => {
   const [steps, setSteps] = useState(0);
-  const [distance, setDistance] = useState(0); // meter
+  const [distance, setDistance] = useState(0); // meters
   const [prevLocation, setPrevLocation] = useState(null);
-  const watchId = useRef(null);
   const [route, setRoute] = useState([]);
+  const watchId = useRef(null);
+  const mapRef = useRef(null);
 
   // 거리 계산 함수 (Haversine)
   const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -59,9 +60,8 @@ const TestScreen = () => {
 
     requestPermissions();
 
-    // 📦 센서 설정
+    // 걸음 센서
     setUpdateIntervalForType(SensorTypes.accelerometer, 400);
-
     let localSteps = 0;
     const sensorSub = accelerometer
       .pipe(
@@ -74,13 +74,11 @@ const TestScreen = () => {
         console.log('Step!', localSteps);
       });
 
-    // 📡 위치 추적
+    // 위치 추적
     watchId.current = Geolocation.watchPosition(
       position => {
-        //백그라운드에서 계속 GPS수싱늘 대기하고 있다가, 위치 정보가 바뀌면 자동으로 콜백 함수를 실행
         const {latitude, longitude, accuracy} = position.coords;
 
-        // ✅ 여기에 로그 추가!
         console.log('GPS', latitude, longitude);
         console.log('Accuracy', accuracy);
 
@@ -91,18 +89,29 @@ const TestScreen = () => {
             latitude,
             longitude,
           );
-
-          const THRESHOLD = 2.5; // ❤️2.5m 이하 변화는 무시
+          const THRESHOLD = 2.5;
           if (d < THRESHOLD) {
             console.log(`Ignored small movement: ${d.toFixed(2)} m`);
-            return; // 이동 거리가 너무 작으면 무시
+            return;
           }
 
           setDistance(prev => prev + d);
           console.log(`Moved ${d.toFixed(2)} m`);
         }
+
         setPrevLocation({latitude, longitude});
         setRoute(prev => [...prev, {latitude, longitude}]);
+
+        // 📍 지도 카메라 따라가기
+        mapRef.current?.animateToRegion(
+          {
+            latitude,
+            longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001,
+          },
+          500,
+        );
       },
       error => {
         console.warn('Location error:', error);
@@ -112,6 +121,7 @@ const TestScreen = () => {
         distanceFilter: 1,
         interval: 3000,
         fastestInterval: 2000,
+        showsBackgroundLocationIndicator: true,
       },
     );
 
@@ -126,7 +136,9 @@ const TestScreen = () => {
   return (
     <View style={{flex: 1}}>
       <MapView
+        ref={mapRef}
         style={{flex: 1}}
+        showsUserLocation={true}
         initialRegion={{
           latitude: route[0]?.latitude || 37.5665,
           longitude: route[0]?.longitude || 126.978,
@@ -135,7 +147,11 @@ const TestScreen = () => {
         }}>
         {route.length > 0 && (
           <>
-            <Polyline coordinates={route} strokeWidth={4} />
+            <Polyline
+              coordinates={route}
+              strokeWidth={4}
+              strokeColor="#007AFF"
+            />
             <Marker coordinate={route[route.length - 1]} />
           </>
         )}
@@ -149,8 +165,17 @@ const TestScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-  label: {fontSize: 20, fontWeight: '600', marginVertical: 10},
+  overlay: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    padding: 12,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+    alignItems: 'center',
+  },
 });
 
 export default TestScreen;
