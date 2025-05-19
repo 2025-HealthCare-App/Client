@@ -193,7 +193,8 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>TODO</Value>
+          <Value isRunning={isRunning}>{steps * 0.04}</Value>
+          {/* Kcal 계산식 */}
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
       </RecordsContainer>
@@ -231,10 +232,15 @@ const RunningScreen = () => {
               <RunningButton
                 option="stop"
                 onPress={() => {
-                  setIsRunning(false);
-                  setElapsedSec(0);
+                  setIsRunning(false); // 타이머 정지
+                  setElapsedSec(0); // 타이머 초기화
+                  // setDistance(0); // 거리 초기화 (선택)
+                  // setSteps(0); // 스텝 초기화 (선택)
+                  // setRoute([]); // 경로 초기화 (선택)
+                  // setPrevLocation(null); // 위치 초기화 (선택)
                 }}
               />
+
               <RunningButton
                 option="start"
                 onPress={handleRunningButtonPress}
