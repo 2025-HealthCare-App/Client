@@ -81,6 +81,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true       // ✅ 여기
     }
     signingConfigs {
         debug {
@@ -108,6 +109,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-sensors') // 👈 여기도 명시 필요
+    implementation 'com.google.android.gms:play-services-location:21.0.1' // ✅ 이 줄 추가 또는 수정
+    implementation 'androidx.multidex:multidex:2.0.1'                      // ✅ 여기
 
     //Flipper 관련
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")

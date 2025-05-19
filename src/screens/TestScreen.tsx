@@ -1,75 +1,3 @@
-// // TestScreen.js or .tsx
-
-// import React, {useEffect, useState} from 'react';
-// import {
-//   View,
-//   Text,
-//   PermissionsAndroid,
-//   Platform,
-//   StyleSheet,
-// } from 'react-native';
-// import {
-//   SensorTypes,
-//   setUpdateIntervalForType,
-//   accelerometer,
-// } from 'react-native-sensors';
-// import {map, filter} from 'rxjs/operators';
-
-// const TestScreen = () => {
-//   const [steps, setSteps] = useState(0);
-
-//   useEffect(() => {
-//     const requestPermission = async () => {
-//       if (Platform.OS === 'android' && Platform.Version >= 29) {
-//         const granted = await PermissionsAndroid.request(
-//           PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
-//         );
-//         if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-//           console.warn('ACTIVITY_RECOGNITION permission denied');
-//         }
-//       }
-//     };
-
-//     requestPermission();
-
-//     setUpdateIntervalForType(SensorTypes.accelerometer, 400); // 400ms 주기로 측정
-
-//     let localSteps = 0;
-//     const subscription = accelerometer
-//       .pipe(
-//         map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
-//         filter(magnitude => magnitude > 12), // 임계값 기준 간단한 step 탐지
-//       )
-//       .subscribe(() => {
-//         localSteps++;
-//         console.log('Step detected, total steps:', localSteps); // 👟 로그 추가
-//         setSteps(localSteps);
-//       });
-
-//     return () => subscription.unsubscribe();
-//   }, []);
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.label}>걸음 수: {steps}</Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   label: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default TestScreen;
-
 import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -84,6 +12,7 @@ import {
   accelerometer,
 } from 'react-native-sensors';
 import Geolocation from 'react-native-geolocation-service';
+import MapView, {Polyline, Marker} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
 
 const TestScreen = () => {
@@ -91,6 +20,7 @@ const TestScreen = () => {
   const [distance, setDistance] = useState(0); // meter
   const [prevLocation, setPrevLocation] = useState(null);
   const watchId = useRef(null);
+  const [route, setRoute] = useState([]);
 
   // 거리 계산 함수 (Haversine)
   const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -172,6 +102,7 @@ const TestScreen = () => {
           console.log(`Moved ${d.toFixed(2)} m`);
         }
         setPrevLocation({latitude, longitude});
+        setRoute(prev => [...prev, {latitude, longitude}]);
       },
       error => {
         console.warn('Location error:', error);
@@ -193,11 +124,26 @@ const TestScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>👣 걸음 수: {steps}</Text>
-      <Text style={styles.label}>
-        📏 이동 거리: {(distance / 1000).toFixed(3)} km
-      </Text>
+    <View style={{flex: 1}}>
+      <MapView
+        style={{flex: 1}}
+        initialRegion={{
+          latitude: route[0]?.latitude || 37.5665,
+          longitude: route[0]?.longitude || 126.978,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        }}>
+        {route.length > 0 && (
+          <>
+            <Polyline coordinates={route} strokeWidth={4} />
+            <Marker coordinate={route[route.length - 1]} />
+          </>
+        )}
+      </MapView>
+      <View style={styles.overlay}>
+        <Text>걸음 수: {steps}</Text>
+        <Text>이동 거리: {(distance / 1000).toFixed(2)} km</Text>
+      </View>
     </View>
   );
 };
