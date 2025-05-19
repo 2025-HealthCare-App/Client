@@ -142,7 +142,7 @@ const RunningScreen = () => {
         Geolocation.clearWatch(watchId.current);
       }
     };
-  });
+  }, []);
   //////////////////////////////////////////////////////
 
   const handleRunningButtonPress = () => {
