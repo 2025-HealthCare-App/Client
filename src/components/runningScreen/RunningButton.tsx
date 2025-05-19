@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 
 interface RunningButtonProps {
@@ -6,10 +6,11 @@ interface RunningButtonProps {
   option: 'pause' | 'start' | 'stop';
 }
 
-const RunningButton = (
-  {onPress}: RunningButtonProps,
-  option: 'pause' | 'start' | 'stop',
-) => {
+const RunningButton = ({onPress, option}: RunningButtonProps) => {
+  useEffect(() => {
+    console.log(`option: ${option}`);
+  }, [option]);
+
   return (
     <Wrapper onPress={onPress} option={option}>
       {option === 'pause' && (
@@ -31,7 +32,7 @@ const Wrapper = styled.TouchableOpacity<{option: 'pause' | 'start' | 'stop'}>`
     const colorMap = {
       pause: '#222831',
       start: '#CDD800',
-      stop: '#ff4d4d',
+      stop: '#222831',
     };
     return colorMap[option];
   }};
@@ -40,8 +41,6 @@ const Wrapper = styled.TouchableOpacity<{option: 'pause' | 'start' | 'stop'}>`
   border-radius: 100px;
   justify-content: center;
   align-items: center;
-  border: 5px solid #222831;
-  background-color: #222831;
   elevation: 7;
 `;
 
@@ -51,6 +50,7 @@ const PauseShape = styled.View`
   height: 23%;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 const Stick = styled.View`
   height: 100%;
@@ -70,12 +70,12 @@ const StartShape = styled.View`
   background-color: transparent;
 
   /* 삼각형 만들기 */
-  border-top-width: 30px;
+  border-top-width: 15px;
   border-top-color: transparent;
 
-  border-bottom-width: 30px;
+  border-bottom-width: 15px;
   border-bottom-color: transparent;
 
-  border-left-width: 60px;
-  border-left-color: #3cb3b3; /* 원하는 삼각형 색 */
+  border-left-width: 25px;
+  border-left-color: #ffffff; /* 원하는 삼각형 색 */
 `;

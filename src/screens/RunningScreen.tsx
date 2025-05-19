@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
-
 import React, {useEffect, useRef, useState} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {
@@ -14,6 +13,9 @@ import {map, filter} from 'rxjs/operators';
 
 const RunningScreen = () => {
   const [isRunning, setIsRunning] = useState(true);
+  ///타이머
+  const [elapsedSec, setElapsedSec] = useState(0); // 총 초
+  const intervalRef = useRef<NodeJS.Timer | null>(null);
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
@@ -44,6 +46,17 @@ const RunningScreen = () => {
     return R * c;
   };
 
+  //시간 포맷팅 함수
+  // 초를 시:분:초 형식으로 변환
+  const formatTime = (sec: number) => {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  };
+
+  //이동 관련 useEffect
   useEffect(() => {
     const requestPermissions = async () => {
       if (Platform.OS === 'android') {
@@ -62,7 +75,6 @@ const RunningScreen = () => {
         }
       }
     };
-
     requestPermissions();
 
     // 걸음 센서
@@ -145,8 +157,28 @@ const RunningScreen = () => {
   }, []);
   //////////////////////////////////////////////////////
 
+  // 타이머 관련 useEffect
+  useEffect(() => {
+    if (isRunning) {
+      intervalRef.current = setInterval(() => {
+        setElapsedSec(prev => prev + 1);
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRunning]); // 💡 isRunning을 의존성에 추가!
+
   const handleRunningButtonPress = () => {
-    setIsRunning(!isRunning);
+    setIsRunning(prev => !prev);
   };
 
   return (
@@ -167,7 +199,7 @@ const RunningScreen = () => {
       </RecordsContainer>
       <Main>
         <TimeContainer>
-          <Time>39:03</Time>
+          <Time>{formatTime(elapsedSec)}</Time>
         </TimeContainer>
 
         <MapView
@@ -196,7 +228,13 @@ const RunningScreen = () => {
             <RunningButton option="pause" onPress={handleRunningButtonPress} />
           ) : (
             <>
-              <RunningButton option="stop" onPress={handleRunningButtonPress} />
+              <RunningButton
+                option="stop"
+                onPress={() => {
+                  setIsRunning(false);
+                  setElapsedSec(0);
+                }}
+              />
               <RunningButton
                 option="start"
                 onPress={handleRunningButtonPress}
@@ -266,7 +304,7 @@ const TimeContainer = styled.View`
 `;
 const Time = styled.Text`
   color: #222831;
-  font-size: 90px;
+  font-size: 75px;
   font-style: italic;
 `;
 
