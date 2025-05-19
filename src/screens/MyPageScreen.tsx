@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import LevelModal from '../components/mypageScreen/LevelModal';
 
 const MyPageScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
+
   return (
     <Wrapper>
       <Header>
-        <BeforeButton>&gt;</BeforeButton>
+        <BeforeButton>&lt;</BeforeButton>
         <HeaderText>내 정보</HeaderText>
       </Header>
       <ProfileImgContainer>
@@ -41,11 +44,16 @@ const MyPageScreen = () => {
           <Value>010-4303-8511</Value>
         </Row>
         <EditRow>
-          <EditButton>
+          <EditButton onPress={() => setModalVisible(true)}>
             <EditButtonText>수정</EditButtonText>
           </EditButton>
         </EditRow>
       </InfoContainer>
+
+      <LevelModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </Wrapper>
   );
 };
@@ -95,10 +103,10 @@ const ProfileImg = styled.Image`
   border-radius: 75px;
   border: 1px solid #ffffff;
 `;
-const EditIcon = styled(Image)`
-  width: 20px;
-  height: 20px;
-`;
+// const EditIcon = styled(Image)`
+//   width: 20px;
+//   height: 20px;
+// `;
 
 const MiddleTextContainer = styled.View`
   width: 100%;

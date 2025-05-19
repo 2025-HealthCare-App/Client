@@ -6,7 +6,7 @@ import GoalModal from './GoalModal';
 
 const MainContents = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false); // ✨ 모달 상태 추가
+  const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
 
   return (
     <Wrapper>
