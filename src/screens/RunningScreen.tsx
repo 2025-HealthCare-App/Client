@@ -199,7 +199,7 @@ const RunningScreen = () => {
       </RecordsContainer>
       <Main>
         <TimeContainer>
-          <Time>{formatTime(elapsedSec)}</Time>
+          <Time isRunning={isRunning}>{formatTime(elapsedSec)}</Time>
         </TimeContainer>
 
         <MapView
@@ -302,10 +302,12 @@ const TimeContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-const Time = styled.Text`
-  color: #222831;
+const Time = styled.Text<{isRunning: boolean}>`
   font-size: 75px;
   font-style: italic;
+  font-weight: bold;
+  text-align: center;
+  color: ${({isRunning}) => (isRunning ? '#CDD800' : '#171b21')};
 `;
 
 const ButtonContainer = styled.View`
