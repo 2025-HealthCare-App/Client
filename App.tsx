@@ -17,7 +17,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Result"
+        initialRouteName="Main"
         screenOptions={{headerShown: false, animation: 'none'}}>
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />

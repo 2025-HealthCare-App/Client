@@ -10,12 +10,29 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Polyline, Marker} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
+import {useNavigation} from '@react-navigation/native';
+import {addComma} from '../utils/util';
 
 const RunningScreen = () => {
   const [isRunning, setIsRunning] = useState(true);
   ///타이머
   const [elapsedSec, setElapsedSec] = useState(0); // 총 초
   const intervalRef = useRef<NodeJS.Timer | null>(null);
+  const navigation = useNavigation();
+
+  //시작 시각을 저장
+  const startTime = useRef(new Date().getTime());
+  //시작 시각을 포맷팅
+  const formatStartTime = (startTime: number) => {
+    const date = new Date(startTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+  const formattedStartTime = formatStartTime(startTime.current);
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
@@ -180,6 +197,24 @@ const RunningScreen = () => {
   const handleRunningButtonPress = () => {
     setIsRunning(prev => !prev);
   };
+  //운동 종료 처리하는 함수
+  const handleStopButtonPress = () => {
+    //다음 페이지로 값들을 전달
+    navigation.navigate('Result', {
+      distance: distance,
+      steps: steps,
+      elapsedSec: elapsedSec,
+      Kcal: steps * 0.04,
+      startTime: formattedStartTime,
+    });
+    //타이머 정지
+    setIsRunning(false);
+    setElapsedSec(0); // 타이머 초기화
+    setDistance(0); // 거리 초기화 (선택)
+    setSteps(0); // 스텝 초기화 (선택)
+    setRoute([]); // 경로 초기화 (선택)
+    setPrevLocation(null); // 위치 초기화 (선택)
+  };
 
   return (
     <Wrapper isRunning={isRunning}>
@@ -189,11 +224,11 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Km</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{steps}</Value>
+          <Value isRunning={isRunning}>{addComma(steps)}</Value>
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{steps * 0.04}</Value>
+          <Value isRunning={isRunning}>{addComma(steps * 0.04)}</Value>
           {/* Kcal 계산식 */}
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
@@ -229,18 +264,7 @@ const RunningScreen = () => {
             <RunningButton option="pause" onPress={handleRunningButtonPress} />
           ) : (
             <>
-              <RunningButton
-                option="stop"
-                onPress={() => {
-                  setIsRunning(false); // 타이머 정지
-                  setElapsedSec(0); // 타이머 초기화
-                  // setDistance(0); // 거리 초기화 (선택)
-                  // setSteps(0); // 스텝 초기화 (선택)
-                  // setRoute([]); // 경로 초기화 (선택)
-                  // setPrevLocation(null); // 위치 초기화 (선택)
-                }}
-              />
-
+              <RunningButton option="stop" onPress={handleStopButtonPress} />
               <RunningButton
                 option="start"
                 onPress={handleRunningButtonPress}

@@ -1,8 +1,32 @@
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import {addComma} from '../utils/util';
+
+type RootStackParamList = {
+  Result: {
+    distance: number;
+    steps: number;
+    elapsedSec: number;
+    Kcal: number;
+    startTime: string;
+  };
+};
+type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
 
 const ResultScreen = () => {
+  const route = useRoute<ResultScreenRouteProp>();
+  const {distance, steps, elapsedSec, Kcal, startTime} = route.params;
+
+  //초를 00:00 형식으로 변환하는 함수
+  const formatTime = (sec: number) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${pad(m)}:${pad(s)}`;
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -10,26 +34,26 @@ const ResultScreen = () => {
       </Header>
       <Main>
         <ResultTitleContainer>
-          <DateandTime>25/3/22 - 8:31 PM</DateandTime>
+          <DateandTime>{startTime}</DateandTime>
           <ResultTitle>CAUON - 제 2회 정기 러닝</ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
-            <KM>3.93</KM>
+            <KM>{distance}</KM>
             <CategoryText>Km</CategoryText>
           </KMContainer>
           <OthersContainer>
             <Category>
-              <Value>39:03</Value>
-              <CategoryText>분</CategoryText>
+              <Value>{formatTime(elapsedSec)}</Value>
+              <CategoryText>Time</CategoryText>
             </Category>
             <Category>
-              <Value>5.0</Value>
-              <CategoryText>Km/h</CategoryText>
+              <Value>{addComma(steps)}</Value>
+              <CategoryText>Step</CategoryText>
             </Category>
             <Category>
-              <Value>1,000</Value>
-              <CategoryText>보폭</CategoryText>
+              <Value>{Kcal}</Value>
+              <CategoryText>Kcal</CategoryText>
             </Category>
           </OthersContainer>
 
