@@ -1,4 +1,4 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
@@ -19,6 +19,8 @@ const ResultScreen = () => {
   const route = useRoute<ResultScreenRouteProp>();
   const {distance, steps, elapsedSec, Kcal, startTime} = route.params;
 
+  const navigation = useNavigation();
+
   //초를 00:00 형식으로 변환하는 함수
   const formatTime = (sec: number) => {
     const m = Math.floor(sec / 60);
@@ -30,7 +32,9 @@ const ResultScreen = () => {
   return (
     <Wrapper>
       <Header>
-        <BeforeButton>&lt;</BeforeButton>
+        <BeforeButton onPress={() => navigation.navigate('Main')}>
+          <BeforeText>&lt;</BeforeText>
+        </BeforeButton>
       </Header>
       <Main>
         <ResultTitleContainer>
@@ -156,7 +160,11 @@ const Header = styled.View`
   gap: 10px;
   /* background-color: #ffdfdf; */
 `;
-const BeforeButton = styled.Text`
+const BeforeButton = styled.TouchableOpacity`
+  height: 100%;
+  justify-content: center;
+`;
+const BeforeText = styled.Text`
   font-size: 20px;
   color: #222831;
   font-weight: bold;
