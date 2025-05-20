@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import {Text} from 'react-native-svg';
 
-const CommunityScreen = ({navigation}: {navigation: any}) => {
+const CommunityScreen = () => {
   return (
     <Wrapper>
       <Text>Statisc</Text>

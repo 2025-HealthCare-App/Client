@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {PermissionsAndroid, Platform} from 'react-native';
+import {NativeModules, PermissionsAndroid, Platform} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -12,6 +12,7 @@ import MapView, {Polyline, Marker} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
 import {addComma} from '../utils/util';
+import Config from 'react-native-config';
 
 const RunningScreen = () => {
   const [isRunning, setIsRunning] = useState(true);
@@ -130,10 +131,10 @@ const RunningScreen = () => {
             longitude,
           );
           const THRESHOLD = 2.5;
-          if (d < THRESHOLD) {
-            console.log(`Ignored small movement: ${d.toFixed(2)} m`);
-            return;
-          }
+          // if (d < THRESHOLD) {
+          //   console.log(`Ignored small movement: ${d.toFixed(2)} m`);
+          //   return;
+          // }
 
           setDistance(prev => prev + d);
           console.log(`Moved ${d.toFixed(2)} m`);
@@ -198,14 +199,18 @@ const RunningScreen = () => {
     setIsRunning(prev => !prev);
   };
   //운동 종료 처리하는 함수
+  const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
+    const staticMapUrl = createStaticMapUrl(route, String(apiKey));
+    console.log('Static Map URL:', staticMapUrl);
     //다음 페이지로 값들을 전달
-    navigation.navigate('Result', {
+    navigation.replace('Result', {
       distance: distance,
       steps: steps,
       elapsedSec: elapsedSec,
       Kcal: steps * 0.04,
       startTime: formattedStartTime,
+      staticMapUrl: staticMapUrl,
     });
     //타이머 정지
     setIsRunning(false);
@@ -214,6 +219,17 @@ const RunningScreen = () => {
     setSteps(0); // 스텝 초기화 (선택)
     setRoute([]); // 경로 초기화 (선택)
     setPrevLocation(null); // 위치 초기화 (선택)
+  };
+  //Static Map URL 변환 함수
+  const createStaticMapUrl = (
+    route: {latitude: number; longitude: number}[],
+    apiKey: string,
+  ) => {
+    const size = '600x400';
+    const path = route.map(p => `${p.latitude},${p.longitude}`).join('|');
+
+    const url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&path=color:0xff0000ff|weight:5|${path}&key=${apiKey}`;
+    return url;
   };
 
   return (

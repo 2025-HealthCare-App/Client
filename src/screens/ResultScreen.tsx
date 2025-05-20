@@ -11,13 +11,17 @@ type RootStackParamList = {
     elapsedSec: number;
     Kcal: number;
     startTime: string;
+    staticMapUrl: string;
   };
 };
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
 
 const ResultScreen = () => {
   const route = useRoute<ResultScreenRouteProp>();
-  const {distance, steps, elapsedSec, Kcal, startTime} = route.params;
+  const {distance, steps, elapsedSec, Kcal, startTime, staticMapUrl} =
+    route.params;
+
+  console.log('[ResultScreen] Static Map URL:', staticMapUrl);
 
   const navigation = useNavigation();
 
@@ -43,7 +47,7 @@ const ResultScreen = () => {
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
-            <KM>{distance}</KM>
+            <KM>{(distance / 1000).toFixed(2)}</KM>
             <CategoryText>Km</CategoryText>
           </KMContainer>
           <OthersContainer>
@@ -60,7 +64,6 @@ const ResultScreen = () => {
               <CategoryText>Kcal</CategoryText>
             </Category>
           </OthersContainer>
-
           <PointsContainer>
             <PointRow>
               <CheckBox />
@@ -76,8 +79,11 @@ const ResultScreen = () => {
               <TotalPointText>339 P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
-
-          <ResultMap source={require('../images/resultMap.png')} />
+          <ResultMap
+            source={{uri: staticMapUrl}}
+            resizeMode="cover"
+            onError={e => console.warn('Image load error', e.nativeEvent)}
+          />
         </ContentsContainer>
       </Main>
     </Wrapper>
@@ -86,7 +92,7 @@ const ResultScreen = () => {
 
 export default ResultScreen;
 
-const ResultMap = styled(Image)`
+const ResultMap = styled.Image`
   width: 90%;
   height: 230px;
   object-fit: cover;

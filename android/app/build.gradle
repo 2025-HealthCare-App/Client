@@ -81,8 +81,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true       // ✅ 여기
-        manifestPlaceholders = [ MAPS_API_KEY: MAPS_API_KEY ]
+        multiDexEnabled true    
+        // manifestPlaceholders = [ MAPS_API_KEY: MAPS_API_KEY ]
+        manifestPlaceholders = [
+        MAPS_API_KEY: project.hasProperty("MAPS_API_KEY") ? project.MAPS_API_KEY : System.getenv("MAPS_API_KEY")        ]
     }
     signingConfigs {
         debug {
@@ -126,3 +128,4 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
