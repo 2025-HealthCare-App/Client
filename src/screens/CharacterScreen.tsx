@@ -15,10 +15,10 @@ const CharacterScreen = ({navigation}: {navigation: any}) => {
 export default CharacterScreen;
 
 const Wrapper = styled.View`
-  flex: 1;
-  justify-content: flex-start;
+  height: 100%;
+  justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding: 30px 0;
-  gap: 15px;
+  padding: 0px 20px;
+  padding-bottom: 60px; /* bottomBar 높이만큼 여백 추가 */
 `;
