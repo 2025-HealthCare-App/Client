@@ -16,7 +16,9 @@ export default RankingBoard;
 
 const Wrapper = styled.View`
   width: 100%;
-  height: 40%;
+  height: 33%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   justify-content: flex-start;
   align-items: center;
   background-color: #393e46;
