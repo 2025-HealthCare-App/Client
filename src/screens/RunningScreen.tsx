@@ -8,10 +8,16 @@ import {
   accelerometer,
 } from 'react-native-sensors';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, {Polyline, Marker} from 'react-native-maps';
+import MapView, {Polyline, Marker, Region} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
-import {addComma} from '../utils/util';
+import {
+  addComma,
+  createStaticMapUrl,
+  formatStartTime,
+  formatTime,
+  getDistance,
+} from '../utils/util';
 import Config from 'react-native-config';
 
 const RunningScreen = () => {
@@ -23,16 +29,6 @@ const RunningScreen = () => {
 
   //시작 시각을 저장
   const startTime = useRef(new Date().getTime());
-  //시작 시각을 포맷팅
-  const formatStartTime = (startTime: number) => {
-    const date = new Date(startTime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-  };
   const formattedStartTime = formatStartTime(startTime.current);
 
   ////지도 부분///////
@@ -48,31 +44,7 @@ const RunningScreen = () => {
   const watchId = useRef<number | null>(null);
   const mapRef = useRef<MapView | null>(null);
 
-  // 거리 계산 함수 (Haversine)
-  const getDistance = (lat1: any, lon1: any, lat2: any, lon2: any) => {
-    const R = 6371e3;
-    const toRad = (deg: number) => (deg * Math.PI) / 180;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  };
-
-  //시간 포맷팅 함수
-  // 초를 시:분:초 형식으로 변환
-  const formatTime = (sec: number) => {
-    const h = Math.floor(sec / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${pad(h)}:${pad(m)}:${pad(s)}`;
-  };
+  const [initialRegion, setInitialRegion] = useState<Region | null>(null);
 
   //이동 관련 useEffect
   useEffect(() => {
@@ -90,7 +62,33 @@ const RunningScreen = () => {
           locationPermission !== PermissionsAndroid.RESULTS.GRANTED
         ) {
           console.warn('Permission denied');
+          return;
         }
+
+        // useEffect 내부: 위치 권한 요청 후 최초 1회 위치 가져오기
+        Geolocation.getCurrentPosition(
+          position => {
+            const {latitude, longitude} = position.coords;
+            setInitialRegion({
+              latitude,
+              longitude,
+              latitudeDelta: 0.001,
+              longitudeDelta: 0.001,
+            });
+
+            // 초기 위치도 prevLocation과 route에 추가
+            setPrevLocation({latitude, longitude});
+            setRoute([{latitude, longitude}]);
+          },
+          error => {
+            console.warn('초기 위치 못 가져옴:', error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 1000,
+          },
+        );
       }
     };
     requestPermissions();
@@ -130,11 +128,6 @@ const RunningScreen = () => {
             latitude,
             longitude,
           );
-          const THRESHOLD = 2.5;
-          // if (d < THRESHOLD) {
-          //   console.log(`Ignored small movement: ${d.toFixed(2)} m`);
-          //   return;
-          // }
 
           setDistance(prev => prev + d);
           console.log(`Moved ${d.toFixed(2)} m`);
@@ -173,7 +166,6 @@ const RunningScreen = () => {
       }
     };
   }, []);
-  //////////////////////////////////////////////////////
 
   // 타이머 관련 useEffect
   useEffect(() => {
@@ -202,7 +194,7 @@ const RunningScreen = () => {
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
     const staticMapUrl = createStaticMapUrl(route, String(apiKey));
-    console.log('Static Map URL:', staticMapUrl);
+
     //다음 페이지로 값들을 전달
     navigation.replace('Result', {
       distance: distance,
@@ -219,17 +211,6 @@ const RunningScreen = () => {
     setSteps(0); // 스텝 초기화 (선택)
     setRoute([]); // 경로 초기화 (선택)
     setPrevLocation(null); // 위치 초기화 (선택)
-  };
-  //Static Map URL 변환 함수
-  const createStaticMapUrl = (
-    route: {latitude: number; longitude: number}[],
-    apiKey: string,
-  ) => {
-    const size = '600x400';
-    const path = route.map(p => `${p.latitude},${p.longitude}`).join('|');
-
-    const url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&path=color:0xff0000ff|weight:5|${path}&key=${apiKey}`;
-    return url;
   };
 
   return (
@@ -258,23 +239,15 @@ const RunningScreen = () => {
           ref={mapRef}
           style={{width: '100%', height: '100%'}}
           showsUserLocation={true}
-          initialRegion={{
-            latitude: route[0]?.latitude || 37.5665,
-            longitude: route[0]?.longitude || 126.978,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
-          }}>
-          {route.length > 0 && (
-            <>
-              <Polyline
-                coordinates={route}
-                strokeWidth={4}
-                strokeColor="#007AFF"
-              />
-              <Marker coordinate={route[route.length - 1]} />
-            </>
-          )}
-        </MapView>
+          initialRegion={
+            initialRegion ?? {
+              latitude: 37.5665,
+              longitude: 126.978,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }
+          }
+        />
         <ButtonContainer>
           {isRunning ? (
             <RunningButton option="pause" onPress={handleRunningButtonPress} />

@@ -21,9 +21,9 @@ const Wrapper = styled.View`
   align-items: center;
 `;
 
-const HealthRoadBox = styled.View`
-  width: 27%;
-  height: 35px;
+const HealthRoadBox = styled.TouchableOpacity`
+  width: 28%;
+  height: 37px;
   background-color: #ffb6b6;
   border: 3px solid #ff9292;
   border-radius: 100px;
@@ -43,7 +43,7 @@ const HealthRoadImage = styled.Image.attrs({
 `;
 
 const HealthRoadText = styled.Text`
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
   color: #ffffff;
   font-family: 'Pretendard';

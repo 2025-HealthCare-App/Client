@@ -44,11 +44,9 @@ const MainContents = () => {
         />
       </CharacterContainer>
 
-      <StartButton>
+      <StartButton onPress={() => navigation.navigate('Running')}>
         <TextContainer>
-          <StartButtonText onPress={() => navigation.navigate('Running')}>
-            START
-          </StartButtonText>
+          <StartButtonText>START</StartButtonText>
         </TextContainer>
       </StartButton>
     </Wrapper>
