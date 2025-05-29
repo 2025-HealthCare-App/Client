@@ -2,7 +2,11 @@ import React from 'react';
 import TextTicker from 'react-native-text-ticker';
 import styled from 'styled-components/native';
 
-const StyledTextTicker = () => {
+interface StyledTextTickerProps {
+  text: string;
+}
+
+const StyledTextTicker = ({text}: StyledTextTickerProps) => {
   return (
     <Wrapper>
       <TextTicker
@@ -17,8 +21,7 @@ const StyledTextTicker = () => {
         bounce={false}
         repeatSpacer={0}
         marqueeDelay={0}>
-        이번주 목표를 달성할 수 있을까요? 오늘도 함께 달려요! 이번주 목표를
-        달성할 수 있을까요? 오늘도 함께 달려요!
+        {text}
       </TextTicker>
     </Wrapper>
   );

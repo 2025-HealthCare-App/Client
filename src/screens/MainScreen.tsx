@@ -9,7 +9,7 @@ const MainScreen = () => {
   return (
     <Wrapper>
       <UserBar />
-      <StyledTextTicker />
+      <StyledTextTicker text="이번주 목표를 달성할 수 있을까요? 오늘도 함께 달려요!  이번주 목표를 달성할 수 있을까요? 오늘도 함께 달려요!" />
       <MainContents />
       <BottomBar />
     </Wrapper>
@@ -20,7 +20,7 @@ export default MainScreen;
 
 const Wrapper = styled.View`
   height: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   background-color: #222831;
   padding: 0px 20px;
