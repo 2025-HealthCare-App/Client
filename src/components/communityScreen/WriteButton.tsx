@@ -1,9 +1,15 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 
 const WriteButton = () => {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.navigate('Write');
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onPress={handlePress}>
       <PencilIcon source={require('../../images/pencil.png')} />
       <WriteText>게시글 작성하기(+500P)</WriteText>
     </Wrapper>
