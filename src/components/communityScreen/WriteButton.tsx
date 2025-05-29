@@ -12,7 +12,7 @@ const WriteButton = () => {
 
 export default WriteButton;
 
-const Wrapper = styled.View`
+const Wrapper = styled.TouchableOpacity`
   padding: 14px 15px;
   border-radius: 10px;
   flex-direction: row;
@@ -21,6 +21,7 @@ const Wrapper = styled.View`
   background-color: #c0ca00;
   border: 2px solid #ffffff;
   margin-top: 20px;
+  margin-bottom: 20px;
   gap: 5px;
 `;
 

@@ -3,12 +3,14 @@ import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import RankingBoard from '../components/communityScreen/RankingBoard';
 import WriteButton from '../components/communityScreen/WriteButton';
+import PostsContainer from '../components/communityScreen/PostsContainer';
 
 const CommunityScreen = () => {
   return (
     <Wrapper>
       <RankingBoard />
       <WriteButton />
+      <PostsContainer />
       <BottomBar />
     </Wrapper>
   );

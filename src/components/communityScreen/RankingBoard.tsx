@@ -7,7 +7,6 @@ const RankingBoard = () => {
       <Wrapper>
         <Title>이번주 실시간 랭킹</Title>
       </Wrapper>
-      <CardArrow />
     </>
   );
 };
@@ -16,7 +15,7 @@ export default RankingBoard;
 
 const Wrapper = styled.View`
   width: 100%;
-  height: 33%;
+  height: 25%;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   justify-content: flex-start;
