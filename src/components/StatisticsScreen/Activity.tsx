@@ -1,12 +1,29 @@
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import styled from 'styled-components/native';
 
 const Activity = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const goToResult = () => {
+    navigation.navigate('Result', {
+      distance: 1200, // 1.2km = 1200m
+      steps: 4210,
+      elapsedSec: 2343, // 39분 3초 = 39*60 + 3 = 2343초
+      Kcal: 142,
+      startTime: '2023.10.01 13:22',
+      staticMapUrl: 'https://example.com/static-map.png',
+      // activityTitle: 'CAUON - 제 2회 정기 러닝',
+      points: 142,
+    });
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onPress={goToResult}>
       <Top>
         <DateAndPoint>
-          <Date>2023.10.01</Date>
+          <Date>2023.10.01 13:22</Date>
           <Point>+ 142 P</Point>
         </DateAndPoint>
         <ActivityTitle>CAUON - 제 2회 정기 러닝</ActivityTitle>

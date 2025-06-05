@@ -3,8 +3,11 @@ import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
+import {useNavigation} from '@react-navigation/native';
 
-const StatisticsScreen = ({navigation}: {navigation: any}) => {
+const StatisticsScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <Wrapper>
       <Header>
@@ -29,7 +32,7 @@ const StatisticsScreen = ({navigation}: {navigation: any}) => {
             <Activity />
             <Activity />
           </ActivitiesContainer>
-          <PlusButton onPress={() => navigation.navigate('Activity')}>
+          <PlusButton onPress={() => navigation.navigate('?')}>
             <PlusButtonText>더보기</PlusButtonText>
           </PlusButton>
         </Section>

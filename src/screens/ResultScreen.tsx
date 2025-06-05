@@ -1,6 +1,5 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React from 'react';
-import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import {addComma} from '../utils/util';
 
@@ -11,7 +10,9 @@ type RootStackParamList = {
     elapsedSec: number;
     Kcal: number;
     startTime: string;
-    staticMapUrl: string;
+    staticMapUrl?: string;
+    activityTitle?: string; // Optional, if you want to display a title
+    points?: number; // Optional, if you want to display points
   };
 };
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
@@ -43,7 +44,9 @@ const ResultScreen = () => {
       <Main>
         <ResultTitleContainer>
           <DateandTime>{startTime}</DateandTime>
-          <ResultTitle>CAUON - 제 2회 정기 러닝</ResultTitle>
+          <ResultTitle>
+            {route.params.activityTitle || `${startTime} 의 운동`}
+          </ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>

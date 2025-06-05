@@ -44,9 +44,9 @@ const MainContents = () => {
           <TitleText>
             {currentMonth}월 {currentWeek}주차 목표
           </TitleText>
-          <QuestionMarkWrapper>
+          {/* <QuestionMarkWrapper>
             <QuestionMark>?</QuestionMark>
-          </QuestionMarkWrapper>
+          </QuestionMarkWrapper> */}
         </GoalTitle>
 
         {isGoalSet ? (
