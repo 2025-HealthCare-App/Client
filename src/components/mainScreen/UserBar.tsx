@@ -1,15 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 
 const UserBar = () => {
-  const navigation = useNavigation();
-
   return (
     <Wrapper>
       <UserInfoContainer>
-        <ProfileImg source={require('../../images/profileImg.jpg')} />
+        <ProfileImg
+          source={require('../../images/profileImgs/profileImg1.jpg')}
+        />
         <TierBadge source={require('../../images/tierBadge.png')} />
         <UserName>나는야초보</UserName>
       </UserInfoContainer>

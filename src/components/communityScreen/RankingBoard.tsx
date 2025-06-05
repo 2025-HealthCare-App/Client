@@ -1,11 +1,36 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import Profile from './Profile';
 
 const RankingBoard = () => {
+  const profileImages = {
+    // 이미지 경로를 객체로 관리
+    profileImg1: require('../../images/profileImgs/profileImg1.jpg'),
+    profileImg2: require('../../images/profileImgs/profileImg2.png'),
+    profileImg3: require('../../images/profileImgs/profileImg3.png'),
+  };
+
   return (
     <>
       <Wrapper>
         <Title>이번주 실시간 랭킹</Title>
+        <ProfilesContainer>
+          <Profile
+            name="작심삼일"
+            km={71}
+            imgSrc={profileImages.profileImg1} // 실제 이미지 객체 전달
+          />
+          <Profile
+            name="나는야초보"
+            km={124}
+            imgSrc={profileImages.profileImg2} // 실제 이미지 객체 전달
+          />
+          <Profile
+            name="달리기하자"
+            km={97}
+            imgSrc={profileImages.profileImg3} // 실제 이미지 객체 전달
+          />
+        </ProfilesContainer>
       </Wrapper>
     </>
   );
@@ -32,13 +57,10 @@ const Title = styled.Text`
   width: 100%;
 `;
 
-const CardArrow = styled.View`
-  width: 0;
-  height: 0;
-  border-left-width: 100px;
-  border-right-width: 100px;
-  border-top-width: 50px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: #3b3f47;
+const ProfilesContainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
 `;
