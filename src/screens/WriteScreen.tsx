@@ -32,11 +32,15 @@ const WriteScreen = () => {
   const goToCommunity = () => {
     navigation.navigate('Community');
   };
+  //뒤로가기
+  const goBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <Wrapper>
       <Header>
-        <TouchableOpacity onPress={goToCommunity}>
+        <TouchableOpacity onPress={goBack}>
           <BeforeButtonText>&lt;</BeforeButtonText>
         </TouchableOpacity>
         <HeaderText>게시글 작성</HeaderText>
