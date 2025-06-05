@@ -1,12 +1,28 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 
 const MainContents = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
+  const [modalVisible, setModalVisible] = useState(false); // 모달 상태
+  const [isGoalSet, setIsGoalSet] = useState(false); // 목표 설정 여부 상태
+  const [goal, setGoal] = useState(0); // 목표 거리 상태(0~100km)
+  const [currentDistance, setCurrentDistance] = useState(25); // 현재 달린 거리 (예시값)
+
+  useEffect(() => {
+    console.log('목표 거리:', goal);
+  }, [goal]);
+
+  // 목표 달성률 계산 (0~100%)
+  const getProgressPercentage = () => {
+    if (goal === 0) {
+      return 0;
+    }
+    const percentage = Math.min((currentDistance / goal) * 100, 100);
+    return percentage;
+  };
 
   return (
     <Wrapper>
@@ -14,6 +30,8 @@ const MainContents = () => {
       <GoalModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        setGoal={setGoal}
+        setIsGoalSet={setIsGoalSet}
       />
 
       <GoalContainer>
@@ -24,17 +42,23 @@ const MainContents = () => {
           </QuestionMarkWrapper>
         </GoalTitle>
 
-        {/* <GoalBarContainer>
-          <GoalBar>
-            <RealGoalBar />
-          </GoalBar>
-        </GoalBarContainer> */}
-
-        <GoalSetButton onPress={() => setModalVisible(true)}>
-          <GoalSetButtonInner>
-            <GoalSetText>이번주 목표를 설정하세요! &gt;</GoalSetText>
-          </GoalSetButtonInner>
-        </GoalSetButton>
+        {isGoalSet ? (
+          <GoalBarContainer>
+            <GoalBar>
+              <RealGoalBar progress={getProgressPercentage()} />
+            </GoalBar>
+            <GoalProgress>
+              {currentDistance}km / {goal}km (
+              {Math.round(getProgressPercentage())}%)
+            </GoalProgress>
+          </GoalBarContainer>
+        ) : (
+          <GoalSetButton onPress={() => setModalVisible(true)}>
+            <GoalSetButtonInner>
+              <GoalSetText>이번주 목표를 설정하세요! &gt;</GoalSetText>
+            </GoalSetButtonInner>
+          </GoalSetButton>
+        )}
       </GoalContainer>
 
       <CharacterContainer>
@@ -86,12 +110,7 @@ const TitleText = styled.Text`
   text-align: center;
   font-weight: bold;
 `;
-// const QuestionMark = styled(Image)`
-//   width: 14px;
-//   height: 14px;
-//   object-fit: contain;
-//   margin-top: 1px;
-// `;
+
 const QuestionMarkWrapper = styled.View`
   width: 15px;
   height: 15px;
@@ -119,11 +138,22 @@ const GoalBar = styled.View`
   background-color: #d9d9d9;
   border-radius: 20px;
 `;
-const RealGoalBar = styled.View`
-  width: 50%;
+
+// props 타입 정의
+interface RealGoalBarProps {
+  progress: number;
+}
+const RealGoalBar = styled.View<RealGoalBarProps>`
+  width: ${props => props.progress}%;
   height: 100%;
   background-color: #ff9292;
   border-radius: 20px;
+  transition: width 0.3s ease;
+`;
+const GoalProgress = styled.Text`
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: bold;
 `;
 const GoalSetButton = styled.TouchableOpacity`
   width: 50%;

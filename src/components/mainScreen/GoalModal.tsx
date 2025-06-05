@@ -6,9 +6,16 @@ import {PanResponder, Animated, Dimensions} from 'react-native';
 interface GoalModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
+  setGoal: (goal: number) => void; // 부모로부터 목표 설정 함수 전달
+  setIsGoalSet: (isSet: boolean) => void; // 목표 설정 여부 상태 업데이트 함수 (선택적)
 }
 
-const GoalModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
+const GoalModal = ({
+  modalVisible,
+  setModalVisible,
+  setGoal,
+  setIsGoalSet,
+}: GoalModalProps) => {
   const [realGoalBarWidth, setRealGoalBarWidth] = useState(0);
   const [containerWidth, setContainerWidth] = useState(270); // GoalBar 전체 폭
   const [goalKm, setGoalKm] = useState(0); // 현재 목표 거리 표시용
@@ -71,7 +78,15 @@ const GoalModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
           </GoalBarContainer>
 
           <RealGoalText>{goalKm}Km</RealGoalText>
-          <CloseButton onPress={() => setModalVisible(false)}>
+          <CloseButton
+            onPress={() => {
+              setModalVisible(false);
+              setGoal(goalKm); // 목표 설정 후 부모 컴포넌트에 전달
+              setRealGoalBarWidth(0); // 모달 닫을 때 바 초기화
+              setContainerWidth(270); // 모달 닫을 때 컨테이너 폭 초기화
+              setGoalKm(0); // 목표 거리 초기화
+              setIsGoalSet(true); // 목표 설정 여부 업데이트
+            }}>
             <CloseButtonText>확인</CloseButtonText>
           </CloseButton>
         </ModalContainer>
