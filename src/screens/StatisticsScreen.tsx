@@ -13,7 +13,7 @@ const StatisticsScreen = () => {
       <Header>
         <Title>나의 운동</Title>
       </Header>
-      <Main>
+      <Main showsVerticalScrollIndicator={false}>
         <CharacterComment />
         <Section id="graph">
           <SemiTitle>주간 그래프</SemiTitle>

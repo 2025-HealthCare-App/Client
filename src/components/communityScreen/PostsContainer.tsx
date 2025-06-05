@@ -4,7 +4,7 @@ import Post from './Post';
 
 const PostsContainer = () => {
   return (
-    <Wrapper>
+    <Wrapper showsVerticalScrollIndicator={false}>
       <Post />
       <Post />
       <Post />
@@ -15,6 +15,6 @@ const PostsContainer = () => {
 export default PostsContainer;
 
 const Wrapper = styled.ScrollView`
-  width: 100%;
+  width: 95%;
   height: 70%;
 `;
