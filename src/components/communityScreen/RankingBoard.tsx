@@ -20,16 +20,19 @@ const RankingBoard = () => {
             name="작심삼일"
             km={71}
             imgSrc={profileImages.profileImg1} // 실제 이미지 객체 전달
+            isSecond={true} // 2등 표시
           />
           <Profile
             name="나는야초보"
             km={124}
             imgSrc={profileImages.profileImg2} // 실제 이미지 객체 전달
+            isFirst={true} // 1등 표시
           />
           <Profile
             name="달리기하자"
             km={97}
             imgSrc={profileImages.profileImg3} // 실제 이미지 객체 전달
+            isThird={true} // 3등 표시
           />
         </ProfilesContainer>
         <PercentText>
@@ -53,7 +56,7 @@ const Wrapper = styled.View`
   align-items: center;
   background-color: #393e46;
   padding: 30px 20px;
-  gap: 30px;
+  gap: 15px;
 `;
 const Title = styled.Text`
   font-size: 22px;
