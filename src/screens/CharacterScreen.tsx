@@ -5,7 +5,7 @@ import UserBar from '../components/mainScreen/UserBar';
 import StyledTextTicker from '../components/mainScreen/StyledTextTicker';
 import CharacterContents from '../components/characterScreen/CharacterContents';
 
-const CharacterScreen = ({navigation}: {navigation: any}) => {
+const CharacterScreen = () => {
   return (
     <Wrapper>
       <UserBar />

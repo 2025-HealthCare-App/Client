@@ -1,10 +1,13 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 
 const HealthRoadContainer = () => {
+  const navigation = useNavigation();
+
   return (
     <Wrapper>
-      <HealthRoadBox>
+      <HealthRoadBox onPress={() => navigation.navigate('HealthRoad')}>
         <HealthRoadImage />
         <HealthRoadText>건강의 길</HealthRoadText>
       </HealthRoadBox>
@@ -34,7 +37,7 @@ const HealthRoadBox = styled.TouchableOpacity`
 `;
 
 const HealthRoadImage = styled.Image.attrs({
-  source: require('../../images/characterScreen/health_road.png'),
+  source: require('../../images/characterScreen/health_road_icon.png'),
   resizeMode: 'contain',
   style: {width: 15, height: 15},
 })`
