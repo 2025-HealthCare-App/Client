@@ -23,6 +23,12 @@ const BottomBar = () => {
         />
         <SectionText>통계</SectionText>
       </Section>
+      <Section onPress={() => handleNavigation('Activities')}>
+        <SectionIcon
+          source={require('../../images/navigation-icons/CalendarIcon.png')}
+        />
+        <SectionText>기록</SectionText>
+      </Section>
       <Section onPress={() => handleNavigation('Character')}>
         <SectionIcon
           source={require('../../images/navigation-icons/CharacterIcon.png')}
