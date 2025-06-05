@@ -28,9 +28,25 @@ const Profile = ({
   isSecond,
   isThird,
 }: ProfileProps) => {
+  const getRankImage = () => {
+    if (isFirst) {
+      return require('../../images/medals/medal1.png');
+    }
+    if (isSecond) {
+      return require('../../images/medals/medal2.png');
+    }
+    if (isThird) {
+      return require('../../images/medals/medal3.png');
+    }
+    return null;
+  };
+
   return (
     <Wrapper isSecond={isSecond} isThird={isThird}>
-      <ProfileImage source={imgSrc} isFirst={isFirst} />
+      <ImageContainer>
+        <ProfileImage source={imgSrc} isFirst={isFirst} />
+        {getRankImage() && <RankBadge source={getRankImage()} />}
+      </ImageContainer>
       <ProfileName>{name}</ProfileName>
       <Km>{km}km</Km>
     </Wrapper>
@@ -45,11 +61,26 @@ const Wrapper = styled.View<WrapperProps>`
   margin-top: ${props => (props.isSecond || props.isThird ? '50px' : '0px')};
 `;
 
+// 새로 추가할 styled-components
+const ImageContainer = styled.View`
+  position: relative;
+  margin-bottom: 5px;
+`;
+
+const RankBadge = styled.Image`
+  position: absolute;
+  top: -3px;
+  left: -5px;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+`;
+
+// 기존 ProfileImage에서 margin-bottom 제거
 const ProfileImage = styled.Image<ImageProps>`
   width: ${props => (props.isFirst ? '100px' : '80px')};
   height: ${props => (props.isFirst ? '100px' : '80px')};
   border-radius: 100px;
-  margin-bottom: 5px;
   border: 1px solid #ffffff;
 `;
 
