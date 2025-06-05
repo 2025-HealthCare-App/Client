@@ -9,7 +9,7 @@ const MainContents = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태
   const [isGoalSet, setIsGoalSet] = useState(false); // 목표 설정 여부 상태
   const [goal, setGoal] = useState(0); // 목표 거리 상태(0~100km)
-  const [currentDistance, setCurrentDistance] = useState(25); // 현재 달린 거리 (예시값)
+  const [currentDistance, setCurrentDistance] = useState(25); // 현재 달린 거리 (예시값) //TODO: 서버에서 받아온 값으로 변경 필요
 
   useEffect(() => {
     console.log('목표 거리:', goal);
@@ -24,6 +24,11 @@ const MainContents = () => {
     return percentage;
   };
 
+  //현재 월과 주차 계산
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
+  const currentWeek = Math.ceil(currentDate.getDate() / 7); // 주차 계산 (1일부터 시작하는 주 기준)
+
   return (
     <Wrapper>
       {/* 모달 */}
@@ -36,7 +41,9 @@ const MainContents = () => {
 
       <GoalContainer>
         <GoalTitle>
-          <TitleText>3월 2주차 목표</TitleText>
+          <TitleText>
+            {currentMonth}월 {currentWeek}주차 목표
+          </TitleText>
           <QuestionMarkWrapper>
             <QuestionMark>?</QuestionMark>
           </QuestionMarkWrapper>
