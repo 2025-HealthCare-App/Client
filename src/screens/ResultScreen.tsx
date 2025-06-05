@@ -1,7 +1,7 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
-import {addComma} from '../utils/util';
+import {addComma, formatElapsedTime} from '../utils/util';
 
 type RootStackParamList = {
   Result: {
@@ -26,14 +26,6 @@ const ResultScreen = () => {
 
   const navigation = useNavigation();
 
-  //초를 00:00 형식으로 변환하는 함수
-  const formatTime = (sec: number) => {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${pad(m)}:${pad(s)}`;
-  };
-
   return (
     <Wrapper>
       <Header>
@@ -55,7 +47,7 @@ const ResultScreen = () => {
           </KMContainer>
           <OthersContainer>
             <Category>
-              <Value>{formatTime(elapsedSec)}</Value>
+              <Value>{formatElapsedTime(elapsedSec)}</Value>
               <CategoryText>Time</CategoryText>
             </Category>
             <Category>

@@ -27,10 +27,24 @@ const StatisticsScreen = () => {
         <Section id="activities">
           <SemiTitle>최근 활동</SemiTitle>
           <ActivitiesContainer>
-            <Activity />
-            <Activity />
-            <Activity />
-            <Activity />
+            <Activity
+              distance={3934}
+              steps={234}
+              elapsedSec={2340}
+              Kcal={151}
+              startTime="2023.10.01 13:22"
+              activityTitle="CAUON - 제 2회 정기 러닝"
+              points={142}
+            />
+            <Activity
+              distance={1039}
+              steps={1454}
+              elapsedSec={1230}
+              Kcal={151}
+              startTime="2024.05.17 19:29"
+              activityTitle="혼자 뛰기"
+              points={39}
+            />
           </ActivitiesContainer>
           <PlusButton onPress={() => navigation.navigate('Activities')}>
             <PlusButtonText>더보기</PlusButtonText>
@@ -98,7 +112,6 @@ const Line = styled.View`
 
 const ActivitiesContainer = styled.View`
   width: 100%;
-  gap: 15px;
 `;
 const PlusButton = styled.TouchableOpacity`
   width: 100%;

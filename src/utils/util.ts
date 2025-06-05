@@ -51,3 +51,10 @@ export const formatTime = (sec: number) => {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 };
+
+export const formatElapsedTime = (elapsedSec: number) => {
+  const m = Math.floor(elapsedSec / 60);
+  const s = elapsedSec % 60;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(m)}:${pad(s)}`;
+};

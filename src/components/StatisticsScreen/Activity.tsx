@@ -2,20 +2,41 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import styled from 'styled-components/native';
+import {addComma, formatElapsedTime, formatTime} from '../../utils/util';
 
-const Activity = () => {
+interface ActivityProps {
+  distance: number; // in meters
+  steps: number;
+  elapsedSec: number; // in seconds
+  Kcal: number;
+  startTime: string; // formatted as 'YYYY.MM.DD HH:mm'
+  staticMapUrl?: string; // URL for the static map image
+  activityTitle: string; // title of the activity
+  points: number; // points earned from the activity
+}
+
+const Activity = ({
+  distance,
+  steps,
+  elapsedSec,
+  Kcal,
+  startTime,
+  staticMapUrl,
+  activityTitle,
+  points,
+}: ActivityProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToResult = () => {
     navigation.navigate('Result', {
-      distance: 1200, // 1.2km = 1200m
-      steps: 4210,
-      elapsedSec: 2343, // 39분 3초 = 39*60 + 3 = 2343초
-      Kcal: 142,
-      startTime: '2023.10.01 13:22',
-      staticMapUrl: 'https://example.com/static-map.png',
-      // activityTitle: 'CAUON - 제 2회 정기 러닝',
-      points: 142,
+      distance: distance, // 1.2km = 1200m
+      steps: steps,
+      elapsedSec: elapsedSec, // 39분 3초 = 39*60 + 3 = 2343초
+      Kcal: Kcal,
+      startTime: startTime,
+      staticMapUrl: staticMapUrl || 'https://example.com/static-map.png', // default URL if not provided
+      activityTitle: activityTitle || 'CAUON - 제 2회 정기 러닝', // default title if not provided
+      points: points || 142, // default points if not provided
     });
   };
 
@@ -23,22 +44,22 @@ const Activity = () => {
     <Wrapper onPress={goToResult}>
       <Top>
         <DateAndPoint>
-          <Date>2023.10.01 13:22</Date>
-          <Point>+ 142 P</Point>
+          <Date>{startTime}</Date>
+          <Point>+ {points} P</Point>
         </DateAndPoint>
-        <ActivityTitle>CAUON - 제 2회 정기 러닝</ActivityTitle>
+        <ActivityTitle>{activityTitle}</ActivityTitle>
       </Top>
       <Bottom>
         <Category id="time">
-          <Value>39:03</Value>
+          <Value>{formatElapsedTime(elapsedSec)}</Value>
           <CategoryText>Time</CategoryText>
         </Category>
         <Category id="km">
-          <Value>1.2</Value>
+          <Value>{(distance / 1000).toFixed(2)}</Value>
           <CategoryText>Km</CategoryText>
         </Category>
         <Category id="step">
-          <Value>4,210</Value>
+          <Value>{addComma(steps)}</Value>
           <CategoryText>Step</CategoryText>
         </Category>
       </Bottom>
@@ -57,6 +78,7 @@ const Wrapper = styled.TouchableOpacity`
   justify-content: space-between;
   align-items: center;
   padding: 25px;
+  margin-bottom: 15px;
 `;
 const Top = styled.View`
   width: 100%;
