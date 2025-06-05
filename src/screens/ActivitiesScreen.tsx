@@ -91,16 +91,16 @@ const ActivitiesScreen = () => {
 export default ActivitiesScreen;
 
 const Wrapper = styled.View`
+  width: 100%;
   height: 100%;
   justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding: 0px 20px;
   padding-bottom: 60px; /* bottomBar 높이만큼 여백 추가 */
 `;
 
 const Header = styled.View`
-  width: 100%;
+  width: 90%;
   height: 10%;
   /* background-color: #787878; */
   justify-content: center;
@@ -119,6 +119,6 @@ const CalendarContainer = styled.View`
 `;
 
 const ActivitiesContainer = styled.View`
-  flex: 1; /* 남은 공간 차지 */
-  width: 100%;
+  flex: 1;
+  width: 95%;
 `;

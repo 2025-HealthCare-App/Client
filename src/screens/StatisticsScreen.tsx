@@ -59,16 +59,16 @@ const StatisticsScreen = () => {
 export default StatisticsScreen;
 
 const Wrapper = styled.View`
+  width: 100%;
   height: 100%;
   justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding: 0px 20px;
   padding-bottom: 60px; /* bottomBar 높이만큼 여백 추가 */
 `;
 
 const Header = styled.View`
-  width: 100%;
+  width: 90%;
   height: 10%;
   /* background-color: #787878; */
   justify-content: center;
@@ -81,7 +81,7 @@ const Title = styled.Text`
 `;
 
 const Main = styled.ScrollView`
-  width: 100%;
+  width: 95%;
   height: 90%;
   padding: 30px 20px;
   background-color: #393e46;

@@ -34,7 +34,7 @@ const UserBar = () => {
 export default UserBar;
 
 const Wrapper = styled.View`
-  width: 100%;
+  width: 95%;
   height: 70px;
   flex-direction: row;
   justify-content: space-between;
