@@ -29,14 +29,14 @@ const WriteScreen = () => {
   };
 
   //before버튼 누르면 communityScreen으로 이동
-  const handleBeforeButtonPress = () => {
+  const goToCommunity = () => {
     navigation.navigate('Community');
   };
 
   return (
     <Wrapper>
       <Header>
-        <TouchableOpacity onPress={handleBeforeButtonPress}>
+        <TouchableOpacity onPress={goToCommunity}>
           <BeforeButtonText>&lt;</BeforeButtonText>
         </TouchableOpacity>
         <HeaderText>게시글 작성</HeaderText>
@@ -59,7 +59,7 @@ const WriteScreen = () => {
             <ImageUploadButtonText>사진 업로드</ImageUploadButtonText>
           </ImageUploadContainer>
         )}
-        <SubmitButton>
+        <SubmitButton onPress={goToCommunity}>
           <SubmitButtonText>작성 완료</SubmitButtonText>
         </SubmitButton>
       </Main>

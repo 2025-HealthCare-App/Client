@@ -84,7 +84,7 @@ const PercentText = styled.Text`
 const UserName = styled.Text`
   font-weight: bold;
   color: #00adb5;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
   text-decoration-line: underline;
 `;

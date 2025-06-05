@@ -2,16 +2,28 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 
-const WriteButton = () => {
+interface WriteButtonProps {
+  isPosted: boolean;
+  setIsPosted: (isPosted: boolean) => void;
+}
+
+const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
   const navigation = useNavigation();
   const handlePress = () => {
     navigation.navigate('Write');
+    if (!isPosted) {
+      setIsPosted(true);
+    }
   };
 
   return (
     <Wrapper onPress={handlePress}>
       <PencilIcon source={require('../../images/pencil.png')} />
-      <WriteText>게시글 작성하기(+500P)</WriteText>
+      {isPosted ? (
+        <WriteText>오늘의 게시글 작성 완료</WriteText>
+      ) : (
+        <WriteText>게시글 작성하기(+500P)</WriteText>
+      )}
     </Wrapper>
   );
 };
