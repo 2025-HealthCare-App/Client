@@ -12,6 +12,7 @@ import TestScreen from './src/screens/TestScreen';
 import ResultScreen from './src/screens/ResultScreen';
 import WriteScreen from './src/screens/WriteScreen';
 import HealthRoadScreen from './src/screens/HealthRoadScreen';
+import ActivitiesScreen from './src/screens/ActivitiesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Statistics"
+        initialRouteName="Activities"
         screenOptions={{headerShown: false, animation: 'none'}}>
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -31,6 +32,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Result" component={ResultScreen} />
         <Stack.Screen name="Write" component={WriteScreen} />
         <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
+        <Stack.Screen name="Activities" component={ActivitiesScreen} />
 
         <Stack.Screen name="Test" component={TestScreen} />
       </Stack.Navigator>

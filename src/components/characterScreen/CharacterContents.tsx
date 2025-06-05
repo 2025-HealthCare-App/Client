@@ -9,7 +9,7 @@ const CharacterContents = () => {
       <HealthRoadContainer />
       <TextBubble text="빨리 커서 몸짱이 되고싶어!" />
       <Character>
-        <Name>Lv 1. 아기</Name>
+        <Name>Lv.1</Name>
         <ChracterImage
           source={require('../../images/characters/character1.png')}
         />

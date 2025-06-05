@@ -9,6 +9,7 @@ const CommunityScreen = () => {
   const [isPosted, setIsPosted] = useState(false);
 
   return (
+    //TODO: 무한 스크롤 구현
     <Wrapper>
       <RankingBoard />
       <WriteButton isPosted={isPosted} setIsPosted={setIsPosted} />

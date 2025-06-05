@@ -32,7 +32,7 @@ const StatisticsScreen = () => {
             <Activity />
             <Activity />
           </ActivitiesContainer>
-          <PlusButton onPress={() => navigation.navigate('?')}>
+          <PlusButton onPress={() => navigation.navigate('Activities')}>
             <PlusButtonText>더보기</PlusButtonText>
           </PlusButton>
         </Section>
