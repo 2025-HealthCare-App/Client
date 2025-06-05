@@ -13,7 +13,6 @@ import ResultScreen from './src/screens/ResultScreen';
 import WriteScreen from './src/screens/WriteScreen';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
   return (
