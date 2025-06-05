@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import QuestModal from '../common/QuestModal';
 
 const UserBar = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <Wrapper>
+      {/* 모달 */}
+      <QuestModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <UserInfoContainer>
         <ProfileImg
           source={require('../../images/profileImgs/profileImg1.jpg')}
@@ -21,11 +28,8 @@ const UserBar = () => {
           <PointText>1,200 P</PointText>
         </PointTextContainer>
       </PointContainer>
-      <QuestContainer>
-        <Image
-          source={require('../../images/quest.png')}
-          style={{width: 25, height: 25, zIndex: 999}}
-        />
+      <QuestContainer onPress={() => setModalVisible(true)}>
+        <QuestImage source={require('../../images/quest.png')} />
       </QuestContainer>
     </Wrapper>
   );
@@ -68,7 +72,7 @@ const PointTextContainer = styled.View`
 `;
 const PointText = styled.Text`
   font-size: 13px;
-  font-weight: bold;
+  /* font-weight: bold; */
   color: white;
   font-family: 'Pretendard';
 `;
@@ -90,7 +94,13 @@ const UserName = styled.Text`
   /* TODO: 여기서 글자수 제한 !! */
 `;
 
-const QuestContainer = styled.View`
+const QuestContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+`;
+
+const QuestImage = styled(Image)`
+  width: 30px;
+  height: 30px;
+  z-index: 999;
 `;
