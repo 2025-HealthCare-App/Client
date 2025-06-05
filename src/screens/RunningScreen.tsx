@@ -116,10 +116,10 @@ const RunningScreen = () => {
         console.log('Accuracy', accuracy);
 
         // ✅ 정확도가 낮으면 무시
-        if (accuracy > 10) {
-          console.log(`Ignored due to low accuracy (${accuracy}m)`);
-          return;
-        }
+        // if (accuracy > 10) {
+        //   console.log(`Ignored due to low accuracy (${accuracy}m)`);
+        //   return;
+        // }
 
         if (prevLocation) {
           const d = getDistance(
