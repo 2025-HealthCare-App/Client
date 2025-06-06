@@ -7,6 +7,15 @@ import Activity from '../components/StatisticsScreen/Activity';
 
 const ActivitiesScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
+  // 운동한 날짜들
+  const exerciseDays = {
+    '2025-06-01': {marked: true},
+    '2024-06-03': {marked: true},
+    '2025-06-05': {marked: true},
+    '2025-06-10': {marked: true},
+    '2025-06-15': {marked: true},
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -22,10 +31,7 @@ const ActivitiesScreen = () => {
             console.log('선택된 날짜:', day.dateString);
             setSelectedDate(day.dateString);
           }}
-          markedDates={{
-            '2024-03-15': {marked: true, dotColor: 'red'},
-            '2024-03-20': {selected: true, selectedColor: 'blue'},
-          }}
+          markedDates={exerciseDays} // 운동한 날짜들 표시
           theme={{
             backgroundColor: '#222831',
             calendarBackground: '#222831',
@@ -35,7 +41,8 @@ const ActivitiesScreen = () => {
             todayTextColor: '#02ADB5',
             dayTextColor: '#ffffff',
             textDisabledColor: '#d9e1e8',
-            dotColor: '#02ADB5',
+            dotColor: '#CDDC39',
+            selectedDotColor: '#CDDC39',
             arrowColor: '#02ADB5',
             monthTextColor: '#ffffff',
           }}
