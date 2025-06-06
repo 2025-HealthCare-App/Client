@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
+type QuestId = 'quest1' | 'quest2' | 'quest3' | 'quest4';
+
 const QuestList = () => {
-  const completedQuests = {
+  const completedQuests: Record<QuestId, boolean> = {
     quest1: true, // 오늘 운동 시작하기는 완료된 상태
     quest2: true,
     quest3: false,
     quest4: false,
   };
 
-  const questData = [
+  const questData: {id: QuestId; text: string; points: string}[] = [
     {id: 'quest1', text: '오늘 운동 시작하기', points: '50 P'},
     {id: 'quest2', text: '1km 걷기', points: '100 P'},
     {id: 'quest3', text: '3km 걷기', points: '150 P'},
@@ -27,7 +29,7 @@ const QuestList = () => {
             {quest.text}
           </QuestText>
           <PointContainer>
-            <PointIcon>🪙</PointIcon>
+            <PointIcon source={require('../../images/point.png')} />
             <PointText>{quest.points}</PointText>
           </PointContainer>
         </Quest>
@@ -53,8 +55,8 @@ interface CheckBoxProps {
 }
 
 const CheckBox = styled.View<CheckBoxProps>`
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 4px;
   border: 2px solid ${props => (props.completed ? '#4CAF50' : '#cccccc')};
   background-color: ${props => (props.completed ? '#4CAF50' : 'transparent')};
@@ -65,7 +67,7 @@ const CheckBox = styled.View<CheckBoxProps>`
 
 const CheckMark = styled.Text`
   color: #ffffff;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
 `;
 
@@ -86,8 +88,9 @@ const PointContainer = styled.View`
   gap: 4px;
 `;
 
-const PointIcon = styled.Text`
-  font-size: 14px;
+const PointIcon = styled.Image`
+  width: 14px;
+  height: 14px;
 `;
 
 const PointText = styled.Text`
