@@ -75,7 +75,11 @@ const ResultScreen = () => {
             </TotalPointRow>
           </PointsContainer>
           <ResultMap
-            source={{uri: staticMapUrl}}
+            source={{
+              uri:
+                staticMapUrl ||
+                'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg',
+            }}
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
@@ -114,10 +118,10 @@ const PointRow = styled.View`
   gap: 10px;
 `;
 const CheckBox = styled.View`
-  width: 15px;
-  height: 15px;
-  border-radius: 2px;
-  background-color: #ffffff;
+  width: 5px;
+  height: 5px;
+  border-radius: 50px;
+  background-color: #222831;
   border: 1px solid #222831;
   justify-content: center;
 `;

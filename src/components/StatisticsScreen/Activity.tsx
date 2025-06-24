@@ -34,8 +34,10 @@ const Activity = ({
       elapsedSec: elapsedSec, // 39분 3초 = 39*60 + 3 = 2343초
       Kcal: Kcal,
       startTime: startTime,
-      staticMapUrl: staticMapUrl || 'https://example.com/static-map.png', // default URL if not provided
-      activityTitle: activityTitle || 'CAUON - 제 2회 정기 러닝', // default title if not provided
+      staticMapUrl:
+        staticMapUrl ||
+        'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg', // default URL if not provided
+      activityTitle: activityTitle || '오늘의 달리기', // default title if not provided
       points: points || 142, // default points if not provided
     });
   };
