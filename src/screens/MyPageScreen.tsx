@@ -1,15 +1,22 @@
 import React, {useState} from 'react';
-import {Image} from 'react-native';
+import {Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import LevelModal from '../components/mypageScreen/LevelModal';
+import {useNavigation} from '@react-navigation/native';
 
 const MyPageScreen = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
+  const navigation = useNavigation();
+  const goBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <Wrapper>
       <Header>
-        <BeforeButton>&lt;</BeforeButton>
+        <TouchableOpacity onPress={goBack}>
+          <BeforeButton>&lt;</BeforeButton>
+        </TouchableOpacity>
         <HeaderText>내 정보</HeaderText>
       </Header>
       <ProfileImgContainer>
@@ -20,7 +27,9 @@ const MyPageScreen = () => {
         {/* <EditIcon source={require('../images/pencil.png')} /> */}
       </ProfileImgContainer>
       <MiddleTextContainer>
-        <QuestionMark source={require('../images/questionMark.png')} />
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <QuestionMark source={require('../images/questionMark.png')} />
+        </TouchableOpacity>
         <TierBadge source={require('../images/tierBadge.png')} />
         <MiddleText>
           <Highlight>나는야초보</Highlight> 님, 오늘도 달려볼까요?
@@ -44,7 +53,7 @@ const MyPageScreen = () => {
           <Value>010-4303-8511</Value>
         </Row>
         <EditRow>
-          <EditButton onPress={() => setModalVisible(true)}>
+          <EditButton>
             <EditButtonText>수정</EditButtonText>
           </EditButton>
         </EditRow>
