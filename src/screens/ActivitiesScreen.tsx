@@ -46,6 +46,7 @@ const ActivitiesScreen = () => {
             arrowColor: '#02ADB5',
             monthTextColor: '#ffffff',
           }}
+          selected={selectedDate}
         />
       </CalendarContainer>
 

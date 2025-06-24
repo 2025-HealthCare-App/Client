@@ -2,9 +2,12 @@ import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
+import {useNavigation} from '@react-navigation/native';
 
 const UserBar = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
+
   return (
     <Wrapper>
       {/* 모달 */}
@@ -12,7 +15,7 @@ const UserBar = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <UserInfoContainer>
+      <UserInfoContainer onPress={() => navigation.navigate('Mypage')}>
         <ProfileImg
           source={require('../../images/profileImgs/profileImg1.jpg')}
         />
@@ -45,7 +48,7 @@ const Wrapper = styled.View`
   align-items: center;
 `;
 
-const UserInfoContainer = styled.View`
+const UserInfoContainer = styled.TouchableOpacity`
   width: 200px;
   height: 100%;
   flex-direction: row;
