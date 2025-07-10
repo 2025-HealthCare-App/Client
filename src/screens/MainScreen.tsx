@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import UserBar from '../components/mainScreen/UserBar';
 import StyledTextTicker from '../components/mainScreen/StyledTextTicker';
 import MainContents from '../components/mainScreen/MainContents';
 import BottomBar from '../components/common/BottomBar';
+import {loginTest} from '../apis/serverTest';
 
 const MainScreen = () => {
+  useEffect(() => {
+    loginTest();
+  }, []);
+
   return (
     <Wrapper>
       <UserBar />
