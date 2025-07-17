@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-native';
+import {Button, Text} from 'react-native';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
@@ -8,13 +8,19 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       <Title>달려</Title>
       <LoginWrapper>
         <Row>
-          <RowText>로그인</RowText>
+          <RowText>아이디</RowText>
           <Input />
         </Row>
         <Row>
           <RowText>비밀번호</RowText>
           <Input secureTextEntry={true} />
         </Row>
+        <LoginBtn
+          onPress={() => {
+            navigation.navigate('Main');
+          }}>
+          <LoginText>로그인</LoginText>
+        </LoginBtn>
       </LoginWrapper>
     </Wrapper>
   );
@@ -56,6 +62,7 @@ const RowText = styled.Text`
   color: #ffffff;
   font-size: 15px;
   width: 30%;
+  font-weight: bold;
 `;
 
 const Input = styled.TextInput`
@@ -65,4 +72,20 @@ const Input = styled.TextInput`
   border-radius: 5px;
   padding: 10px;
   color: #ffffff;
+`;
+
+const LoginBtn = styled.TouchableOpacity`
+  width: 20%;
+  height: 40px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: #00adb5;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoginText = styled.Text`
+  text-align: center;
+  color: white;
+  font-weight: bold;
 `;
