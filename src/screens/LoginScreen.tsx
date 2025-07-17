@@ -1,22 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
+import {loginAPI} from '../apis/loginAPI';
+import {Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const LoginScreen = ({navigation}: {navigation: any}) => {
+const LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
+
   return (
     <Wrapper>
       <Title>달려</Title>
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>
-          <Input />
+          <Input value={username} onChangeText={setUsername} />
         </Row>
         <Row>
           <RowText>비밀번호</RowText>
-          <Input secureTextEntry={true} />
+          <Input
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
         </Row>
         <LoginBtn
           onPress={() => {
-            navigation.navigate('Main');
+            loginAPI(username, password)
+              .then(response => {
+                console.log('로그인 성공:', response);
+                Alert.alert('로그인 성공', '환영합니다!');
+                // 로그인 성공 후 처리 (예: 메인 화면으로 이동)
+                navigation.navigate('Main');
+              })
+              .catch(error => {
+                console.error('로그인 실패:', error);
+                // 로그인 실패 처리
+              });
           }}>
           <LoginText>로그인</LoginText>
         </LoginBtn>
