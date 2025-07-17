@@ -30,12 +30,17 @@ const LoginScreen = () => {
           onPress={() => {
             loginAPI(username, password)
               .then(async response => {
-                console.log('로그인 성공:', response);
-                Alert.alert('로그인 성공', '환영합니다!');
+                const token = response.token;
+
+                // // 사용자 환영 메시지
+                // Alert.alert('로그인 성공', '환영합니다!');
+
+                // ✅ 토큰 Alert로 출력
+                Alert.alert('발급된 토큰', response.token);
 
                 // 토큰 저장
                 try {
-                  await AsyncStorage.setItem('token', response.token);
+                  await AsyncStorage.setItem('token', token);
                   console.log('토큰 저장 완료');
                 } catch (storageError) {
                   console.error('토큰 저장 중 오류:', storageError);
@@ -51,9 +56,8 @@ const LoginScreen = () => {
                   '아이디 또는 비밀번호가 잘못되었습니다.',
                 );
               });
-          }}>
-          <LoginText>로그인</LoginText>
-        </LoginBtn>
+          }}
+        />
       </LoginWrapper>
     </Wrapper>
   );

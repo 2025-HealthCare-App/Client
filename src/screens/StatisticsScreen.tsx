@@ -4,15 +4,12 @@ import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
-import {
-  getAllExercisesAPI,
-  getMyExercisesAPI,
-} from '../apis/exercise/exerciseAPI';
+import {getMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 
 const StatisticsScreen = () => {
   const navigation = useNavigation();
 
-  // 주간 데이터 (월~일)
+  // 주간 데이터 (월~일) - //TODO(임시)
   const weeklyData = [
     {day: '월', myDistance: 4.5, goalDistance: 7.0},
     {day: '화', myDistance: 2.0, goalDistance: 3.5},

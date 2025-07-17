@@ -1,7 +1,8 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
+import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 
 type RootStackParamList = {
   Result: {
@@ -25,6 +26,26 @@ const ResultScreen = () => {
   console.log('[ResultScreen] Static Map URL:', staticMapUrl);
 
   const navigation = useNavigation();
+
+  //임시 데이터
+  const newExercise = {
+    ex_title: '런닝머신 30분',
+    ex_distance: 3000,
+    ex_kcal: 250,
+    ex_steps: 4000,
+    ex_start_time: '14:30:00',
+    ex_end_time: '15:00:00',
+    ex_route_image: 'https://maps.googleapis.com/...', // 경로 이미지
+  };
+  useEffect(() => {
+    postMyExercisesAPI(newExercise)
+      .then(response => {
+        console.log('운동 기록 저장 성공:', response.data);
+      })
+      .catch(error => {
+        console.error('운동 기록 저장 실패:', error);
+      });
+  }, []);
 
   return (
     <Wrapper>
