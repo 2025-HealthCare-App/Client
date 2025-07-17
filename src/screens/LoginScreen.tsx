@@ -3,6 +3,7 @@ import styled from 'styled-components/native'; // ← RN은 반드시 /native �
 import {loginAPI} from '../apis/loginAPI';
 import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
@@ -28,15 +29,23 @@ const LoginScreen = () => {
         <LoginBtn
           onPress={() => {
             loginAPI(username, password)
-              .then(response => {
+              .then(async response => {
                 console.log('로그인 성공:', response);
                 Alert.alert('로그인 성공', '환영합니다!');
-                // 로그인 성공 후 처리 (예: 메인 화면으로 이동)
+
+                // 토큰 저장
+                try {
+                  await AsyncStorage.setItem('token', response.token);
+                  console.log('토큰 저장 완료');
+                } catch (storageError) {
+                  console.error('토큰 저장 중 오류:', storageError);
+                }
+
+                // 로그인 성공 후 화면 이동
                 navigation.navigate('Main');
               })
               .catch(error => {
                 console.error('로그인 실패:', error);
-                // 로그인 실패 처리
                 Alert.alert(
                   '로그인 실패',
                   '아이디 또는 비밀번호가 잘못되었습니다.',
