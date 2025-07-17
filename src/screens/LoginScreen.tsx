@@ -1,5 +1,4 @@
 import React from 'react';
-import {Button, Text} from 'react-native';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
