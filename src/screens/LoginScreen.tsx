@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native'; // ← RN은 반드시 /native 필요!
-import {loginAPI} from '../apis/loginAPI';
+import {loginAPI} from '../apis/user/loginAPI';
 import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
