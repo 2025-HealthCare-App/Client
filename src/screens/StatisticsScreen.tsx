@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
+import {
+  getAllExercisesAPI,
+  getMyExercisesAPI,
+} from '../apis/exercise/exerciseAPI';
 
 const StatisticsScreen = () => {
   const navigation = useNavigation();
@@ -21,8 +25,19 @@ const StatisticsScreen = () => {
 
   const maxDistance = 7; // 최대 거리 (7km)
 
-  console.log('월요일 goalDistance:', weeklyData[0].goalDistance);
-  console.log('계산된 높이:', (weeklyData[0].goalDistance / maxDistance) * 100);
+  // console.log('월요일 goalDistance:', weeklyData[0].goalDistance);
+  // console.log('계산된 높이:', (weeklyData[0].goalDistance / maxDistance) * 100);
+
+  //나의 운동 받아오기
+  useEffect(() => {
+    getMyExercisesAPI()
+      .then(response => {
+        console.log('나의 운동 데이터:', response.data);
+      })
+      .catch(error => {
+        console.error('나의 운동 데이터 가져오기 실패:', error);
+      });
+  }, []);
 
   return (
     <Wrapper>
