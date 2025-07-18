@@ -3,24 +3,41 @@ import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
+import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
 
 const MainContents = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태
   const [isGoalSet, setIsGoalSet] = useState(false); // 목표 설정 여부 상태
-  const [goal, setGoal] = useState(0); // 목표 거리 상태(0~100km)
-  const [currentDistance, setCurrentDistance] = useState(25); // 현재 달린 거리 (예시값) //TODO: 서버에서 받아온 값으로 변경 필요
+  const [weekGoal, setWeekGoal] = useState(0); // 목표 거리 상태(0~100km)
+  const [currentDistance, setCurrentDistance] = useState(0); // 이번주 달린 거리
 
   useEffect(() => {
-    console.log('목표 거리:', goal);
-  }, [goal]);
+    getMyWeekGoalAPI()
+      .then(response => {
+        console.log(response);
+        const data = response.data;
+        if (data === null) {
+          console.log('이번주 목표가 설정되지 않았습니다.');
+          return;
+        }
+        console.log('이번주 목표:', data.target_distance, 'm');
+        console.log('이번주 달린 거리:', data.total_distance, 'm');
+        setIsGoalSet(true);
+        setWeekGoal(data.target_distance);
+        setCurrentDistance(data.total_distance);
+      })
+      .catch(error => {
+        console.error('이번주 목표 조회 실패:', error);
+      });
+  }, []);
 
   // 목표 달성률 계산 (0~100%)
   const getProgressPercentage = () => {
-    if (goal === 0) {
+    if (weekGoal === 0) {
       return 0;
     }
-    const percentage = Math.min((currentDistance / goal) * 100, 100);
+    const percentage = Math.min((currentDistance / weekGoal) * 100, 100);
     return percentage;
   };
 
@@ -35,7 +52,7 @@ const MainContents = () => {
       <GoalModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        setGoal={setGoal}
+        setGoal={setWeekGoal}
         setIsGoalSet={setIsGoalSet}
       />
 
@@ -55,7 +72,7 @@ const MainContents = () => {
               <RealGoalBar progress={getProgressPercentage()} />
             </GoalBar>
             <GoalProgress>
-              {currentDistance}km / {goal}km (
+              {currentDistance}km / {weekGoal}km (
               {Math.round(getProgressPercentage())}%)
             </GoalProgress>
           </GoalBarContainer>
