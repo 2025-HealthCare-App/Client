@@ -1,12 +1,24 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
 import {useNavigation} from '@react-navigation/native';
+import {getMyUserInfoAPI} from '../../apis/user/userInfoAPI';
 
 const UserBar = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+
+  //나의 유저 정보 API 호출
+  useEffect(() => {
+    getMyUserInfoAPI()
+      .then(response => {
+        console.log('나의 유저 정보:', response.data);
+      })
+      .catch(error => {
+        console.error('유저 정보 조회 실패:', error);
+      });
+  }, []);
 
   return (
     <Wrapper>

@@ -12,7 +12,7 @@ const MainContents = () => {
   const [weekGoal, setWeekGoal] = useState(0); // 목표 거리 상태(0~100km)
   const [currentDistance, setCurrentDistance] = useState(0); // 이번주 달린 거리
 
-  // 이번주 목표 조회 API 호출하여 상태바 설정
+  // 1. 이번주 목표 조회 API 호출하여 상태바 설정
   useEffect(() => {
     getMyWeekGoalAPI()
       .then(response => {
@@ -33,7 +33,7 @@ const MainContents = () => {
       });
   }, []);
 
-  // 목표 달성률 계산 (0~100%)
+  // *목표 달성률 계산 (0~100%)
   const getProgressPercentage = () => {
     if (weekGoal === 0) {
       return 0;
