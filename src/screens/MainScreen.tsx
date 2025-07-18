@@ -1,11 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import UserBar from '../components/mainScreen/UserBar';
 import StyledTextTicker from '../components/mainScreen/StyledTextTicker';
 import MainContents from '../components/mainScreen/MainContents';
 import BottomBar from '../components/common/BottomBar';
+import {getMyWeekGoalAPI} from '../apis/week-ex/weekExApi';
 
 const MainScreen = () => {
+  useEffect(() => {
+    getMyWeekGoalAPI()
+      .then(response => {
+        const data = response.data;
+        console.log('이번주 목표:', data.target_distance, 'm');
+        console.log('이번주 달린 거리:', data.total_distance, 'm');
+      })
+      .catch(error => {
+        console.error('이번주 목표 조회 실패:', error);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <UserBar />

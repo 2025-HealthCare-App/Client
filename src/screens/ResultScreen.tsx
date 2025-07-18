@@ -27,7 +27,7 @@ const ResultScreen = () => {
 
   const navigation = useNavigation();
 
-  //임시 데이터
+  //임시 데이터 //TODO: 실제 운동한 데이터로 변경
   const newExercise = {
     ex_title: '런닝머신 30분',
     ex_distance: 3000,
