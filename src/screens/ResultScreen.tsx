@@ -35,7 +35,8 @@ const ResultScreen = () => {
     ex_steps: 4000,
     ex_start_time: '14:30:00',
     ex_end_time: '15:00:00',
-    ex_route_image: 'https://maps.googleapis.com/...', // 경로 이미지
+    ex_route_image:
+      'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.4219983,-122.084|37.4219983,-122.084&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg', // 경로 이미지
   };
   useEffect(() => {
     postMyExercisesAPI(newExercise)

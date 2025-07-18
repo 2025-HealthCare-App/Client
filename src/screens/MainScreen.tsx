@@ -10,7 +10,12 @@ const MainScreen = () => {
   useEffect(() => {
     getMyWeekGoalAPI()
       .then(response => {
+        console.log(response);
         const data = response.data;
+        if (data === null) {
+          console.log('이번주 목표가 설정되지 않았습니다.');
+          return;
+        }
         console.log('이번주 목표:', data.target_distance, 'm');
         console.log('이번주 달린 거리:', data.total_distance, 'm');
       })

@@ -32,11 +32,11 @@ const LoginScreen = () => {
               .then(async response => {
                 const token = response.token;
 
-                // // 사용자 환영 메시지
-                // Alert.alert('로그인 성공', '환영합니다!');
+                // 사용자 환영 메시지
+                Alert.alert('로그인 성공', '환영합니다!');
 
-                // ✅ 토큰 Alert로 출력
-                Alert.alert('발급된 토큰', response.token);
+                // // ✅ 토큰 Alert로 출력
+                // Alert.alert('발급된 토큰', response.token);
 
                 // 토큰 저장
                 try {
