@@ -5,15 +5,34 @@ import QuestModal from '../common/QuestModal';
 import {useNavigation} from '@react-navigation/native';
 import {getMyUserInfoAPI} from '../../apis/user/userInfoAPI';
 
+type UserInfo = {
+  id: number;
+  name: string;
+  profileImage: string;
+  tier: string;
+  points: number;
+};
+
 const UserBar = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); // 모달 상태
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null); // 유저 정보 상태
+
   const navigation = useNavigation();
 
   //나의 유저 정보 API 호출
   useEffect(() => {
     getMyUserInfoAPI()
       .then(response => {
-        console.log('나의 유저 정보:', response.data);
+        // console.log('나의 유저 정보:', response.data);
+        const data = response.data;
+        setUserInfo({
+          id: data.Uid,
+          name: data.name,
+          profileImage: data.profile_image,
+          tier: data.tier,
+          points: data.points,
+        });
+        console.log('유저 정보:', data);
       })
       .catch(error => {
         console.error('유저 정보 조회 실패:', error);
@@ -32,7 +51,7 @@ const UserBar = () => {
           source={require('../../images/profileImgs/profileImg1.jpg')}
         />
         <TierBadge source={require('../../images/tierBadge.png')} />
-        <UserName>나는야초보</UserName>
+        <UserName>{userInfo?.name}</UserName>
       </UserInfoContainer>
       <PointContainer>
         <Image
@@ -40,7 +59,7 @@ const UserBar = () => {
           style={{width: 30, height: 30, marginRight: -15, zIndex: 999}}
         />
         <PointTextContainer>
-          <PointText>1,200 P</PointText>
+          <PointText>{userInfo?.points.toLocaleString()} P</PointText>
         </PointTextContainer>
       </PointContainer>
       <QuestContainer onPress={() => setModalVisible(true)}>
