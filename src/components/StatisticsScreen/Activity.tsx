@@ -28,7 +28,7 @@ const Exercise = ({
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToResult = () => {
-    navigation.navigate('Result', {
+    navigation.navigate('Result2', {
       distance: distance, // 1.2km = 1200m
       steps: steps,
       elapsedSec: elapsedSec, // 39분 3초 = 39*60 + 3 = 2343초
