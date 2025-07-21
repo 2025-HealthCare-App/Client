@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
@@ -7,19 +7,18 @@ import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
 
 const MainContents = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false); // 모달 상태
-  const [isGoalSet, setIsGoalSet] = useState(false); // 목표 설정 여부 상태
-  const [weekGoal, setWeekGoal] = useState(0); // 목표 거리 상태(0~100km)
-  const [currentDistance, setCurrentDistance] = useState(0); // 이번주 달린 거리
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isGoalSet, setIsGoalSet] = useState(false);
+  const [weekGoal, setWeekGoal] = useState(0);
+  const [currentDistance, setCurrentDistance] = useState(0);
 
-  // 1. 이번주 목표 조회 API 호출하여 상태바 설정
-  useEffect(() => {
+  const fetchWeekGoal = useCallback(() => {
     getMyWeekGoalAPI()
       .then(response => {
-        console.log(response);
         const data = response.data;
         if (data === null) {
           console.log('이번주 목표가 설정되지 않았습니다.');
+          setIsGoalSet(false);
           return;
         }
         console.log('이번주 목표:', data.target_distance, 'm');
@@ -33,23 +32,27 @@ const MainContents = () => {
       });
   }, []);
 
-  // *목표 달성률 계산 (0~100%)
+  // 🎯 메인 화면이 포커스를 받을 때마다 목표 fetch
+  useFocusEffect(
+    useCallback(() => {
+      fetchWeekGoal();
+    }, [fetchWeekGoal]),
+  );
+
+  // 목표 달성률 계산
   const getProgressPercentage = () => {
     if (weekGoal === 0) {
       return 0;
     }
-    const percentage = Math.min((currentDistance / weekGoal) * 100, 100);
-    return percentage;
+    return Math.min((currentDistance / weekGoal) * 100, 100);
   };
 
-  //현재 월과 주차 계산
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
-  const currentWeek = Math.ceil(currentDate.getDate() / 7); // 주차 계산 (1일부터 시작하는 주 기준)
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentWeek = Math.ceil(currentDate.getDate() / 7);
 
   return (
     <Wrapper>
-      {/* 모달 */}
       <GoalModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -133,21 +136,6 @@ const TitleText = styled.Text`
   font-weight: bold;
 `;
 
-const QuestionMarkWrapper = styled.View`
-  width: 15px;
-  height: 15px;
-  aspect-ratio: 1/1;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  border: 1px solid #ffffff;
-`;
-const QuestionMark = styled.Text`
-  font-size: 7px;
-  color: #ffffff;
-  font-weight: bold;
-  text-align: center;
-`;
 const GoalBarContainer = styled.View`
   width: 80%;
   height: 25px;

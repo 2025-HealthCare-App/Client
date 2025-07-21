@@ -30,9 +30,9 @@ const ResultScreen = () => {
   //임시 데이터 //TODO: 실제 운동한 데이터로 변경
   const newExercise = {
     ex_title: '런닝머신 30분',
-    ex_distance: 3000,
-    ex_kcal: 250,
-    ex_steps: 4000,
+    ex_distance: 10,
+    ex_kcal: 30,
+    ex_steps: 200,
     ex_start_time: '14:30:00',
     ex_end_time: '15:00:00',
     ex_route_image:

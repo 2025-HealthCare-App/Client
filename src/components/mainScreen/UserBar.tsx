@@ -19,7 +19,7 @@ const UserBar = () => {
 
   const navigation = useNavigation();
 
-  //나의 유저 정보 API 호출
+  //나의 유저 정보 API 호출 및 세탕
   useEffect(() => {
     getMyUserInfoAPI()
       .then(response => {
@@ -84,7 +84,7 @@ const UserInfoContainer = styled.TouchableOpacity`
   height: 100%;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: #00494d;
   border: 3px solid #02adb5;
   border-radius: 50px;
