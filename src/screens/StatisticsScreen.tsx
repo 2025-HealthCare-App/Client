@@ -1,12 +1,27 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
-import {getMyAllExercisesAPI} from '../apis/exercise/exerciseAPI';
+import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
+
+type Exercise = {
+  exerciseId: number;
+  distance: number;
+  steps: number;
+  elapsedSec: number;
+  Kcal: number;
+  startTime: string;
+  endTime: string;
+  exTitle: string;
+  points: number;
+  staticMapUrl: string;
+  date: string;
+};
 
 const StatisticsScreen = () => {
+  const [recentExercises, setRecentExercises] = useState<Exercise[]>([]);
   const navigation = useNavigation();
 
   // 주간 데이터 (월~일) - //TODO(임시)
@@ -19,22 +34,58 @@ const StatisticsScreen = () => {
     {day: '토', myDistance: 5.2, goalDistance: 6.0},
     {day: '일', myDistance: 2.5, goalDistance: 3.5},
   ];
+  const maxDistance = 7; // 최대 거리 (7km) - //TODO(임시)
 
-  const maxDistance = 7; // 최대 거리 (7km)
-
-  // console.log('월요일 goalDistance:', weeklyData[0].goalDistance);
-  // console.log('계산된 높이:', (weeklyData[0].goalDistance / maxDistance) * 100);
+  // 경과 시간 계산 함수(startTime과 endTime을 초로 변환)
+  const getElapsedSec = (start: string, end: string): number => {
+    const [sh, sm, ss] = start.split(':').map(Number);
+    const [eh, em, es] = end.split(':').map(Number);
+    const startSec = sh * 3600 + sm * 60 + ss;
+    const endSec = eh * 3600 + em * 60 + es;
+    return endSec - startSec;
+  };
+  //created_at에서 날짜 추출 함수
+  const getDateFromCreatedAt = (createdAt: string): string => {
+    const date = new Date(createdAt);
+    return date.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 반환
+  };
 
   //나의 운동 받아오기
   useEffect(() => {
-    getMyAllExercisesAPI()
+    getMyRecentExercisesAPI()
       .then(response => {
-        // console.log('나의 운동 데이터:', response.data);
+        // console.log('나의 최근 운동 데이터:', response.data);
+        const {exercises} = response.data;
+        if (Array.isArray(exercises)) {
+          setRecentExercises(
+            exercises.map((exercise: any) => ({
+              exerciseId: exercise.exercise_id,
+              distance: exercise.ex_distance,
+              steps: exercise.ex_steps,
+              elapsedSec: getElapsedSec(
+                exercise.ex_start_time,
+                exercise.ex_end_time,
+              ),
+              Kcal: exercise.ex_kcal,
+              startTime: exercise.ex_start_time,
+              endTime: exercise.ex_end_time,
+              exTitle: exercise.ex_title || '오늘의 운동',
+              points: exercise.points || 0,
+              staticMapUrl: exercise.ex_route_image || '',
+              date: getDateFromCreatedAt(exercise.created_at), // 날짜 추출
+            })),
+          );
+        }
       })
       .catch(error => {
         console.error('나의 운동 데이터 가져오기 실패:', error);
       });
   }, []);
+
+  //잘 세팅되었나 확인
+  useEffect(() => {
+    console.log(JSON.stringify(recentExercises, null, 2)); // JSON 형태로 출력
+  }, [recentExercises]);
 
   return (
     <Wrapper>
@@ -94,24 +145,18 @@ const StatisticsScreen = () => {
         <Section id="activities">
           <SemiTitle>최근 활동</SemiTitle>
           <ActivitiesContainer>
-            <Activity
-              distance={3934}
-              steps={234}
-              elapsedSec={2340}
-              Kcal={151}
-              startTime="2023.10.01 13:22"
-              activityTitle="CAUON - 제 2회 정기 러닝"
-              points={142}
-            />
-            <Activity
-              distance={1039}
-              steps={1454}
-              elapsedSec={1230}
-              Kcal={151}
-              startTime="2024.05.17 19:29"
-              activityTitle="혼자 뛰기"
-              points={39}
-            />
+            {recentExercises.map((exercise, index) => (
+              <Activity
+                key={index}
+                distance={exercise.distance}
+                steps={exercise.steps}
+                elapsedSec={exercise.elapsedSec}
+                Kcal={exercise.Kcal}
+                startTime={exercise.startTime}
+                exTitle={exercise.exTitle}
+                points={exercise.points}
+              />
+            ))}
           </ActivitiesContainer>
           <PlusButton onPress={() => navigation.navigate('Activities')}>
             <PlusButtonText>더보기</PlusButtonText>

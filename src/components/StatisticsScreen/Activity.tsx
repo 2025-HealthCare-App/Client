@@ -2,29 +2,29 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import styled from 'styled-components/native';
-import {addComma, formatElapsedTime, formatTime} from '../../utils/util';
+import {addComma, formatElapsedTime} from '../../utils/util';
 
-interface ActivityProps {
+interface ExerciseProps {
   distance: number; // in meters
   steps: number;
   elapsedSec: number; // in seconds
   Kcal: number;
   startTime: string; // formatted as 'YYYY.MM.DD HH:mm'
   staticMapUrl?: string; // URL for the static map image
-  activityTitle: string; // title of the activity
-  points: number; // points earned from the activity
+  exTitle: string; // title of the exercise
+  points: number; // points earned from the exercise
 }
 
-const Activity = ({
+const Exercise = ({
   distance,
   steps,
   elapsedSec,
   Kcal,
   startTime,
   staticMapUrl,
-  activityTitle,
+  exTitle,
   points,
-}: ActivityProps) => {
+}: ExerciseProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToResult = () => {
@@ -37,7 +37,7 @@ const Activity = ({
       staticMapUrl:
         staticMapUrl ||
         'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg', // default URL if not provided
-      activityTitle: activityTitle || '오늘의 달리기', // default title if not provided
+      exTitle: exTitle || '오늘의 달리기', // default title if not provided
       points: points || 142, // default points if not provided
     });
   };
@@ -49,7 +49,7 @@ const Activity = ({
           <Date>{startTime}</Date>
           <Point>+ {points} P</Point>
         </DateAndPoint>
-        <ActivityTitle>{activityTitle}</ActivityTitle>
+        <ExerciseTitle>{exTitle}</ExerciseTitle>
       </Top>
       <Bottom>
         <Category id="time">
@@ -69,7 +69,7 @@ const Activity = ({
   );
 };
 
-export default Activity;
+export default Exercise;
 
 const Wrapper = styled.TouchableOpacity`
   width: 100%;
@@ -112,7 +112,7 @@ const Point = styled.Text`
   text-align: center;
   color: #6f6f6f;
 `;
-const ActivityTitle = styled.Text`
+const ExerciseTitle = styled.Text`
   width: 100%;
   font-size: 13px;
   color: #222831;

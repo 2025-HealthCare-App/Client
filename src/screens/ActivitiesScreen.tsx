@@ -58,7 +58,7 @@ const ActivitiesScreen = () => {
             elapsedSec={2340}
             Kcal={151}
             startTime="2023.10.01 13:22"
-            activityTitle="CAUON - 제 2회 정기 러닝"
+            exTitle="CAUON - 제 2회 정기 러닝"
             points={142}
           />
           <Activity
@@ -67,7 +67,7 @@ const ActivitiesScreen = () => {
             elapsedSec={1230}
             Kcal={151}
             startTime="2024.05.17 19:29"
-            activityTitle="혼자 뛰기"
+            exTitle="혼자 뛰기"
             points={39}
           />
           <Activity
@@ -76,7 +76,7 @@ const ActivitiesScreen = () => {
             elapsedSec={1230}
             Kcal={151}
             startTime="2024.05.17 19:29"
-            activityTitle="혼자 뛰기"
+            exTitle="혼자 뛰기"
             points={39}
           />
           <Activity
@@ -85,7 +85,7 @@ const ActivitiesScreen = () => {
             elapsedSec={1230}
             Kcal={151}
             startTime="2024.05.17 19:29"
-            activityTitle="혼자 뛰기"
+            exTitle="혼자 뛰기"
             points={39}
           />
         </ScrollView>

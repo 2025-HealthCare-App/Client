@@ -19,6 +19,26 @@ export const getMyAllExercisesAPI = async () => {
   }
 };
 
+//나의 최근 3개 운동 조회 API
+export const getMyRecentExercisesAPI = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('토큰이 존재하지 않습니다.');
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/exercises/recent`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // 나의 운동 Post API
 export const postMyExercisesAPI = async exerciseData => {
   try {
