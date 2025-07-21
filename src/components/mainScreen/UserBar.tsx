@@ -32,7 +32,6 @@ const UserBar = () => {
           tier: data.tier,
           points: data.points,
         });
-        console.log('유저 정보:', data);
       })
       .catch(error => {
         console.error('유저 정보 조회 실패:', error);

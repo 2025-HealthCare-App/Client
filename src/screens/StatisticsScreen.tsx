@@ -29,7 +29,7 @@ const StatisticsScreen = () => {
   useEffect(() => {
     getMyExercisesAPI()
       .then(response => {
-        console.log('나의 운동 데이터:', response.data);
+        // console.log('나의 운동 데이터:', response.data);
       })
       .catch(error => {
         console.error('나의 운동 데이터 가져오기 실패:', error);
