@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_BASE_URL} from '@env';
 
-//나의 운동 조회 API
-export const getMyExercisesAPI = async () => {
+//나의 모든 운동 조회 API
+export const getMyAllExercisesAPI = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
 

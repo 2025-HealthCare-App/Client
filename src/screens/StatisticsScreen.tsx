@@ -4,7 +4,7 @@ import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
-import {getMyExercisesAPI} from '../apis/exercise/exerciseAPI';
+import {getMyAllExercisesAPI} from '../apis/exercise/exerciseAPI';
 
 const StatisticsScreen = () => {
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ const StatisticsScreen = () => {
 
   //나의 운동 받아오기
   useEffect(() => {
-    getMyExercisesAPI()
+    getMyAllExercisesAPI()
       .then(response => {
         // console.log('나의 운동 데이터:', response.data);
       })
