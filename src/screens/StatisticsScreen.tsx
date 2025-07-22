@@ -56,11 +56,6 @@ const StatisticsScreen = () => {
       });
   }, []);
 
-  //잘 세팅되었나 확인
-  useEffect(() => {
-    console.log(JSON.stringify(recentExercises, null, 2)); // JSON 형태로 출력
-  }, [recentExercises]);
-
   return (
     <Wrapper>
       <Header>

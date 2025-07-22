@@ -18,3 +18,20 @@ export const getMyUserInfoAPI = async () => {
     throw error;
   }
 };
+
+//나의 누적 총 거리 조회 API
+export const getMyTotalDistanceAPI = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.get(`${API_BASE_URL}/users/total-distance`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,5 +1,7 @@
 import styled from 'styled-components/native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {getMilestoneMessage} from '../../constants/distanceMsg';
+import {getMyTotalDistanceAPI} from '../../apis/user/userInfoAPI';
 
 const BalloonWrapper = styled.View`
   height: 100%;
@@ -10,7 +12,7 @@ const BalloonWrapper = styled.View`
   background-color: #02adb5;
   border-radius: 10px;
   align-self: flex-start;
-  margin-left: 10px; /* 말풍선 꼬리를 위한? 왼쪽 여백 추가 */
+  margin-left: 10px;
   padding: 0px 20px;
 `;
 
@@ -22,7 +24,7 @@ const BalloonTail = styled.View`
   height: 0;
   border-top-width: 5px;
   border-bottom-width: 5px;
-  border-right-width: 20px; /* 말풍선 꼬리의 너비 */
+  border-right-width: 20px;
   border-style: solid;
   border-top-color: transparent;
   border-bottom-color: transparent;
@@ -32,6 +34,7 @@ const BalloonTail = styled.View`
 const BalloonText = styled.Text`
   color: white;
   font-size: 12px;
+  text-align: center;
 `;
 
 const BoldText = styled(BalloonText)`
@@ -40,15 +43,23 @@ const BoldText = styled(BalloonText)`
 `;
 
 const SpeechBubble = () => {
+  const [totalDistance, setTotalDistance] = useState(40000); // 예시: 40,000m (서울역 ~ 용인)
+  useEffect(() => {
+    // console.log(JSON.stringify(recentExercises, null, 2)); // JSON 형태로 출력
+    getMyTotalDistanceAPI()
+      .then(response => {
+        console.log('나의 총 거리(m):', response.data.totalDistance);
+        setTotalDistance(response.data.totalDistance / 1000); // m -> km 변환
+      })
+      .catch(error => {
+        console.error('나의 총 거리 가져오기 실패:', error);
+      });
+  }, []);
+
   return (
     <BalloonWrapper>
       <BalloonTail />
-      <BalloonText>
-        지금까지 {'\n'}
-        <BoldText>서울역</BoldText>
-        에서 <BoldText>강남역</BoldText>
-        까지 달렸어요!
-      </BalloonText>
+      <BalloonText>{getMilestoneMessage(totalDistance)}</BalloonText>
     </BalloonWrapper>
   );
 };
