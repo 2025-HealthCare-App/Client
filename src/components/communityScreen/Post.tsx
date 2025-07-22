@@ -1,21 +1,33 @@
 import React, {useState} from 'react';
-import {Text, Touchable, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
+import {PostType} from '../../types/postType';
 
-const Post = () => {
+type Props = {
+  post: PostType;
+};
+
+const Post = ({post}: Props) => {
   const [isHearted, setIsHearted] = useState(false);
-  const [heartCount, setHeartCount] = useState(34);
+  const [heartCount, setHeartCount] = useState(post.heartsNum);
+
   return (
     <Wrapper>
-      {/* <Title>나는야 초보</Title> */}
+      {/* 게시물 이미지 */}
       <PostImage
-        source={require('../../images/communityScreen/workdone.png')}
+        source={
+          post.postImage
+            ? {uri: post.postImage}
+            : require('../../images/communityScreen/workdone.png')
+        }
       />
+
+      {/* 하트 */}
       <HeartContainer>
         <TouchableOpacity
           onPress={() => {
             setIsHearted(!isHearted);
-            setHeartCount(isHearted ? heartCount - 1 : heartCount + 1);
+            setHeartCount(prev => (isHearted ? prev - 1 : prev + 1));
           }}>
           <HeartIcon
             source={
@@ -27,18 +39,17 @@ const Post = () => {
         </TouchableOpacity>
         <HeartCount>{heartCount}</HeartCount>
       </HeartContainer>
+
+      {/* 텍스트 영역 */}
       <PostTextContainer>
         <NameAndDate>
           <UserName>
-            <Text>나는야초보</Text>
+            <Text>User {post.Uid}</Text>
             <TierBadge source={require('../../images/tierBadge.png')} />
           </UserName>
-          <Date>2025.10.01</Date>
+          <Date>{post.createdAt.split('T')[0]}</Date>
         </NameAndDate>
-        <PostText>
-          오늘도 열심히 운동했습니다! 운동을 시작한지 얼마 되지 않았지만,
-          매일매일 조금씩 발전하는 것 같아요 💪
-        </PostText>
+        <PostText>{post.postContent}</PostText>
       </PostTextContainer>
     </Wrapper>
   );

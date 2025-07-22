@@ -39,7 +39,8 @@ const BalloonText = styled.Text`
 
 const BoldText = styled(BalloonText)`
   font-weight: bold;
-  font-size: 16px;
+  font-size: 13px;
+  text-align: center;
 `;
 
 const SpeechBubble = () => {
@@ -59,7 +60,7 @@ const SpeechBubble = () => {
   return (
     <BalloonWrapper>
       <BalloonTail />
-      <BalloonText>{getMilestoneMessage(totalDistance)}</BalloonText>
+      <BoldText>{getMilestoneMessage(totalDistance)}</BoldText>
     </BalloonWrapper>
   );
 };
