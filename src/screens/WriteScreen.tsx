@@ -3,11 +3,29 @@ import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import styled from 'styled-components/native';
+import {uploadPost} from '../apis/community/postAPI';
 
 const WriteScreen = () => {
+  const [postContent, setPostContent] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const navigation = useNavigation();
 
+  //게시글 post API
+  const handlePostSubmit = async () => {
+    try {
+      const response = await uploadPost({postContent, imageUri: selectedImage});
+      if (response.success) {
+        console.log('게시글 작성 성공:', response);
+        navigation.navigate('Community'); // 게시글 작성 후 커뮤니티 화면으로 이동
+      } else {
+        console.error('게시글 작성 실패:', response.message);
+      }
+    } catch (error) {
+      console.error('게시글 작성 중 오류 발생:', error);
+    }
+  };
+
+  // 이미지 업로드 핸들러
   const handleImageUpload = () => {
     launchImageLibrary(
       {
@@ -28,10 +46,6 @@ const WriteScreen = () => {
     );
   };
 
-  //before버튼 누르면 communityScreen으로 이동
-  const goToCommunity = () => {
-    navigation.navigate('Community');
-  };
   //뒤로가기
   const goBack = () => {
     navigation.goBack();
@@ -52,6 +66,9 @@ const WriteScreen = () => {
           multiline={true} // ✅ 줄바꿈 가능
           maxLength={50} // ✅ 최대 글자 수 제한
           textAlignVertical="top" // ✅ 입력 내용 위쪽부터 시작
+          value={postContent}
+          onChangeText={text => setPostContent(text)}
+          style={{textAlign: 'left'}} // ✅ 왼쪽 정렬
         />
         {selectedImage ? (
           <PreviewImage source={{uri: selectedImage}} />
@@ -63,7 +80,7 @@ const WriteScreen = () => {
             <ImageUploadButtonText>사진 업로드</ImageUploadButtonText>
           </ImageUploadContainer>
         )}
-        <SubmitButton onPress={goToCommunity}>
+        <SubmitButton onPress={handlePostSubmit}>
           <SubmitButtonText>작성 완료</SubmitButtonText>
         </SubmitButton>
       </Main>
