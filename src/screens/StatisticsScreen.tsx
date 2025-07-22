@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseType} from '../types/exercise';
 import Exercise from '../components/StatisticsScreen/Exercise';
+import {getDateFromCreatedAt, getElapsedSec} from '../utils/timeUtil';
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
@@ -22,20 +23,6 @@ const StatisticsScreen = () => {
     {day: '일', myDistance: 2.5, goalDistance: 3.5},
   ];
   const maxDistance = 7; // 최대 거리 (7km) - //TODO(임시)
-
-  // 경과 시간 계산 함수(startTime과 endTime을 초로 변환)
-  const getElapsedSec = (start: string, end: string): number => {
-    const [sh, sm, ss] = start.split(':').map(Number);
-    const [eh, em, es] = end.split(':').map(Number);
-    const startSec = sh * 3600 + sm * 60 + ss;
-    const endSec = eh * 3600 + em * 60 + es;
-    return endSec - startSec;
-  };
-  //created_at에서 날짜 추출 함수
-  const getDateFromCreatedAt = (createdAt: string): string => {
-    const date = new Date(createdAt);
-    return date.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 반환
-  };
 
   //나의 운동 받아오기
   useEffect(() => {
@@ -133,7 +120,7 @@ const StatisticsScreen = () => {
           <SemiTitle>최근 활동</SemiTitle>
           <ActivitiesContainer>
             {recentExercises.map((exercise, index) => (
-              <Exercise key={index} exercise={exercise} />
+              <Exercise key={index} {...exercise} />
             ))}
           </ActivitiesContainer>
           <PlusButton onPress={() => navigation.navigate('Activities')}>

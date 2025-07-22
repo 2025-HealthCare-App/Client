@@ -12,7 +12,7 @@ import TestScreen from './src/screens/TestScreen';
 import ResultScreen from './src/screens/ResultScreen';
 import WriteScreen from './src/screens/WriteScreen';
 import HealthRoadScreen from './src/screens/HealthRoadScreen';
-import ActivitiesScreen from './src/screens/ActivitiesScreen';
+import ActivitiesScreen from './src/screens/HistoryScreen';
 import Result2Screen from './src/screens/Result2Screen';
 
 const Stack = createNativeStackNavigator();

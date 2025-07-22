@@ -5,28 +5,33 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
 import {ExerciseType} from '../../types/exercise';
 
-type Props = {
-  exercise: ExerciseType;
-};
-
-const Exercise = ({exercise}: Props) => {
+// 🔥 props 타입을 ExerciseType으로 바로 지정
+const Exercise = ({
+  distance,
+  steps,
+  elapsedSec,
+  Kcal,
+  startTime,
+  staticMapUrl,
+  exTitle,
+  points,
+  date,
+  ...rest
+}: ExerciseType) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
-  const {
-    distance,
-    steps,
-    elapsedSec,
-    Kcal,
-    startTime,
-    staticMapUrl,
-    exTitle,
-    points,
-    date,
-  } = exercise;
 
   const goToResult = () => {
     navigation.navigate('Result2', {
-      ...exercise, // 한 줄로 모든 정보 전달
+      distance,
+      steps,
+      elapsedSec,
+      Kcal,
+      startTime,
+      staticMapUrl,
+      exTitle,
+      points,
+      date,
+      ...rest,
     });
   };
 

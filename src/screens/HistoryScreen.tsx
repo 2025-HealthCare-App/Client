@@ -3,11 +3,13 @@ import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
-import Activity from '../components/StatisticsScreen/Exercise';
+import Exercise from '../components/StatisticsScreen/Exercise';
+import {ExerciseType} from '../types/exercise';
 
-const ActivitiesScreen = () => {
+const HistoryScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
-  // 운동한 날짜들
+
+  // 운동한 날짜들 표시
   const exerciseDays = {
     '2025-06-01': {marked: true},
     '2024-06-03': {marked: true},
@@ -15,6 +17,62 @@ const ActivitiesScreen = () => {
     '2025-06-10': {marked: true},
     '2025-06-15': {marked: true},
   };
+
+  // 예시 운동 데이터 (서버에서 받아온다고 가정)
+  const dummyExercises: ExerciseType[] = [
+    {
+      exerciseId: 1,
+      distance: 3934,
+      steps: 234,
+      elapsedSec: 2340,
+      Kcal: 151,
+      startTime: '13:22:00',
+      endTime: '13:50:00',
+      exTitle: 'CAUON - 제 2회 정기 러닝',
+      points: 142,
+      staticMapUrl: '',
+      date: '2023-10-01',
+    },
+    {
+      exerciseId: 2,
+      distance: 1039,
+      steps: 1454,
+      elapsedSec: 1230,
+      Kcal: 151,
+      startTime: '19:29:00',
+      endTime: '19:50:00',
+      exTitle: '혼자 뛰기',
+      points: 39,
+      staticMapUrl: '',
+      date: '2024-05-17',
+    },
+    {
+      exerciseId: 3,
+      distance: 1039,
+      steps: 1454,
+      elapsedSec: 1230,
+      Kcal: 151,
+      startTime: '19:29:00',
+      endTime: '19:50:00',
+      exTitle: '혼자 뛰기',
+      points: 39,
+      staticMapUrl: '',
+      date: '2024-05-17',
+    },
+    {
+      exerciseId: 4,
+      distance: 1039,
+      steps: 1454,
+      elapsedSec: 1230,
+      Kcal: 151,
+      startTime: '19:29:00',
+      endTime: '19:50:00',
+      exTitle: '혼자 뛰기',
+      points: 39,
+      staticMapUrl: '',
+      date: '2024-05-17',
+    },
+  ];
 
   return (
     <Wrapper>
@@ -24,14 +82,12 @@ const ActivitiesScreen = () => {
 
       <CalendarContainer>
         <Calendar
-          style={{
-            width: '100%',
-          }}
+          style={{width: '100%'}}
           onDayPress={day => {
             console.log('선택된 날짜:', day.dateString);
             setSelectedDate(day.dateString);
           }}
-          markedDates={exerciseDays} // 운동한 날짜들 표시
+          markedDates={exerciseDays}
           theme={{
             backgroundColor: '#222831',
             calendarBackground: '#222831',
@@ -52,42 +108,9 @@ const ActivitiesScreen = () => {
 
       <ActivitiesContainer>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Activity
-            distance={3934}
-            steps={234}
-            elapsedSec={2340}
-            Kcal={151}
-            startTime="2023.10.01 13:22"
-            exTitle="CAUON - 제 2회 정기 러닝"
-            points={142}
-          />
-          <Activity
-            distance={1039}
-            steps={1454}
-            elapsedSec={1230}
-            Kcal={151}
-            startTime="2024.05.17 19:29"
-            exTitle="혼자 뛰기"
-            points={39}
-          />
-          <Activity
-            distance={1039}
-            steps={1454}
-            elapsedSec={1230}
-            Kcal={151}
-            startTime="2024.05.17 19:29"
-            exTitle="혼자 뛰기"
-            points={39}
-          />
-          <Activity
-            distance={1039}
-            steps={1454}
-            elapsedSec={1230}
-            Kcal={151}
-            startTime="2024.05.17 19:29"
-            exTitle="혼자 뛰기"
-            points={39}
-          />
+          {dummyExercises.map(exercise => (
+            <Exercise key={exercise.exerciseId} {...exercise} />
+          ))}
         </ScrollView>
       </ActivitiesContainer>
 
@@ -96,7 +119,7 @@ const ActivitiesScreen = () => {
   );
 };
 
-export default ActivitiesScreen;
+export default HistoryScreen;
 
 const Wrapper = styled.View`
   width: 100%;
