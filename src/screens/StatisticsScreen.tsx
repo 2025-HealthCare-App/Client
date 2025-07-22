@@ -155,6 +155,8 @@ const StatisticsScreen = () => {
                 startTime={exercise.startTime}
                 exTitle={exercise.exTitle}
                 points={exercise.points}
+                staticMapUrl={exercise.staticMapUrl}
+                date={exercise.date}
               />
             ))}
           </ActivitiesContainer>

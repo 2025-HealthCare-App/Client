@@ -5,14 +5,17 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
 
 interface ExerciseProps {
-  distance: number; // in meters
+  exerciseId: number;
+  distance: number;
   steps: number;
-  elapsedSec: number; // in seconds
+  elapsedSec: number;
   Kcal: number;
-  startTime: string; // formatted as 'YYYY.MM.DD HH:mm'
-  staticMapUrl?: string; // URL for the static map image
-  exTitle: string; // title of the exercise
-  points: number; // points earned from the exercise
+  startTime: string;
+  endTime: string;
+  exTitle: string;
+  points: number;
+  staticMapUrl: string;
+  date: string;
 }
 
 const Exercise = ({
@@ -24,6 +27,7 @@ const Exercise = ({
   staticMapUrl,
   exTitle,
   points,
+  date,
 }: ExerciseProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -46,7 +50,9 @@ const Exercise = ({
     <Wrapper onPress={goToResult}>
       <Top>
         <DateAndPoint>
-          <Date>{startTime}</Date>
+          <Date>
+            {date} {startTime}
+          </Date>
           <Point>+ {points} P</Point>
         </DateAndPoint>
         <ExerciseTitle>{exTitle}</ExerciseTitle>

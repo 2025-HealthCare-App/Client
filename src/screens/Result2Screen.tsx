@@ -5,14 +5,17 @@ import {addComma, formatElapsedTime} from '../utils/util';
 
 type RootStackParamList = {
   Result: {
+    exerciseId: number;
     distance: number;
     steps: number;
     elapsedSec: number;
     Kcal: number;
     startTime: string;
-    staticMapUrl?: string;
-    activityTitle?: string; // Optional, if you want to display a title
-    points?: number; // Optional, if you want to display points
+    endTime: string;
+    exTitle: string;
+    points: number;
+    staticMapUrl: string;
+    date: string;
   };
 };
 type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
@@ -21,9 +24,6 @@ const Result2Screen = () => {
   const route = useRoute<ResultScreenRouteProp>();
   const {distance, steps, elapsedSec, Kcal, startTime, staticMapUrl} =
     route.params;
-
-  console.log('[ResultScreen] Static Map URL:', staticMapUrl);
-
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Result2Screen = () => {
         <ResultTitleContainer>
           <DateandTime>{startTime}</DateandTime>
           <ResultTitle>
-            {route.params.activityTitle || `${startTime} 의 운동`}
+            {route.params.exTitle || `${startTime} 의 운동`}
           </ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
