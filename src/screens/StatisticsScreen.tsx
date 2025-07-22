@@ -5,23 +5,10 @@ import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
-
-type Exercise = {
-  exerciseId: number;
-  distance: number;
-  steps: number;
-  elapsedSec: number;
-  Kcal: number;
-  startTime: string;
-  endTime: string;
-  exTitle: string;
-  points: number;
-  staticMapUrl: string;
-  date: string;
-};
+import {ExerciseType} from '../types/exercise';
 
 const StatisticsScreen = () => {
-  const [recentExercises, setRecentExercises] = useState<Exercise[]>([]);
+  const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
   const navigation = useNavigation();
 
   // 주간 데이터 (월~일) - //TODO(임시)

@@ -3,28 +3,23 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
+import {ExerciseParamList} from '../types/exercise';
 
-type RootStackParamList = {
-  Result: {
-    distance: number;
-    steps: number;
-    elapsedSec: number;
-    Kcal: number;
-    startTime: string;
-    staticMapUrl?: string;
-    activityTitle?: string; // Optional, if you want to display a title
-    points?: number; // Optional, if you want to display points
-  };
-};
-type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
+type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
 const ResultScreen = () => {
   const route = useRoute<ResultScreenRouteProp>();
-  const {distance, steps, elapsedSec, Kcal, startTime, staticMapUrl} =
-    route.params;
-
-  console.log('[ResultScreen] Static Map URL:', staticMapUrl);
-
+  const {
+    distance,
+    steps,
+    elapsedSec,
+    Kcal,
+    startTime,
+    staticMapUrl,
+    exTitle,
+    date,
+    points,
+  } = route.params;
   const navigation = useNavigation();
 
   //임시 데이터 //TODO: 실제 운동한 데이터로 변경
@@ -57,10 +52,10 @@ const ResultScreen = () => {
       </Header>
       <Main>
         <ResultTitleContainer>
-          <DateandTime>{startTime}</DateandTime>
-          <ResultTitle>
-            {route.params.activityTitle || `${startTime} 의 운동`}
-          </ResultTitle>
+          <DateandTime>
+            {date} {startTime}
+          </DateandTime>
+          <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
@@ -93,14 +88,12 @@ const ResultScreen = () => {
               <PointValue>+ 100</PointValue>
             </PointRow>
             <TotalPointRow>
-              <TotalPointText>339 P를 획득했어요!</TotalPointText>
+              <TotalPointText>{points} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
           <ResultMap
             source={{
-              uri:
-                staticMapUrl ||
-                'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg',
+              uri: staticMapUrl,
             }}
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}

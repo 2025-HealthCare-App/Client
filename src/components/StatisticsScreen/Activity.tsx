@@ -3,20 +3,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
-
-interface ExerciseProps {
-  exerciseId: number;
-  distance: number;
-  steps: number;
-  elapsedSec: number;
-  Kcal: number;
-  startTime: string;
-  endTime: string;
-  exTitle: string;
-  points: number;
-  staticMapUrl: string;
-  date: string;
-}
+import {ExerciseType} from '../../types/exercise';
 
 const Exercise = ({
   distance,
@@ -28,7 +15,7 @@ const Exercise = ({
   exTitle,
   points,
   date,
-}: ExerciseProps) => {
+}: ExerciseType) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToResult = () => {
@@ -41,8 +28,9 @@ const Exercise = ({
       staticMapUrl:
         staticMapUrl ||
         'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg', // default URL if not provided
-      exTitle: exTitle || '오늘의 달리기', // default title if not provided
-      points: points || 142, // default points if not provided
+      exTitle: exTitle,
+      points: points || 0, // TODO: 고치기
+      date: date || 'YYYY-MM-DD',
     });
   };
 

@@ -2,28 +2,23 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
+import {ExerciseParamList} from '../types/exercise';
 
-type RootStackParamList = {
-  Result: {
-    exerciseId: number;
-    distance: number;
-    steps: number;
-    elapsedSec: number;
-    Kcal: number;
-    startTime: string;
-    endTime: string;
-    exTitle: string;
-    points: number;
-    staticMapUrl: string;
-    date: string;
-  };
-};
-type ResultScreenRouteProp = RouteProp<RootStackParamList, 'Result'>;
+type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
 const Result2Screen = () => {
   const route = useRoute<ResultScreenRouteProp>();
-  const {distance, steps, elapsedSec, Kcal, startTime, staticMapUrl} =
-    route.params;
+  const {
+    distance,
+    steps,
+    elapsedSec,
+    Kcal,
+    startTime,
+    staticMapUrl,
+    exTitle,
+    date,
+    points,
+  } = route.params;
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -39,10 +34,10 @@ const Result2Screen = () => {
       </Header>
       <Main>
         <ResultTitleContainer>
-          <DateandTime>{startTime}</DateandTime>
-          <ResultTitle>
-            {route.params.exTitle || `${startTime} 의 운동`}
-          </ResultTitle>
+          <DateandTime>
+            {date} {startTime}
+          </DateandTime>
+          <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
@@ -75,14 +70,12 @@ const Result2Screen = () => {
               <PointValue>+ 100</PointValue>
             </PointRow>
             <TotalPointRow>
-              <TotalPointText>339 P를 획득했어요!</TotalPointText>
+              <TotalPointText>{points} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
           <ResultMap
             source={{
-              uri:
-                staticMapUrl ||
-                'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg',
+              uri: staticMapUrl,
             }}
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
