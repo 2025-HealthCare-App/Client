@@ -33,7 +33,7 @@ const Result2Screen = () => {
   return (
     <Wrapper>
       <Header>
-        <BeforeButton onPress={() => navigation.navigate('Main')}>
+        <BeforeButton onPress={() => navigation.goBack()}>
           <BeforeText>&lt;</BeforeText>
         </BeforeButton>
       </Header>
