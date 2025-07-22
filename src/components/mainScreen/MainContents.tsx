@@ -1,9 +1,10 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
+import {convertMetersToKilometers} from '../../utils/distanceUtil';
 
 const MainContents = () => {
   const navigation = useNavigation();
@@ -16,6 +17,7 @@ const MainContents = () => {
     getMyWeekGoalAPI()
       .then(response => {
         const data = response.data;
+        console.log('이번주 목표 조회 성공:', data);
         if (data === null) {
           console.log('이번주 목표가 설정되지 않았습니다.');
           setIsGoalSet(false);
@@ -25,7 +27,7 @@ const MainContents = () => {
         // console.log('이번주 달린 거리:', data.total_distance, 'm');
         setIsGoalSet(true);
         setWeekGoal(data.target_distance);
-        setCurrentDistance(data.total_distance);
+        setCurrentDistance(convertMetersToKilometers(data.total_distance));
       })
       .catch(error => {
         console.error('이번주 목표 조회 실패:', error);

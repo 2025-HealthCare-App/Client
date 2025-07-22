@@ -25,7 +25,7 @@ const ResultScreen = () => {
   //임시 데이터 //TODO: 실제 운동한 데이터로 변경
   const newExercise = {
     ex_title: '헤헤헤 세번째 운동',
-    ex_distance: 5,
+    ex_distance: 500,
     ex_kcal: 10,
     ex_steps: 200,
     ex_start_time: '14:30:00',
