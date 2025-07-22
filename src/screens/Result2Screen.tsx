@@ -2,12 +2,14 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
-import {ExerciseParamList} from '../types/exercise';
+import {ExerciseParamList, ExerciseType} from '../types/exercise';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
 const Result2Screen = () => {
   const route = useRoute<ResultScreenRouteProp>();
+  const exercise: ExerciseType = route.params;
+
   const {
     distance,
     steps,
@@ -18,7 +20,8 @@ const Result2Screen = () => {
     exTitle,
     date,
     points,
-  } = route.params;
+  } = exercise;
+
   const navigation = useNavigation();
 
   useEffect(() => {

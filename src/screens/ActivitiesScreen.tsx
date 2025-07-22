@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
-import Activity from '../components/StatisticsScreen/Activity';
+import Activity from '../components/StatisticsScreen/Exercise';
 
 const ActivitiesScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');

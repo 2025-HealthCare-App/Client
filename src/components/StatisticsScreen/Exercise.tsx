@@ -5,32 +5,28 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
 import {ExerciseType} from '../../types/exercise';
 
-const Exercise = ({
-  distance,
-  steps,
-  elapsedSec,
-  Kcal,
-  startTime,
-  staticMapUrl,
-  exTitle,
-  points,
-  date,
-}: ExerciseType) => {
+type Props = {
+  exercise: ExerciseType;
+};
+
+const Exercise = ({exercise}: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const {
+    distance,
+    steps,
+    elapsedSec,
+    Kcal,
+    startTime,
+    staticMapUrl,
+    exTitle,
+    points,
+    date,
+  } = exercise;
 
   const goToResult = () => {
     navigation.navigate('Result2', {
-      distance: distance, // 1.2km = 1200m
-      steps: steps,
-      elapsedSec: elapsedSec, // 39분 3초 = 39*60 + 3 = 2343초
-      Kcal: Kcal,
-      startTime: startTime,
-      staticMapUrl:
-        staticMapUrl ||
-        'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg', // default URL if not provided
-      exTitle: exTitle,
-      points: points || 0, // TODO: 고치기
-      date: date || 'YYYY-MM-DD',
+      ...exercise, // 한 줄로 모든 정보 전달
     });
   };
 

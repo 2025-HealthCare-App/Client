@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
-import Activity from '../components/StatisticsScreen/Activity';
 import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseType} from '../types/exercise';
+import Exercise from '../components/StatisticsScreen/Exercise';
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
@@ -133,18 +133,7 @@ const StatisticsScreen = () => {
           <SemiTitle>최근 활동</SemiTitle>
           <ActivitiesContainer>
             {recentExercises.map((exercise, index) => (
-              <Activity
-                key={index}
-                distance={exercise.distance}
-                steps={exercise.steps}
-                elapsedSec={exercise.elapsedSec}
-                Kcal={exercise.Kcal}
-                startTime={exercise.startTime}
-                exTitle={exercise.exTitle}
-                points={exercise.points}
-                staticMapUrl={exercise.staticMapUrl}
-                date={exercise.date}
-              />
+              <Exercise key={index} exercise={exercise} />
             ))}
           </ActivitiesContainer>
           <PlusButton onPress={() => navigation.navigate('Activities')}>
