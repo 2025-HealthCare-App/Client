@@ -17,3 +17,17 @@ export type ExerciseType = {
 export type ExerciseParamList = {
   Result: ExerciseType;
 };
+
+export const toExerciseType = (ex: any): ExerciseType => ({
+  exerciseId: ex.exercise_id,
+  distance: ex.ex_distance,
+  steps: ex.ex_steps,
+  elapsedSec: 0,
+  Kcal: ex.ex_kcal,
+  startTime: ex.ex_start_time,
+  endTime: ex.ex_end_time,
+  exTitle: ex.ex_title,
+  points: ex.points,
+  staticMapUrl: ex.ex_route_image,
+  date: ex.created_at.split('T')[0],
+});

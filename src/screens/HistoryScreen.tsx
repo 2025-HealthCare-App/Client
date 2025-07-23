@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
-import {ExerciseType} from '../types/exercise';
+import {ExerciseType, toExerciseType} from '../types/exercise';
 import {getExercisesByDateAPI} from '../apis/history/dateExAPI';
 
 const HistoryScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
+  const [dayExercises, setDayExercises] = useState<ExerciseType[]>([]);
 
   // 운동한 날짜들 표시(서버에서 받아온다고 가정)
   const exerciseDays = {
@@ -81,14 +82,18 @@ const HistoryScreen = () => {
     setSelectedDate(day.dateString);
     getExercisesByDateAPI(day.dateString)
       .then(data => {
-        //json형식으로 예쁘게 출력
-        console.log('운동 데이터:', JSON.stringify(data, null, 2));
-        // 여기에 받아온 데이터를 상태에 저장하거나 처리하는 로직 추가
+        setDayExercises(data.exercises.map(toExerciseType));
       })
       .catch(error => {
         console.error('운동 데이터 가져오기 실패:', error);
       });
   };
+
+  //세팅 확인
+  useEffect(() => {
+    console.log('선택된 날짜:', selectedDate);
+    console.log('운동 데이터:', JSON.stringify(dayExercises, null, 2));
+  }, [selectedDate, dayExercises]);
 
   return (
     <Wrapper>
