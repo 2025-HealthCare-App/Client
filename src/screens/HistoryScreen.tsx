@@ -5,11 +5,12 @@ import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
 import {ExerciseType} from '../types/exercise';
+import {getExercisesByDateAPI} from '../apis/history/dateExAPI';
 
 const HistoryScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
 
-  // 운동한 날짜들 표시
+  // 운동한 날짜들 표시(서버에서 받아온다고 가정)
   const exerciseDays = {
     '2025-06-01': {marked: true},
     '2024-06-03': {marked: true},
@@ -74,6 +75,21 @@ const HistoryScreen = () => {
     },
   ];
 
+  //날짜 눌렀을 때 함수
+  const handleDayPress = (day: {dateString: string}) => {
+    console.log('선택된 날짜:', day.dateString);
+    setSelectedDate(day.dateString);
+    getExercisesByDateAPI(day.dateString)
+      .then(data => {
+        //json형식으로 예쁘게 출력
+        console.log('운동 데이터:', JSON.stringify(data, null, 2));
+        // 여기에 받아온 데이터를 상태에 저장하거나 처리하는 로직 추가
+      })
+      .catch(error => {
+        console.error('운동 데이터 가져오기 실패:', error);
+      });
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -83,10 +99,7 @@ const HistoryScreen = () => {
       <CalendarContainer>
         <Calendar
           style={{width: '100%'}}
-          onDayPress={day => {
-            console.log('선택된 날짜:', day.dateString);
-            setSelectedDate(day.dateString);
-          }}
+          onDayPress={handleDayPress}
           markedDates={exerciseDays}
           theme={{
             backgroundColor: '#222831',
