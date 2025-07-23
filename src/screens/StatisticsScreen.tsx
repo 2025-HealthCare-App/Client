@@ -34,9 +34,8 @@ export const mapWeeklyData = (
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
   const [weeklyData, setWeeklyData] = useState<weeklyDataType[]>([]);
+  const [maxDistance, setMaxDistance] = useState<number>(100);
   const navigation = useNavigation();
-
-  const maxDistance = 500; // 최대 거리 (7km) - //TODO(임시) 이거 몇으로 하지...
 
   //1. 나의 운동 받아오기
   useEffect(() => {
@@ -65,6 +64,12 @@ const StatisticsScreen = () => {
           avgRes.weeklyAverages,
         );
         setWeeklyData(mapped);
+
+        // ✅ 최대 거리 계산
+        const max = Math.max(
+          ...mapped.map(item => Math.max(item.myDistance, item.avgDistance)),
+        );
+        setMaxDistance(max === 0 ? 1 : max); // 0일 경우 대비
       } catch (err) {
         console.error('주간 평균 거리 데이터 조회 실패:', err);
       }
