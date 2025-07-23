@@ -21,12 +21,12 @@ const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
   };
 
   return (
-    <Wrapper onPress={handlePress}>
+    <Wrapper onPress={handlePress} isPosted={isPosted}>
       <PencilIcon source={require('../../images/pencil.png')} />
       {isPosted ? (
-        <WriteText>오늘의 게시글 작성 완료</WriteText>
+        <WriteText isPosted={isPosted}>오늘의 게시글 작성 완료</WriteText>
       ) : (
-        <WriteText>게시글 작성하기(+500P)</WriteText>
+        <WriteText isPosted={isPosted}>게시글 작성하기(+500P)</WriteText>
       )}
     </Wrapper>
   );
@@ -40,8 +40,8 @@ const Wrapper = styled.TouchableOpacity<{isPosted: boolean}>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: ${({isPosted}) => (isPosted ? '#c0ca00' : '#656a00')};
-  border: 2px solid ${({isPosted}) => (isPosted ? '#ffffff' : '#b3b3b3')};
+  background-color: ${({isPosted}) => (isPosted ? '#656a00' : '#c0ca00')};
+  border: 2px solid ${({isPosted}) => (isPosted ? '#b3b3b3' : '#ffffff')};
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 5px;
@@ -55,5 +55,5 @@ const PencilIcon = styled.Image`
 const WriteText = styled.Text<{isPosted: boolean}>`
   font-size: 12px;
   font-weight: bold;
-  color: ${({isPosted}) => (isPosted ? '#ffffff' : '#b3b3b3')};
+  color: ${({isPosted}) => (isPosted ? '#b3b3b3' : '#ffffff')};
 `;
