@@ -18,6 +18,8 @@ export type ExerciseParamList = {
   Result: ExerciseType;
 };
 
+// 서버에서 받아온 운동 데이터를 ExerciseType으로 변환하는 함수
+// 이 함수는 서버에서 받아온 운동 데이터의 형식에 따라 조정이 필요
 export const toExerciseType = (ex: any): ExerciseType => ({
   exerciseId: ex.exercise_id,
   distance: ex.ex_distance,

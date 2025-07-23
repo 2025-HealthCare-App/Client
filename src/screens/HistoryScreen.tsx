@@ -126,9 +126,21 @@ const HistoryScreen = () => {
 
       <ActivitiesContainer>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {dummyExercises.map(exercise => (
-            <Exercise key={exercise.exerciseId} {...exercise} />
-          ))}
+          {dayExercises.length > 0 ? (
+            dayExercises.map(exercise => (
+              <Exercise key={exercise.exerciseId} {...exercise} />
+            ))
+          ) : (
+            <Title
+              style={{
+                textAlign: 'center',
+                marginTop: 20,
+                fontSize: 14,
+                color: '#4e5a6b',
+              }}>
+              선택한 날짜에 운동 기록이 없어요!
+            </Title>
+          )}
         </ScrollView>
       </ActivitiesContainer>
 
