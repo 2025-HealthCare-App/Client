@@ -5,76 +5,25 @@ import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
 import {ExerciseType, toExerciseType} from '../types/exercise';
-import {getExercisesByDateAPI} from '../apis/history/dateExAPI';
+import {
+  getExerciseDaysByMonthAPI,
+  getExercisesByDateAPI,
+} from '../apis/history/dateExAPI';
 
 const HistoryScreen = () => {
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [dayExercises, setDayExercises] = useState<ExerciseType[]>([]);
 
   // 운동한 날짜들 표시(서버에서 받아온다고 가정)
-  const exerciseDays = {
-    '2025-06-01': {marked: true},
-    '2024-06-03': {marked: true},
-    '2025-06-05': {marked: true},
-    '2025-06-10': {marked: true},
-    '2025-06-15': {marked: true},
-  };
-
-  // 예시 운동 데이터 (서버에서 받아온다고 가정)
-  const dummyExercises: ExerciseType[] = [
-    {
-      exerciseId: 1,
-      distance: 3934,
-      steps: 234,
-      elapsedSec: 2340,
-      Kcal: 151,
-      startTime: '13:22:00',
-      endTime: '13:50:00',
-      exTitle: 'CAUON - 제 2회 정기 러닝',
-      points: 142,
-      staticMapUrl: '',
-      date: '2023-10-01',
-    },
-    {
-      exerciseId: 2,
-      distance: 1039,
-      steps: 1454,
-      elapsedSec: 1230,
-      Kcal: 151,
-      startTime: '19:29:00',
-      endTime: '19:50:00',
-      exTitle: '혼자 뛰기',
-      points: 39,
-      staticMapUrl: '',
-      date: '2024-05-17',
-    },
-    {
-      exerciseId: 3,
-      distance: 1039,
-      steps: 1454,
-      elapsedSec: 1230,
-      Kcal: 151,
-      startTime: '19:29:00',
-      endTime: '19:50:00',
-      exTitle: '혼자 뛰기',
-      points: 39,
-      staticMapUrl: '',
-      date: '2024-05-17',
-    },
-    {
-      exerciseId: 4,
-      distance: 1039,
-      steps: 1454,
-      elapsedSec: 1230,
-      Kcal: 151,
-      startTime: '19:29:00',
-      endTime: '19:50:00',
-      exTitle: '혼자 뛰기',
-      points: 39,
-      staticMapUrl: '',
-      date: '2024-05-17',
-    },
-  ];
+  const [exerciseDays, setExerciseDays] = useState<{
+    [key: string]: {
+      marked?: boolean;
+      selected?: boolean;
+      selectedColor?: string;
+    };
+  }>({});
 
   //날짜 눌렀을 때 함수
   const handleDayPress = (day: {dateString: string}) => {
@@ -89,11 +38,63 @@ const HistoryScreen = () => {
       });
   };
 
-  //세팅 확인
+  // 컴포넌트가 마운트될 때 현재 날짜로 초기화
   useEffect(() => {
-    console.log('선택된 날짜:', selectedDate);
-    console.log('운동 데이터:', JSON.stringify(dayExercises, null, 2));
-  }, [selectedDate, dayExercises]);
+    const today = new Date();
+    const year = today.getFullYear().toString();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const date = today.getDate().toString().padStart(2, '0');
+
+    setSelectedYear(year);
+    setSelectedMonth(month);
+    setSelectedDate(`${year}-${month}-${date}`);
+
+    // 초기 로드 시 오늘 날짜의 운동 데이터 가져오기
+    getExercisesByDateAPI(`${year}-${month}-${date}`)
+      .then(data => {
+        setDayExercises(data.exercises.map(toExerciseType));
+      })
+      .catch(error => {
+        console.error('운동 데이터 가져오기 실패:', error);
+      });
+  }, []);
+
+  //해당하는 년, 월의 며칠에 운동했는지 조회하는 API 호출
+  useEffect(() => {
+    if (selectedYear && selectedMonth) {
+      getExerciseDaysByMonthAPI(selectedYear, selectedMonth)
+        .then(days => {
+          console.log('days: ', days);
+          const markedDays: {
+            [key: string]: {
+              marked?: boolean;
+              selected?: boolean;
+              selectedColor?: string;
+            };
+          } = {};
+
+          days.forEach((day: number) => {
+            const formattedDay = String(day).padStart(2, '0');
+            const dateStr = `${selectedYear}-${selectedMonth}-${formattedDay}`;
+            markedDays[dateStr] = {
+              marked: true,
+            };
+          });
+
+          // ✅ 선택한 날짜를 별도로 추가 또는 덮어쓰기
+          markedDays[selectedDate] = {
+            ...(markedDays[selectedDate] || {}),
+            selected: true,
+            selectedColor: '#ffffff',
+          };
+
+          setExerciseDays(markedDays);
+        })
+        .catch(error => {
+          console.error('운동 날짜 가져오기 실패:', error);
+        });
+    }
+  }, [selectedYear, selectedMonth, selectedDate]);
 
   return (
     <Wrapper>
@@ -121,6 +122,10 @@ const HistoryScreen = () => {
             monthTextColor: '#ffffff',
           }}
           selected={selectedDate}
+          onMonthChange={(month: {year: number; month: number}) => {
+            setSelectedYear(month.year.toString());
+            setSelectedMonth(month.month.toString().padStart(2, '0'));
+          }}
         />
       </CalendarContainer>
 
