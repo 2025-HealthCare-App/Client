@@ -3,20 +3,25 @@ import {API_BASE_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import mime from 'react-native-mime-types';
 
-// ✅ 게시글 조회 API
+// 게시글 조회 API
 export const getPostsAPI = async (page = 1) => {
   try {
+    const token = await AsyncStorage.getItem('token'); // ✅ 토큰 읽기
+
     const response = await axios.get(`${API_BASE_URL}/posts`, {
       params: {page},
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 토큰 추가
+      },
     });
+
     return response.data;
   } catch (error) {
     console.error('게시물 조회 실패:', error?.response?.data || error.message);
     throw new Error('게시글을 불러오지 못했습니다. 다시 시도해주세요.');
   }
 };
-
-// ✅ 게시글 업로드 API (토큰 기반 인증)
+// 게시글 업로드 API (토큰 기반 인증)
 export const uploadPost = async ({postContent, imageUri}) => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -68,5 +73,28 @@ export const checkTodayPost = async () => {
       error?.response?.data || error.message,
     );
     throw new Error('오늘의 게시글 작성 여부를 확인하지 못했습니다.');
+  }
+};
+
+//게시글 좋아요 API
+export const likePost = async postId => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.post(
+      `${API_BASE_URL}/posts/${postId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      '게시글 좋아요 실패:',
+      error?.response?.data || error.message,
+    );
+    throw new Error('게시글 좋아요를 처리하지 못했습니다. 다시 시도해주세요.');
   }
 };

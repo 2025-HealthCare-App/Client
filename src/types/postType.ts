@@ -5,4 +5,5 @@ export type PostType = {
   postImage: string;
   heartsNum: number;
   createdAt: string;
+  liked: boolean; // 하트 상태 추가
 };

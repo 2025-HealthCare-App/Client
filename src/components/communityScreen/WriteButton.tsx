@@ -15,9 +15,6 @@ const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
     }
     // 게시글 작성 화면으로 이동
     navigation.navigate('Write');
-    // if (!isPosted) {
-    //   setIsPosted(true);
-    // }
   };
 
   return (

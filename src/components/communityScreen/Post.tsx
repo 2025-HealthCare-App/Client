@@ -1,15 +1,41 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {PostType} from '../../types/postType';
+import {likePost} from '../../apis/community/postAPI';
 
 type Props = {
   post: PostType;
 };
 
 const Post = ({post}: Props) => {
-  const [isHearted, setIsHearted] = useState(false);
+  const [isHearted, setIsHearted] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.heartsNum);
+
+  // 하트 클릭 핸들러
+  const handleHeartPress = () => {
+    //하트 숫자 증가 API 호출
+    likePost(post.postId)
+      .then(response => {
+        if (response.success) {
+          console.log('하트 업데이트 성공:', response.message);
+          // 하트 상태 업데이트
+          setIsHearted(!isHearted);
+          setHeartCount(prev => (isHearted ? prev - 1 : prev + 1));
+        } else {
+          console.error('하트 업데이트 실패:', response.message);
+        }
+      })
+      .catch(error => {
+        console.error('하트 업데이트 중 오류 발생:', error);
+      });
+  };
+
+  useEffect(() => {
+    // 초기 하트 상태 설정
+    // post.liked가 변경될 때마다 isHearted 상태 업데이트
+    setIsHearted(post.liked);
+  }, [post.liked]);
 
   return (
     <Wrapper>
@@ -26,8 +52,7 @@ const Post = ({post}: Props) => {
       <HeartContainer>
         <TouchableOpacity
           onPress={() => {
-            setIsHearted(!isHearted);
-            setHeartCount(prev => (isHearted ? prev - 1 : prev + 1));
+            handleHeartPress();
           }}>
           <HeartIcon
             source={
