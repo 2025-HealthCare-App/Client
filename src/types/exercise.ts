@@ -1,3 +1,5 @@
+import {getElapsedSec} from '../utils/timeUtil';
+
 export type ExerciseType = {
   exerciseId: number;
   distance: number;
@@ -24,7 +26,7 @@ export const toExerciseType = (ex: any): ExerciseType => ({
   exerciseId: ex.exercise_id,
   distance: ex.ex_distance,
   steps: ex.ex_steps,
-  elapsedSec: 0,
+  elapsedSec: getElapsedSec(ex.ex_start_time, ex.ex_end_time),
   Kcal: ex.ex_kcal,
   startTime: ex.ex_start_time,
   endTime: ex.ex_end_time,

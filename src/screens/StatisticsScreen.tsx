@@ -4,9 +4,8 @@ import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
-import {ExerciseType} from '../types/exercise';
+import {ExerciseType, toExerciseType} from '../types/exercise';
 import Exercise from '../components/StatisticsScreen/Exercise';
-import {getDateFromCreatedAt, getElapsedSec} from '../utils/timeUtil';
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
@@ -28,27 +27,9 @@ const StatisticsScreen = () => {
   useEffect(() => {
     getMyRecentExercisesAPI()
       .then(response => {
-        // console.log('나의 최근 운동 데이터:', response.data);
         const {exercises} = response.data;
         if (Array.isArray(exercises)) {
-          setRecentExercises(
-            exercises.map((exercise: any) => ({
-              exerciseId: exercise.exercise_id,
-              distance: exercise.ex_distance,
-              steps: exercise.ex_steps,
-              elapsedSec: getElapsedSec(
-                exercise.ex_start_time,
-                exercise.ex_end_time,
-              ),
-              Kcal: exercise.ex_kcal,
-              startTime: exercise.ex_start_time,
-              endTime: exercise.ex_end_time,
-              exTitle: exercise.ex_title || '오늘의 운동',
-              points: exercise.points || 0,
-              staticMapUrl: exercise.ex_route_image || '',
-              date: getDateFromCreatedAt(exercise.created_at), // 날짜 추출
-            })),
-          );
+          setRecentExercises(exercises.map(toExerciseType));
         }
       })
       .catch(error => {

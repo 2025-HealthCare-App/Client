@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
 import {ExerciseType} from '../../types/exercise';
 
-// 🔥 props 타입을 ExerciseType으로 바로 지정
+// props 타입을 ExerciseType으로 바로 지정
 const Exercise = ({
   distance,
   steps,

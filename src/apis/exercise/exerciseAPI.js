@@ -32,7 +32,6 @@ export const getMyRecentExercisesAPI = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data;
   } catch (error) {
     throw error;

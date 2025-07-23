@@ -81,7 +81,7 @@ const HistoryScreen = () => {
             };
           });
 
-          // ✅ 선택한 날짜를 별도로 추가 또는 덮어쓰기
+          // 선택한 날짜를 별도로 추가 또는 덮어쓰기
           markedDays[selectedDate] = {
             ...(markedDays[selectedDate] || {}),
             selected: true,
