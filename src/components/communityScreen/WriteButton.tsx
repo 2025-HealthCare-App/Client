@@ -10,10 +10,14 @@ interface WriteButtonProps {
 const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
   const navigation = useNavigation();
   const handlePress = () => {
-    navigation.navigate('Write');
-    if (!isPosted) {
-      setIsPosted(true);
+    if (isPosted) {
+      return; // 이미 게시글을 작성한 경우 아무 동작도 하지 않음
     }
+    // 게시글 작성 화면으로 이동
+    navigation.navigate('Write');
+    // if (!isPosted) {
+    //   setIsPosted(true);
+    // }
   };
 
   return (
@@ -30,14 +34,14 @@ const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
 
 export default WriteButton;
 
-const Wrapper = styled.TouchableOpacity`
+const Wrapper = styled.TouchableOpacity<{isPosted: boolean}>`
   padding: 14px 15px;
   border-radius: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #c0ca00;
-  border: 2px solid #ffffff;
+  background-color: ${({isPosted}) => (isPosted ? '#c0ca00' : '#656a00')};
+  border: 2px solid ${({isPosted}) => (isPosted ? '#ffffff' : '#b3b3b3')};
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 5px;
@@ -48,8 +52,8 @@ const PencilIcon = styled.Image`
   height: 17px;
 `;
 
-const WriteText = styled.Text`
+const WriteText = styled.Text<{isPosted: boolean}>`
   font-size: 12px;
   font-weight: bold;
-  color: #ffffff;
+  color: ${({isPosted}) => (isPosted ? '#ffffff' : '#b3b3b3')};
 `;

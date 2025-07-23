@@ -8,7 +8,7 @@ const PostsContainer = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
-    getPostsAPI(2)
+    getPostsAPI(1) //TODO: 무한 스크롤 구현을 위해 페이지 번호를 동적으로 변경
       .then(data => {
         setPosts(
           data.posts.map((post: any) => ({

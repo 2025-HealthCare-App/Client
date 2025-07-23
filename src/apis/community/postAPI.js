@@ -51,3 +51,22 @@ export const uploadPost = async ({postContent, imageUri}) => {
     throw new Error('게시글을 업로드하지 못했습니다. 다시 시도해주세요.');
   }
 };
+
+//오늘의 게시글 작성 여부 확인 API
+export const checkTodayPost = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.get(`${API_BASE_URL}/posts/check-daily`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      '오늘의 게시글 작성 여부 확인 실패:',
+      error?.response?.data || error.message,
+    );
+    throw new Error('오늘의 게시글 작성 여부를 확인하지 못했습니다.');
+  }
+};
