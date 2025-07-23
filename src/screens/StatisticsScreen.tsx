@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseType, toExerciseType} from '../types/exercise';
 import Exercise from '../components/StatisticsScreen/Exercise';
+import {getWeekAvgDistanceAPI} from '../apis/week-ex/weekExApi';
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
@@ -34,6 +35,18 @@ const StatisticsScreen = () => {
       })
       .catch(error => {
         console.error('나의 운동 데이터 가져오기 실패:', error);
+      });
+  }, []);
+
+  //이번주의 요일별 전체 사용자 평균 거리 조회 API 호출
+  useEffect(() => {
+    getWeekAvgDistanceAPI()
+      .then(response => {
+        //json형식으로 예쁘게 출력
+        console.log(JSON.stringify(response.weeklyAverages, null, 2));
+      })
+      .catch(error => {
+        console.error('이번주 사용자 평균 거리 조회 실패:', error);
       });
   }, []);
 

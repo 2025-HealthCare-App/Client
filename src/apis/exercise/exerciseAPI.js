@@ -65,13 +65,3 @@ export const postMyExercisesAPI = async exerciseData => {
     throw error;
   }
 };
-
-//임시
-export const getAllExercisesAPI = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/exercises`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};

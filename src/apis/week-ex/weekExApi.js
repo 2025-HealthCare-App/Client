@@ -39,3 +39,15 @@ export const setMyWeekGoalAPI = async target_distance => {
     throw error;
   }
 };
+
+//이번 주 요일별 평균 거리 조회 API(토큰X)
+export const getWeekAvgDistanceAPI = async () => {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/exercises/weekly-daily-avg`,
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
