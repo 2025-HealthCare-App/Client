@@ -28,7 +28,7 @@ const CommunityScreen = () => {
     //TODO: 무한 스크롤 구현
     <Wrapper>
       <RankingBoard />
-      <WriteButton isPosted={isPosted} setIsPosted={setIsPosted} />
+      <WriteButton isPosted={isPosted} />
       <PostsContainer />
       <BottomBar />
     </Wrapper>

@@ -4,10 +4,9 @@ import styled from 'styled-components/native';
 
 interface WriteButtonProps {
   isPosted: boolean;
-  setIsPosted: (isPosted: boolean) => void;
 }
 
-const WriteButton = ({isPosted, setIsPosted}: WriteButtonProps) => {
+const WriteButton = ({isPosted}: WriteButtonProps) => {
   const navigation = useNavigation();
   const handlePress = () => {
     if (isPosted) {
