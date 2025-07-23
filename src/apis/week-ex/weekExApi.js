@@ -51,3 +51,23 @@ export const getWeekAvgDistanceAPI = async () => {
     throw error;
   }
 };
+
+//나의 이번주 요일별 평균 거리 조회 API
+export const getMyWeekAvgDistanceAPI = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.get(
+      `${API_BASE_URL}/exercises/my-weekly-distances`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

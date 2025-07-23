@@ -6,25 +6,39 @@ import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseType, toExerciseType} from '../types/exercise';
 import Exercise from '../components/StatisticsScreen/Exercise';
-import {getWeekAvgDistanceAPI} from '../apis/week-ex/weekExApi';
+import {
+  getMyWeekAvgDistanceAPI,
+  getWeekAvgDistanceAPI,
+} from '../apis/week-ex/weekExApi';
+import dayjs from 'dayjs';
+
+type weeklyDataType = {
+  day: string;
+  myDistance: number;
+  avgDistance: number;
+};
+export const mapWeeklyData = (
+  myDistances: {[date: string]: number},
+  avgDistances: {[date: string]: number},
+): weeklyDataType[] => {
+  // 날짜 오름차순 정렬
+  const sortedDates = Object.keys(myDistances).sort();
+
+  return sortedDates.map(date => ({
+    day: dayjs(date).format('ddd'), // 예: "Mon", "Tue"
+    myDistance: myDistances[date] || 0,
+    avgDistance: avgDistances[date] || 0,
+  }));
+};
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
+  const [weeklyData, setWeeklyData] = useState<weeklyDataType[]>([]);
   const navigation = useNavigation();
 
-  // 주간 데이터 (월~일) - //TODO(임시)
-  const weeklyData = [
-    {day: '월', myDistance: 4.5, goalDistance: 7.0},
-    {day: '화', myDistance: 2.0, goalDistance: 3.5},
-    {day: '수', myDistance: 3.2, goalDistance: 2.8},
-    {day: '목', myDistance: 6.5, goalDistance: 4.2},
-    {day: '금', myDistance: 4.8, goalDistance: 4.0},
-    {day: '토', myDistance: 5.2, goalDistance: 6.0},
-    {day: '일', myDistance: 2.5, goalDistance: 3.5},
-  ];
-  const maxDistance = 7; // 최대 거리 (7km) - //TODO(임시)
+  const maxDistance = 500; // 최대 거리 (7km) - //TODO(임시) 이거 몇으로 하지...
 
-  //나의 운동 받아오기
+  //1. 나의 운동 받아오기
   useEffect(() => {
     getMyRecentExercisesAPI()
       .then(response => {
@@ -38,16 +52,25 @@ const StatisticsScreen = () => {
       });
   }, []);
 
-  //이번주의 요일별 전체 사용자 평균 거리 조회 API 호출
   useEffect(() => {
-    getWeekAvgDistanceAPI()
-      .then(response => {
-        //json형식으로 예쁘게 출력
-        console.log(JSON.stringify(response.weeklyAverages, null, 2));
-      })
-      .catch(error => {
-        console.error('이번주 사용자 평균 거리 조회 실패:', error);
-      });
+    const fetchWeeklyData = async () => {
+      try {
+        const [avgRes, myRes] = await Promise.all([
+          getWeekAvgDistanceAPI(),
+          getMyWeekAvgDistanceAPI(),
+        ]);
+
+        const mapped = mapWeeklyData(
+          myRes.myWeeklyDistances,
+          avgRes.weeklyAverages,
+        );
+        setWeeklyData(mapped);
+      } catch (err) {
+        console.error('주간 평균 거리 데이터 조회 실패:', err);
+      }
+    };
+
+    fetchWeeklyData();
   }, []);
 
   return (
@@ -94,7 +117,7 @@ const StatisticsScreen = () => {
                         color="#E91E63"
                       />
                       <Bar
-                        height={(data.goalDistance / maxDistance) * 100}
+                        height={(data.avgDistance / maxDistance) * 100}
                         color="#CDDC39"
                       />
                     </BarsWrapper>
