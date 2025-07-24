@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {Alert, Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import LevelModal from '../components/mypageScreen/LevelModal';
@@ -13,18 +13,20 @@ import {userInfoAtom} from '../recoil/atom';
 import {formatGender} from '../utils/util';
 
 const MyPageScreen = () => {
-  const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
+  const [modalVisible, setModalVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [originImage, setOriginImage] = useState<string | null>(null); // 원본 이미지 상태 추가
-  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom); // Recoil 상태에서 사용자 정보 가져오기
+  const [originImage, setOriginImage] = useState<string | null>(null);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
 
   const navigation = useNavigation();
 
-  const goBack = () => {
+  // 뒤로가기
+  const goBack = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
-  const handleImageUpload = () => {
+  // 프로필 이미지 업로드
+  const handleImageUpload = useCallback(() => {
     launchImageLibrary(
       {
         mediaType: 'photo',
@@ -37,12 +39,14 @@ const MyPageScreen = () => {
           console.error('ImagePicker Error: ', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const asset = response.assets[0];
-
-          // 미리보기 이미지 설정
           setPreviewImage(asset.uri || null);
 
           Alert.alert('프로필 사진 변경', '이 사진으로 변경할까요?', [
-            {text: '취소', style: 'cancel'},
+            {
+              text: '취소',
+              style: 'cancel',
+              onPress: () => setPreviewImage(originImage),
+            },
             {
               text: '확인',
               onPress: async () => {
@@ -52,11 +56,8 @@ const MyPageScreen = () => {
                     type: asset.type || 'image/jpeg',
                     fileName: asset.fileName || 'profile.jpg',
                   });
-                  console.log('성공적으로 업로드됨');
                   Alert.alert('성공', '프로필 사진이 변경되었습니다.');
-                  // 원본 이미지 업데이트
                   setOriginImage(asset.uri ?? null);
-                  // Recoil 상태 업데이트
                   setUserInfo(prev => ({
                     ...prev,
                     profileImage: asset.uri ?? prev.profileImage,
@@ -70,9 +71,9 @@ const MyPageScreen = () => {
         }
       },
     );
-  };
+  }, [originImage, setUserInfo]);
 
-  // 프로필 이미지 최초 렌더링 시 원본 이미지 저장 (예시: 서버에서 받아온 이미지라면 그 값을 originImage에 저장)
+  // 최초 렌더링 및 userInfo.profileImage 변경 시 원본/미리보기 이미지 동기화
   useEffect(() => {
     if (userInfo.profileImage) {
       setOriginImage(userInfo.profileImage);
@@ -92,10 +93,10 @@ const MyPageScreen = () => {
         <ProfileImg
           source={
             previewImage
-              ? {uri: String(previewImage)} // ✅ 문자열 강제 변환
+              ? {uri: String(previewImage)}
               : originImage
-              ? {uri: String(originImage)} // ✅ 문자열 강제 변환
-              : require('../images/profileImgs/profileImg_default.png') // ✅ require는 그대로
+              ? {uri: String(originImage)}
+              : require('../images/profileImgs/profileImg_default.png')
           }
           resizeMode="cover"
         />
@@ -129,7 +130,6 @@ const MyPageScreen = () => {
           </EditButton>
         </EditRow>
       </InfoContainer>
-
       <LevelModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -140,6 +140,7 @@ const MyPageScreen = () => {
 
 export default MyPageScreen;
 
+// 스타일 컴포넌트 (불필요한 중복/순서 정리)
 const Wrapper = styled.View`
   height: 100%;
   width: 100%;
@@ -159,11 +160,13 @@ const Header = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: #3d4859;
 `;
+
 const BeforeButton = styled.Text`
   font-size: 20px;
   color: #ffffff;
   font-weight: bold;
 `;
+
 const HeaderText = styled.Text`
   font-size: 20px;
   color: #ffffff;
@@ -177,12 +180,14 @@ const ProfileImgContainer = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
 const ProfileImg = styled.Image`
   width: 130px;
   height: 130px;
   border-radius: 75px;
   border: 1px solid #ffffff;
 `;
+
 const EditIcon = styled.Image`
   width: 20px;
   height: 20px;
@@ -199,18 +204,22 @@ const MiddleTextContainer = styled.View`
   align-items: center;
   gap: 2px;
 `;
+
 const QuestionMark = styled(Image)`
   width: 12px;
   height: 12px;
 `;
+
 const TierBadge = styled(Image)`
   width: 25px;
   height: 25px;
 `;
+
 const MiddleText = styled.Text`
   font-size: 16px;
   color: #ffffff;
 `;
+
 const Highlight = styled.Text`
   font-weight: bold;
   text-decoration-line: underline;
@@ -225,17 +234,20 @@ const InfoContainer = styled.View`
   padding: 40px;
   border-radius: 18px;
 `;
+
 const Row = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `;
+
 const Category = styled.Text`
   color: #000;
   font-weight: bold;
   font-size: 16px;
 `;
+
 const Value = styled.Text`
   background-color: #f3f3f3;
   width: 170px;
@@ -253,6 +265,7 @@ const EditRow = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
 const EditButton = styled.TouchableOpacity`
   padding: 13px 33px;
   background-color: #cdd800;
@@ -260,6 +273,7 @@ const EditButton = styled.TouchableOpacity`
   align-self: center;
   justify-self: center;
 `;
+
 const EditButtonText = styled.Text`
   color: #ffffff;
   font-size: 12px;
