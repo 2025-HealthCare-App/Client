@@ -53,6 +53,14 @@ const MyPageScreen = () => {
                     fileName: asset.fileName || 'profile.jpg',
                   });
                   console.log('성공적으로 업로드됨');
+                  Alert.alert('성공', '프로필 사진이 변경되었습니다.');
+                  // 원본 이미지 업데이트
+                  setOriginImage(asset.uri ?? null);
+                  // Recoil 상태 업데이트
+                  setUserInfo(prev => ({
+                    ...prev,
+                    profileImage: asset.uri ?? prev.profileImage,
+                  }));
                 } catch (err) {
                   console.error('업로드 실패', err);
                 }
@@ -66,9 +74,11 @@ const MyPageScreen = () => {
 
   // 프로필 이미지 최초 렌더링 시 원본 이미지 저장 (예시: 서버에서 받아온 이미지라면 그 값을 originImage에 저장)
   useEffect(() => {
-    // 예시: 서버에서 받아온 이미지가 있다면 아래처럼 초기화
-    // setOriginImage(user.profileImageUrl);
-  }, []);
+    if (userInfo.profileImage) {
+      setOriginImage(userInfo.profileImage);
+      setPreviewImage(userInfo.profileImage);
+    }
+  }, [userInfo.profileImage]);
 
   return (
     <Wrapper>
@@ -82,8 +92,10 @@ const MyPageScreen = () => {
         <ProfileImg
           source={
             previewImage
-              ? {uri: previewImage}
-              : require('../images/profileImgs/profileImg_default.png')
+              ? {uri: String(previewImage)} // ✅ 문자열 강제 변환
+              : originImage
+              ? {uri: String(originImage)} // ✅ 문자열 강제 변환
+              : require('../images/profileImgs/profileImg_default.png') // ✅ require는 그대로
           }
           resizeMode="cover"
         />
