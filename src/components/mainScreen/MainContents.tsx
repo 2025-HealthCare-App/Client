@@ -16,7 +16,7 @@ const MainContents = () => {
     getMyWeekGoalAPI()
       .then(response => {
         const data = response.data;
-        console.log('이번주 목표 조회 성공:', data);
+        // console.log('이번주 목표 조회 성공:', data);
         if (data === null) {
           console.log('이번주 목표가 설정되지 않았습니다.');
           setIsGoalSet(false);

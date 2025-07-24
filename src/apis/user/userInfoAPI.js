@@ -12,7 +12,6 @@ export const getMyUserInfoAPI = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('나의 유저 정보:', response.data);
     return response.data;
   } catch (error) {
     throw error;
