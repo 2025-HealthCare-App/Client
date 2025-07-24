@@ -23,7 +23,7 @@ export const distanceMessages = [
 export const getMilestoneMessage = (distance: number): string => {
   for (const {threshold, message} of distanceMessages) {
     if (distance >= threshold) {
-      return `지금까지 ${message}까지 달렸어요!`;
+      return `${message}까지 달렸어요!`;
     }
   }
   return '이제 첫 발걸음을 시작했어요!';

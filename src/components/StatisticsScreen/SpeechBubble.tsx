@@ -49,7 +49,7 @@ const SpeechBubble = () => {
     // console.log(JSON.stringify(recentExercises, null, 2)); // JSON 형태로 출력
     getMyTotalDistanceAPI()
       .then(response => {
-        setTotalDistance(response.data.totalDistance / 1000); // m -> km 변환
+        setTotalDistance(response.data.totalDistance); // m단위 그대로 사용
       })
       .catch(error => {
         console.error('나의 총 거리 가져오기 실패:', error);
