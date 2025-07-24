@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import LevelModal from '../components/mypageScreen/LevelModal';
@@ -8,10 +8,18 @@ import {
   launchImageLibrary,
   ImagePickerResponse,
 } from 'react-native-image-picker';
+import {useRecoilState} from 'recoil';
+import {userInfoAtom} from '../recoil/atom';
+import {formatGender} from '../utils/util';
 
 const MyPageScreen = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [originImage, setOriginImage] = useState<string | null>(null); // 원본 이미지 상태 추가
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom); // Recoil 상태에서 사용자 정보 가져오기
+
   const navigation = useNavigation();
+
   const goBack = () => {
     navigation.goBack();
   };
@@ -29,6 +37,9 @@ const MyPageScreen = () => {
           console.error('ImagePicker Error: ', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const asset = response.assets[0];
+
+          // 미리보기 이미지 설정
+          setPreviewImage(asset.uri || null);
 
           Alert.alert('프로필 사진 변경', '이 사진으로 변경할까요?', [
             {text: '취소', style: 'cancel'},
@@ -53,6 +64,12 @@ const MyPageScreen = () => {
     );
   };
 
+  // 프로필 이미지 최초 렌더링 시 원본 이미지 저장 (예시: 서버에서 받아온 이미지라면 그 값을 originImage에 저장)
+  useEffect(() => {
+    // 예시: 서버에서 받아온 이미지가 있다면 아래처럼 초기화
+    // setOriginImage(user.profileImageUrl);
+  }, []);
+
   return (
     <Wrapper>
       <Header>
@@ -63,7 +80,11 @@ const MyPageScreen = () => {
       </Header>
       <ProfileImgContainer onPress={handleImageUpload}>
         <ProfileImg
-          source={require('../images/profileImgs/profileImg_default.png')}
+          source={
+            previewImage
+              ? {uri: previewImage}
+              : require('../images/profileImgs/profileImg_default.png')
+          }
           resizeMode="cover"
         />
         <EditIcon source={require('../images/pencil.png')} />
@@ -74,25 +95,21 @@ const MyPageScreen = () => {
         </TouchableOpacity>
         <TierBadge source={require('../images/tierBadge.png')} />
         <MiddleText>
-          <Highlight>나는야초보</Highlight> 님, 오늘도 달려볼까요?
+          <Highlight>{userInfo.name}</Highlight> 님, 오늘도 달려볼까요?
         </MiddleText>
       </MiddleTextContainer>
       <InfoContainer>
         <Row>
           <Category>닉네임</Category>
-          <Value>나는야초보</Value>
+          <Value>{userInfo.name}</Value>
         </Row>
         <Row>
           <Category>성별</Category>
-          <Value>여성</Value>
+          <Value>{formatGender(userInfo.gender)}</Value>
         </Row>
         <Row>
           <Category>생년월일</Category>
-          <Value>1999.01.02</Value>
-        </Row>
-        <Row>
-          <Category>전화번호</Category>
-          <Value>010-4303-8511</Value>
+          <Value>{userInfo.birth}</Value>
         </Row>
         <EditRow>
           <EditButton>

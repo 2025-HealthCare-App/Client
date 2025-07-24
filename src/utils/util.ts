@@ -58,3 +58,15 @@ export const formatElapsedTime = (elapsedSec: number) => {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${pad(m)}:${pad(s)}`;
 };
+
+//F이면 여성, M이면 남성
+export const formatGender = (gender: string) => {
+  switch (gender) {
+    case 'F':
+      return '여성';
+    case 'M':
+      return '남성';
+    default:
+      return '알 수 없음';
+  }
+};

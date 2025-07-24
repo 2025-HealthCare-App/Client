@@ -6,6 +6,8 @@ export const userInfoAtom = atom({
   default: {
     Uid: 0,
     name: '',
+    gender: '',
+    birth: '',
     profileImage: '',
     tier: 1, // tier는 숫자로 관리
     points: 0,
