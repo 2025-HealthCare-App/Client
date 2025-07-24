@@ -10,8 +10,8 @@ const MainContents = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [isGoalSet, setIsGoalSet] = useState(false);
-  const [weekGoal, setWeekGoal] = useState(0);
-  const [currentDistance, setCurrentDistance] = useState(0);
+  const [weekGoal, setWeekGoal] = useState(0); // 주간 목표 거리 (단위: m)
+  const [currentDistance, setCurrentDistance] = useState(0); // 현재 달린 거리 (단위: m)
 
   const fetchWeekGoal = useCallback(() => {
     getMyWeekGoalAPI()
@@ -26,8 +26,8 @@ const MainContents = () => {
         // console.log('이번주 목표:', data.target_distance, 'm');
         // console.log('이번주 달린 거리:', data.total_distance, 'm');
         setIsGoalSet(true);
-        setWeekGoal(data.target_distance);
-        setCurrentDistance(convertMetersToKilometers(data.total_distance));
+        setWeekGoal(data.target_distance); // m 단위로 저장
+        setCurrentDistance(data.total_distance); // m 단위 그대로 저장
       })
       .catch(error => {
         console.error('이번주 목표 조회 실패:', error);
@@ -75,7 +75,9 @@ const MainContents = () => {
               <RealGoalBar progress={getProgressPercentage()} />
             </GoalBar>
             <GoalProgress>
-              {currentDistance}km / {weekGoal}km (
+              {/* 화면에 보여줄 때만 km 단위로 변환 */}
+              {(currentDistance / 1000).toFixed(2)}km /{' '}
+              {(weekGoal / 1000).toFixed(2)}km (
               {Math.round(getProgressPercentage())}%)
             </GoalProgress>
           </GoalBarContainer>
