@@ -24,7 +24,7 @@ const MyPageScreen = () => {
           source={require('../images/profileImgs/profileImg_default.png')}
           resizeMode="cover"
         />
-        {/* <EditIcon source={require('../images/pencil.png')} /> */}
+        <EditIcon source={require('../images/pencil.png')} />
       </ProfileImgContainer>
       <MiddleTextContainer>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -112,10 +112,13 @@ const ProfileImg = styled.Image`
   border-radius: 75px;
   border: 1px solid #ffffff;
 `;
-// const EditIcon = styled(Image)`
-//   width: 20px;
-//   height: 20px;
-// `;
+const EditIcon = styled.Image`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 145px;
+  top: 85px;
+`;
 
 const MiddleTextContainer = styled.View`
   width: 100%;
