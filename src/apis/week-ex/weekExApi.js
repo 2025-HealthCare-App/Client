@@ -26,7 +26,7 @@ export const setMyWeekGoalAPI = async target_distance => {
 
     const response = await axios.post(
       `${API_BASE_URL}/week-ex`,
-      {target_distance},
+      {target_distance: target_distance * 1000}, // m 단위로 변환하여 전송
       {
         headers: {
           Authorization: `Bearer ${token}`,
