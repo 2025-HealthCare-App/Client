@@ -14,31 +14,34 @@ import WriteScreen from './src/screens/WriteScreen';
 import HealthRoadScreen from './src/screens/HealthRoadScreen';
 import ActivitiesScreen from './src/screens/HistoryScreen';
 import Result2Screen from './src/screens/Result2Screen';
+import {RecoilRoot} from 'recoil';
 
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{headerShown: false, animation: 'none'}}>
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Statistics" component={StatisticsScreen} />
-        <Stack.Screen name="Character" component={CharacterScreen} />
-        <Stack.Screen name="Community" component={CommunityScreen} />
-        <Stack.Screen name="Running" component={RunningScreen} />
-        <Stack.Screen name="Mypage" component={MyPageScreen} />
-        <Stack.Screen name="Result" component={ResultScreen} />
-        <Stack.Screen name="Result2" component={Result2Screen} />
-        <Stack.Screen name="Write" component={WriteScreen} />
-        <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
-        <Stack.Screen name="Activities" component={ActivitiesScreen} />
+    <RecoilRoot>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{headerShown: false, animation: 'none'}}>
+          <Stack.Screen name="Main" component={MainScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Statistics" component={StatisticsScreen} />
+          <Stack.Screen name="Character" component={CharacterScreen} />
+          <Stack.Screen name="Community" component={CommunityScreen} />
+          <Stack.Screen name="Running" component={RunningScreen} />
+          <Stack.Screen name="Mypage" component={MyPageScreen} />
+          <Stack.Screen name="Result" component={ResultScreen} />
+          <Stack.Screen name="Result2" component={Result2Screen} />
+          <Stack.Screen name="Write" component={WriteScreen} />
+          <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
+          <Stack.Screen name="Activities" component={ActivitiesScreen} />
 
-        <Stack.Screen name="Test" component={TestScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="Test" component={TestScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 }
 

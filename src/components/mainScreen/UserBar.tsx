@@ -4,18 +4,12 @@ import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
 import {useNavigation} from '@react-navigation/native';
 import {getMyUserInfoAPI} from '../../apis/user/userInfoAPI';
-
-type UserInfo = {
-  id: number;
-  name: string;
-  profileImage: string;
-  tier: number;
-  points: number;
-};
+import {useRecoilState} from 'recoil';
+import {userInfoAtom} from '../../recoil/atom';
 
 const UserBar = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null); // 유저 정보 상태
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom); // Recoil 상태에서 유저 정보 가져오기
 
   const navigation = useNavigation();
 
@@ -35,24 +29,26 @@ const UserBar = () => {
     }
   };
 
-  //나의 유저 정보 API 호출 및 세탕
+  //나의 유저 정보 API 호출 및 세팅
   useEffect(() => {
     getMyUserInfoAPI()
       .then(response => {
         console.log('나의 유저 정보:', response.data);
         const data = response.data;
         setUserInfo({
-          id: data.Uid,
+          Uid: data.Uid,
           name: data.name,
           profileImage: data.profile_image,
           tier: data.tier,
           points: data.points,
+          level: data.level,
+          totalDistance: data.total_distance,
         });
       })
       .catch(error => {
         console.error('유저 정보 조회 실패:', error);
       });
-  }, []);
+  }, [setUserInfo]);
 
   return (
     <Wrapper>
