@@ -21,7 +21,7 @@ const MyPageScreen = () => {
       </Header>
       <ProfileImgContainer>
         <ProfileImg
-          source={require('../images/profileImgs/profileImg1.jpg')}
+          source={require('../images/profileImgs/profileImg_default.png')}
           resizeMode="cover"
         />
         {/* <EditIcon source={require('../images/pencil.png')} /> */}

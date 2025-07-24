@@ -1,14 +1,15 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components/native';
 import Profile from './Profile';
 import {Text, Animated, TouchableOpacity} from 'react-native';
+import {getRankingsAPI} from '../../apis/community/rankAPI';
 
 const RankingBoard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const animatedHeight = useRef(new Animated.Value(1)).current; // 1 = 펼쳐진 상태
 
   const profileImages = {
-    // 이미지 경로를 객체로 관리
+    // 이미지 경로를 객체로 관리 TODO: 임시
     profileImg1: require('../../images/profileImgs/profileImg1.jpg'),
     profileImg2: require('../../images/profileImgs/profileImg2.png'),
     profileImg3: require('../../images/profileImgs/profileImg3.png'),
@@ -25,6 +26,18 @@ const RankingBoard = () => {
 
     setIsCollapsed(!isCollapsed);
   };
+
+  //랭킹 조회 API 호출
+  useEffect(() => {
+    getRankingsAPI()
+      .then(data => {
+        //Json 형태로 예쁘게 출력
+        console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
+      })
+      .catch(error => {
+        console.error('랭킹 조회 실패:', error);
+      });
+  }, []);
 
   return (
     <Animated.View

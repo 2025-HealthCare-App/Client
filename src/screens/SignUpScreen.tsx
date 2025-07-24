@@ -5,21 +5,45 @@ import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
 
   return (
     <Wrapper>
-      <Title>달려</Title>
-      <LoginWrapper>
+      <Title>회원가입</Title>
+      <SignUpWrapper>
         <Row>
           <RowText>아이디</RowText>
           <Input value={username} onChangeText={setUsername} />
         </Row>
         <Row>
           <RowText>비밀번호</RowText>
+          <Input
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+        </Row>
+        <Row>
+          <RowText>닉네임</RowText>
+          <Input
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+        </Row>
+        <Row>
+          <RowText>성별</RowText>
+          <Input
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+        </Row>
+        <Row>
+          <RowText>생년월일</RowText>
           <Input
             secureTextEntry={true}
             value={password}
@@ -58,12 +82,12 @@ const LoginScreen = () => {
               });
           }}
         />
-      </LoginWrapper>
+      </SignUpWrapper>
     </Wrapper>
   );
 };
 
-export default LoginScreen;
+export default SignUpScreen;
 
 const Wrapper = styled.View`
   height: 100%;
@@ -75,7 +99,7 @@ const Wrapper = styled.View`
   gap: 15px;
 `;
 
-const LoginWrapper = styled.View`
+const SignUpWrapper = styled.View`
   width: 100%;
   height: 100%;
   justify-content: center;

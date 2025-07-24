@@ -15,6 +15,7 @@ import HealthRoadScreen from './src/screens/HealthRoadScreen';
 import ActivitiesScreen from './src/screens/HistoryScreen';
 import Result2Screen from './src/screens/Result2Screen';
 import {RecoilRoot} from 'recoil';
+import SignUpScreen from './src/screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,7 @@ function App(): React.JSX.Element {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Main"
           screenOptions={{headerShown: false, animation: 'none'}}>
           <Stack.Screen name="Main" component={MainScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
@@ -37,6 +38,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="Write" component={WriteScreen} />
           <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
           <Stack.Screen name="Activities" component={ActivitiesScreen} />
+          <Stack.Screen name="Signup" component={SignUpScreen} />
 
           <Stack.Screen name="Test" component={TestScreen} />
         </Stack.Navigator>

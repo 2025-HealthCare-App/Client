@@ -4,7 +4,6 @@ import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
-import {convertMetersToKilometers} from '../../utils/distanceUtil';
 
 const MainContents = () => {
   const navigation = useNavigation();
