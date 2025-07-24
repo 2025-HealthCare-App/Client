@@ -35,3 +35,19 @@ export const getCharacterMessage = (level: number): string => {
   const randomIndex = Math.floor(Math.random() * messages.length);
   return messages[randomIndex];
 };
+
+//캐릭터 레벨에 따라 다음 레벨로 업그레이드 하기위한 포인트 반환
+export const getPointsForNextLevel = (level: number): number | string => {
+  switch (level) {
+    case 1:
+      return 1500;
+    case 2:
+      return 2500;
+    case 3:
+      return 3500;
+    case 4:
+      return 4500;
+    default:
+      return '-'; // 5레벨 이상은 더 이상 포인트가 필요 없음
+  }
+};

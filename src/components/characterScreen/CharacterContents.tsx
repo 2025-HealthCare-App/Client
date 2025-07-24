@@ -4,7 +4,10 @@ import HealthRoadContainer from './HealthRoadContainer';
 import TextBubble from './TextBubble';
 import {userInfoAtom} from '../../recoil/atom';
 import {useRecoilValue} from 'recoil';
-import {getCharacterMessage} from '../../constants/characterMsg';
+import {
+  getCharacterMessage,
+  getPointsForNextLevel,
+} from '../../constants/characterMsg';
 
 const CharacterContents = () => {
   const userInfo = useRecoilValue(userInfoAtom);
@@ -38,7 +41,10 @@ const CharacterContents = () => {
         <LvUpButton>
           <LVUpButtonText>Level UP !</LVUpButtonText>
         </LvUpButton>
-        <PointText>5120 / 2500 P</PointText>
+        <PointText>
+          {userInfo?.points.toLocaleString()} /{' '}
+          {getPointsForNextLevel(userInfo?.level)} P
+        </PointText>
       </LvUpContainer>
     </Wrapper>
   );
