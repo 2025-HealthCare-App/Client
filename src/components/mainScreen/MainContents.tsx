@@ -91,7 +91,7 @@ const MainContents = () => {
       <CharacterContainer>
         <Image
           source={require('../../images/characters/character4.png')}
-          style={{width: 300, height: 300}}
+          style={{width: 260, height: 260}}
         />
       </CharacterContainer>
 

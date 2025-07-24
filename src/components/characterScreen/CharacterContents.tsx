@@ -32,7 +32,7 @@ const CharacterContents = () => {
       <TextBubble text={getCharacterMessage(userInfo?.level)} />
       <Character>
         <Name>Lv.1</Name>
-        <ChracterImage source={getCharacterImageSource(userInfo?.level)} />
+        <CharacterImage source={getCharacterImageSource(userInfo?.level)} />
       </Character>
       <LvUpContainer>
         <LvUpButton>
@@ -69,9 +69,9 @@ const Name = styled.Text`
   font-family: 'Pretendard';
   margin-left: 10px;
 `;
-const ChracterImage = styled.Image`
-  width: 300px;
-  height: 300px;
+const CharacterImage = styled.Image`
+  width: 250px;
+  height: 250px;
 `;
 
 const LvUpContainer = styled.View`
