@@ -39,7 +39,7 @@ const UserBar = () => {
   useEffect(() => {
     getMyUserInfoAPI()
       .then(response => {
-        // console.log('나의 유저 정보:', response.data);
+        console.log('나의 유저 정보:', response.data);
         const data = response.data;
         setUserInfo({
           id: data.Uid,
