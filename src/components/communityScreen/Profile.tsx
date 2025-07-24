@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 interface ProfileProps {
   name: string;
   imgSrc: any;
-  km: number;
+  total_distance: number;
   isFirst?: boolean;
   isSecond?: boolean;
   isThird?: boolean;
@@ -23,7 +23,7 @@ interface ImageProps {
 const Profile = ({
   name,
   imgSrc,
-  km,
+  total_distance,
   isFirst,
   isSecond,
   isThird,
@@ -41,14 +41,25 @@ const Profile = ({
     return null;
   };
 
+  // 네트워크 이미지와 로컬 이미지 분기 처리
+  const getProfileImageSource = (src: any) => {
+    if (typeof src === 'string') {
+      return {uri: src};
+    }
+    return src;
+  };
+
   return (
     <Wrapper isSecond={isSecond} isThird={isThird}>
       <ImageContainer>
-        <ProfileImage source={imgSrc} isFirst={isFirst} />
+        <ProfileImage
+          source={getProfileImageSource(imgSrc)}
+          isFirst={isFirst}
+        />
         {getRankImage() && <RankBadge source={getRankImage()} />}
       </ImageContainer>
       <ProfileName>{name}</ProfileName>
-      <Km>{km}km</Km>
+      <Km>{(total_distance / 1000).toLocaleString()}km</Km>
     </Wrapper>
   );
 };
@@ -61,7 +72,6 @@ const Wrapper = styled.View<WrapperProps>`
   margin-top: ${props => (props.isSecond || props.isThird ? '50px' : '0px')};
 `;
 
-// 새로 추가할 styled-components
 const ImageContainer = styled.View`
   position: relative;
   margin-bottom: 5px;
@@ -76,7 +86,6 @@ const RankBadge = styled.Image`
   z-index: 10;
 `;
 
-// 기존 ProfileImage에서 margin-bottom 제거
 const ProfileImage = styled.Image<ImageProps>`
   width: ${props => (props.isFirst ? '100px' : '80px')};
   height: ${props => (props.isFirst ? '100px' : '80px')};

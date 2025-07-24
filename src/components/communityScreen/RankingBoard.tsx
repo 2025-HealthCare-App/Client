@@ -3,9 +3,22 @@ import styled from 'styled-components/native';
 import Profile from './Profile';
 import {Text, Animated, TouchableOpacity} from 'react-native';
 import {getRankingsAPI} from '../../apis/community/rankAPI';
+import {useRecoilValue} from 'recoil';
+import {userInfoAtom} from '../../recoil/atom';
+
+type RankingUser = {
+  name: string;
+  total_distance: number;
+  profile_image: string;
+  tier: number;
+  Uid: number;
+  rank: number;
+};
 
 const RankingBoard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [rankUsers, setRankUsers] = useState<RankingUser[]>([]); // 랭킹 사용자 목록
+  const userInfo = useRecoilValue(userInfoAtom); // Recoil 상태에서 유저 정보 가져오기
   const animatedHeight = useRef(new Animated.Value(1)).current; // 1 = 펼쳐진 상태
 
   const profileImages = {
@@ -32,12 +45,21 @@ const RankingBoard = () => {
     getRankingsAPI()
       .then(data => {
         //Json 형태로 예쁘게 출력
-        console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
+        // console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
+        setRankUsers(data.topUsers);
       })
       .catch(error => {
         console.error('랭킹 조회 실패:', error);
       });
   }, []);
+  //랭킹 세팅 확인
+  useEffect(() => {
+    if (rankUsers.length > 0) {
+      console.log('랭킹 사용자 목록:', JSON.stringify(rankUsers, null, 2));
+    } else {
+      console.log('랭킹 사용자 목록이 비어 있습니다.');
+    }
+  }, [rankUsers]);
 
   return (
     <Animated.View
@@ -59,27 +81,27 @@ const RankingBoard = () => {
 
         <ProfilesContainer>
           <Profile
-            name="작심삼일"
-            km={71}
-            imgSrc={profileImages.profileImg1} // 실제 이미지 객체 전달
+            name={rankUsers[0]?.name || '익명'}
+            total_distance={rankUsers[0]?.total_distance || 0}
+            imgSrc={rankUsers[0]?.profile_image || profileImages.profileImg1}
             isSecond={true} // 2등 표시
           />
           <Profile
-            name="나는야초보"
-            km={124}
-            imgSrc={profileImages.profileImg2} // 실제 이미지 객체 전달
+            name={rankUsers[1]?.name || '익명'}
+            total_distance={rankUsers[1]?.total_distance || 0}
+            imgSrc={rankUsers[1]?.profile_image || profileImages.profileImg2}
             isFirst={true} // 1등 표시
           />
           <Profile
-            name="달리기하자"
-            km={97}
-            imgSrc={profileImages.profileImg3} // 실제 이미지 객체 전달
+            name={rankUsers[2]?.name || '익명'}
+            total_distance={rankUsers[2]?.total_distance || 0}
+            imgSrc={rankUsers[2]?.profile_image || profileImages.profileImg3}
             isThird={true} // 3등 표시
           />
         </ProfilesContainer>
 
         <PercentText>
-          <UserName>나는야초보</UserName>
+          <UserName>{userInfo.name}</UserName>
           <Text> 님은 현재 </Text>
           <Percent>상위 12%</Percent>
           <Text>에 있어요!</Text>

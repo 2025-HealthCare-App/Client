@@ -273,23 +273,3 @@ const Value = styled.Text`
   align-items: center;
   text-align: center;
 `;
-
-const EditRow = styled.View`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
-const EditButton = styled.TouchableOpacity`
-  padding: 13px 33px;
-  background-color: #cdd800;
-  border-radius: 5px;
-  align-self: center;
-  justify-self: center;
-`;
-
-const EditButtonText = styled.Text`
-  color: #ffffff;
-  font-size: 12px;
-`;
