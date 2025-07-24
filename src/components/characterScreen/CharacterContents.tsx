@@ -4,13 +4,17 @@ import HealthRoadContainer from './HealthRoadContainer';
 import TextBubble from './TextBubble';
 import {userInfoAtom} from '../../recoil/atom';
 import {useRecoilValue} from 'recoil';
-import {
-  getCharacterMessage,
-  getPointsForNextLevel,
-} from '../../constants/characterMsg';
+import {getCharacterMessage} from '../../constants/characterMsg';
+import {getPointsForNextLevel, levelUp} from '../../utils/characterUtil';
 
 const CharacterContents = () => {
   const userInfo = useRecoilValue(userInfoAtom);
+
+  // 버튼 비활성화 조건: 최대 레벨이거나 포인트 부족
+  const isButtonDisabled =
+    userInfo?.level === 5 ||
+    typeof userInfo?.points !== 'number' ||
+    userInfo?.points < Number(getPointsForNextLevel(userInfo?.level));
 
   const getCharacterImageSource = (level: number | undefined) => {
     switch (level) {
@@ -34,15 +38,24 @@ const CharacterContents = () => {
       <HealthRoadContainer />
       <TextBubble text={getCharacterMessage(userInfo?.level)} />
       <Character>
-        <Name>Lv.1</Name>
+        <Name>Lv.{userInfo?.level ?? 1}</Name>
         <CharacterImage source={getCharacterImageSource(userInfo?.level)} />
       </Character>
       <LvUpContainer>
-        <LvUpButton>
-          <LVUpButtonText>Level UP !</LVUpButtonText>
+        <LvUpButton
+          disabled={isButtonDisabled}
+          isDisabled={isButtonDisabled}
+          onPress={() => levelUp(userInfo?.points, userInfo?.level)}>
+          <LVUpButtonText isDisabled={isButtonDisabled}>
+            {userInfo?.level === 5
+              ? 'Max Level'
+              : isButtonDisabled
+              ? '포인트가 부족해요'
+              : 'Level UP !'}
+          </LVUpButtonText>
         </LvUpButton>
         <PointText>
-          {userInfo?.points.toLocaleString()} /{' '}
+          {userInfo?.points?.toLocaleString()} /{' '}
           {getPointsForNextLevel(userInfo?.level)} P
         </PointText>
       </LvUpContainer>
@@ -85,17 +98,18 @@ const LvUpContainer = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-const LvUpButton = styled.TouchableOpacity`
+const LvUpButton = styled.TouchableOpacity<{isDisabled: boolean}>`
   width: 150px;
   height: 50px;
-  background-color: #feae00;
+  background-color: ${({isDisabled}) => (isDisabled ? '#d79300' : '#feae00')};
   border: 3px solid #a26f00;
   justify-content: center;
   align-items: center;
   border-radius: 50px;
+  opacity: ${({isDisabled}) => (isDisabled ? 0.7 : 1)};
 `;
-const LVUpButtonText = styled.Text`
-  font-size: 14px;
+const LVUpButtonText = styled.Text<{isDisabled: boolean}>`
+  font-size: ${({isDisabled}) => (isDisabled ? '12px' : '16px')};
   color: #ffffff;
   font-family: 'Pretendard';
   font-weight: bold;
