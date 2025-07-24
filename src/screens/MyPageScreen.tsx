@@ -73,6 +73,22 @@ const MyPageScreen = () => {
     );
   }, [originImage, setUserInfo]);
 
+  // tier에 따라 뱃지 이미지 경로 선택
+  const getTierBadgeSource = (tier: number | undefined) => {
+    switch (tier) {
+      case 1:
+        return require('../images/tiers/tier_1.png');
+      case 2:
+        return require('../images/tiers/tier_2.png');
+      case 3:
+        return require('../images/tiers/tier_3.png');
+      case 4:
+        return require('../images/tiers/tier_4.png');
+      default:
+        return require('../images/tiers/tier_1.png'); // 기본값
+    }
+  };
+
   // 최초 렌더링 및 userInfo.profileImage 변경 시 원본/미리보기 이미지 동기화
   useEffect(() => {
     if (userInfo.profileImage) {
@@ -106,7 +122,7 @@ const MyPageScreen = () => {
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <QuestionMark source={require('../images/questionMark.png')} />
         </TouchableOpacity>
-        <TierBadge source={require('../images/tierBadge.png')} />
+        <TierBadge source={getTierBadgeSource(userInfo?.tier)} />
         <MiddleText>
           <Highlight>{userInfo.name}</Highlight> 님, 오늘도 달려볼까요?
         </MiddleText>
@@ -124,11 +140,10 @@ const MyPageScreen = () => {
           <Category>생년월일</Category>
           <Value>{userInfo.birth}</Value>
         </Row>
-        <EditRow>
-          <EditButton>
-            <EditButtonText>수정</EditButtonText>
-          </EditButton>
-        </EditRow>
+        <Row>
+          <Category>누적 달린 거리</Category>
+          <Value>{(userInfo.totalDistance / 1000).toLocaleString()} km</Value>
+        </Row>
       </InfoContainer>
       <LevelModal
         modalVisible={modalVisible}
