@@ -3,10 +3,11 @@ import styled from 'styled-components/native';
 import HealthRoadContainer from './HealthRoadContainer';
 import TextBubble from './TextBubble';
 import {userInfoAtom} from '../../recoil/atom';
-import {useRecoilState} from 'recoil';
+import {useRecoilValue} from 'recoil';
+import {getCharacterMessage} from '../../constants/characterMsg';
 
 const CharacterContents = () => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+  const userInfo = useRecoilValue(userInfoAtom);
 
   const getCharacterImageSource = (level: number | undefined) => {
     switch (level) {
@@ -28,7 +29,7 @@ const CharacterContents = () => {
   return (
     <Wrapper>
       <HealthRoadContainer />
-      <TextBubble text="빨리 커서 몸짱이 되고싶어!" />
+      <TextBubble text={getCharacterMessage(userInfo?.level)} />
       <Character>
         <Name>Lv.1</Name>
         <ChracterImage source={getCharacterImageSource(userInfo?.level)} />

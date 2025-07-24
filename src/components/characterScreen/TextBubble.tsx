@@ -20,7 +20,6 @@ export default TextBubble;
 
 const Wrapper = styled.View`
   align-items: center;
-  width: 240px;
   margin-top: 30px; //TODO: 조정
 `;
 
@@ -28,7 +27,6 @@ const Bubble = styled.View`
   background-color: white;
   padding: 20px 30px;
   border-radius: 10px;
-  max-width: 240px;
   elevation: 2;
   shadow-color: #000;
   shadow-opacity: 0.1;
