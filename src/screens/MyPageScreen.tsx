@@ -1,14 +1,56 @@
 import React, {useState} from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {Alert, Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import LevelModal from '../components/mypageScreen/LevelModal';
 import {useNavigation} from '@react-navigation/native';
+import {changeProfileImageAPI} from '../apis/user/profileAPI';
+import {
+  launchImageLibrary,
+  ImagePickerResponse,
+} from 'react-native-image-picker';
 
 const MyPageScreen = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 추가
   const navigation = useNavigation();
   const goBack = () => {
     navigation.goBack();
+  };
+
+  const handleImageUpload = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        selectionLimit: 1,
+      },
+      async (response: ImagePickerResponse) => {
+        if (response.didCancel) {
+          console.log('사용자가 취소함');
+        } else if (response.errorCode) {
+          console.error('ImagePicker Error: ', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          const asset = response.assets[0];
+
+          Alert.alert('프로필 사진 변경', '이 사진으로 변경할까요?', [
+            {text: '취소', style: 'cancel'},
+            {
+              text: '확인',
+              onPress: async () => {
+                try {
+                  await changeProfileImageAPI({
+                    uri: asset.uri,
+                    type: asset.type || 'image/jpeg',
+                    fileName: asset.fileName || 'profile.jpg',
+                  });
+                  console.log('성공적으로 업로드됨');
+                } catch (err) {
+                  console.error('업로드 실패', err);
+                }
+              },
+            },
+          ]);
+        }
+      },
+    );
   };
 
   return (
@@ -19,7 +61,7 @@ const MyPageScreen = () => {
         </TouchableOpacity>
         <HeaderText>내 정보</HeaderText>
       </Header>
-      <ProfileImgContainer>
+      <ProfileImgContainer onPress={handleImageUpload}>
         <ProfileImg
           source={require('../images/profileImgs/profileImg_default.png')}
           resizeMode="cover"
@@ -99,7 +141,7 @@ const HeaderText = styled.Text`
   font-weight: bold;
 `;
 
-const ProfileImgContainer = styled.View`
+const ProfileImgContainer = styled.TouchableOpacity`
   width: 100%;
   height: 16%;
   flex-direction: row;
