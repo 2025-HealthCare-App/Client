@@ -9,7 +9,7 @@ type UserInfo = {
   id: number;
   name: string;
   profileImage: string;
-  tier: string;
+  tier: number;
   points: number;
 };
 
@@ -18,6 +18,22 @@ const UserBar = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null); // 유저 정보 상태
 
   const navigation = useNavigation();
+
+  // tier에 따라 뱃지 이미지 경로 선택
+  const getTierBadgeSource = (tier: number | undefined) => {
+    switch (tier) {
+      case 1:
+        return require('../../images/tiers/tier_1.png');
+      case 2:
+        return require('../../images/tiers/tier_2.png');
+      case 3:
+        return require('../../images/tiers/tier_3.png');
+      case 4:
+        return require('../../images/tiers/tier_4.png');
+      default:
+        return require('../../images/tiers/tier_1.png'); // 기본값
+    }
+  };
 
   //나의 유저 정보 API 호출 및 세탕
   useEffect(() => {
@@ -49,7 +65,7 @@ const UserBar = () => {
         <ProfileImg
           source={require('../../images/profileImgs/profileImg1.jpg')}
         />
-        <TierBadge source={require('../../images/tierBadge.png')} />
+        <TierBadge source={getTierBadgeSource(userInfo?.tier)} />
         <UserName>{userInfo?.name}</UserName>
       </UserInfoContainer>
       <PointContainer>
