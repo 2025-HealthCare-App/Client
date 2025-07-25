@@ -1,5 +1,6 @@
 import {Alert} from 'react-native';
 import {levelUpAPI} from '../apis/character/characterAPI';
+import {playLevelUpSound} from './playLevelUpSound';
 
 //캐릭터 레벨에 따라 다음 레벨로 업그레이드 하기위한 포인트 반환
 export const getPointsForNextLevel = (level: number): number | string => {
@@ -25,6 +26,8 @@ export const levelUp = (curPoints: number, level: number): boolean => {
       //API 호출로 레벨 업 처리
       levelUpAPI()
         .then(() => {
+          //효과음 재생
+          playLevelUpSound();
           Alert.alert('레벨 업 성공', '축하합니다! 레벨이 올랐습니다.', [
             {text: '확인'},
           ]);

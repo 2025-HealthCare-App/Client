@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import TrackPlayer from 'react-native-track-player';
+import {setupPlayer} from './src/utils/trackPlayerUtil';
 import MainScreen from './src/screens/MainScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import StatisticsScreen from './src/screens/StatisticsScreen';
@@ -16,10 +18,17 @@ import ActivitiesScreen from './src/screens/HistoryScreen';
 import Result2Screen from './src/screens/Result2Screen';
 import {RecoilRoot} from 'recoil';
 import SignUpScreen from './src/screens/SignUpScreen';
+TrackPlayer.registerPlaybackService(
+  () => require('./src/utils/TrackPlayerService').default,
+);
 
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    setupPlayer();
+  }, []);
+
   return (
     <RecoilRoot>
       <NavigationContainer>
