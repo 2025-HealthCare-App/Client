@@ -65,3 +65,29 @@ export const postMyExercisesAPI = async exerciseData => {
     throw error;
   }
 };
+
+// 운동 title 수정하는 API
+export const patchMyExerciseTitleAPI = async (exerciseId, ex_title) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('토큰이 존재하지 않습니다.');
+    }
+
+    const response = await axios.patch(
+      `${API_BASE_URL}/exercise/${exerciseId}/title`,
+      {ex_title},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('운동 제목 수정 실패:', error);
+    throw error;
+  }
+};

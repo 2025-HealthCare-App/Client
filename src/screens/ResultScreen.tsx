@@ -1,9 +1,9 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
-import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseParamList} from '../types/exerciseType';
+import {Touchable, TouchableOpacity} from 'react-native';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -34,7 +34,12 @@ const ResultScreen = () => {
           <DateandTime>
             {date} {startTime}
           </DateandTime>
-          <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
+          <Titlecontainer>
+            <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
+            <TouchableOpacity>
+              <EditTitleBtn>수정</EditTitleBtn>
+            </TouchableOpacity>
+          </Titlecontainer>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
@@ -188,6 +193,23 @@ const DateandTime = styled.Text`
   font-size: 16px;
   color: #7b7b7b;
   text-align: center;
+`;
+const Titlecontainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+`;
+const EditTitleBtn = styled.Text`
+  font-size: 11px;
+  color: #02adb5;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  transition: background-color 0.3s ease;
 `;
 const ResultTitle = styled.Text`
   font-size: 19px;
