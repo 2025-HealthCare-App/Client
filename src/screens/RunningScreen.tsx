@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {NativeModules, PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -11,6 +11,7 @@ import Geolocation from 'react-native-geolocation-service';
 import MapView, {Polyline, Marker, Region} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
 import {
   addComma,
   createStaticMapUrl,
@@ -19,13 +20,25 @@ import {
   getDistance,
 } from '../utils/util';
 import Config from 'react-native-config';
+import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
+type RootStackParamList = {
+  Running: undefined;
+  Result: {
+    distance: number;
+    steps: number;
+    elapsedSec: number;
+    Kcal: number;
+    startTime: string;
+    staticMapUrl: string;
+  };
+};
 
 const RunningScreen = () => {
   const [isRunning, setIsRunning] = useState(true);
   ///타이머
   const [elapsedSec, setElapsedSec] = useState(0); // 총 초
   const intervalRef = useRef<NodeJS.Timer | null>(null);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   //시작 시각을 저장
   const startTime = useRef(new Date().getTime());
@@ -165,7 +178,7 @@ const RunningScreen = () => {
         Geolocation.clearWatch(watchId.current);
       }
     };
-  }, []);
+  }, [prevLocation]);
 
   // 타이머 관련 useEffect
   useEffect(() => {
@@ -194,6 +207,42 @@ const RunningScreen = () => {
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
     const staticMapUrl = createStaticMapUrl(route, String(apiKey));
+    const startDate = new Date(startTime.current);
+
+    const newExercise = {
+      ex_title: `${startDate.getFullYear()}-${String(
+        startDate.getMonth() + 1,
+      ).padStart(2, '0')}-${String(startDate.getDate()).padStart(
+        2,
+        '0',
+      )} ${String(startDate.getHours()).padStart(2, '0')}:${String(
+        startDate.getMinutes(),
+      ).padStart(2, '0')} 의 운동`,
+      ex_distance: distance,
+      ex_kcal: steps * 0.04,
+      ex_steps: steps,
+      ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }), // 결과 예: "13:42:00"
+      ex_end_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
+        hour12: false, // 24시간제
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }), // 결과 예: "13:42:00"
+      ex_route_image: staticMapUrl || '',
+    };
+    console.log('운동 기록:', JSON.stringify(newExercise, null, 2));
+    postMyExercisesAPI(newExercise)
+      .then(response => {
+        console.log('운동 기록 저장 성공:', response.data);
+      })
+      .catch(error => {
+        console.error('운동 기록 저장 실패:', error);
+      });
 
     //다음 페이지로 값들을 전달
     navigation.replace('Result', {
