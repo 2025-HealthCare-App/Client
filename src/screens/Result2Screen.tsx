@@ -40,8 +40,6 @@ const Result2Screen = () => {
       return;
     }
 
-    //인자 확인
-    console.log(exercise.exerciseId, editTitle);
     patchMyExerciseTitleAPI(exercise.exerciseId, editTitle)
       .then(() => {
         setIsEditMode(false);

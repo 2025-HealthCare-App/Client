@@ -1,9 +1,8 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList} from '../types/exerciseType';
-import {Alert, TouchableOpacity} from 'react-native';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -20,17 +19,7 @@ const ResultScreen = () => {
     date,
     points,
   } = route.params;
-  // 수정 모드 상태 및 타이틀 입력 상태 추가
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editTitle, setEditTitle] = useState(exTitle || '');
   const navigation = useNavigation();
-
-  // (수정) 완료 버튼 클릭 시
-  const handleEditComplete = () => {
-    setIsEditMode(false);
-    Alert.alert('운동 제목이 수정되었습니다.', editTitle);
-    // 실제 API 호출은 여기서 처리
-  };
 
   return (
     <Wrapper>
@@ -44,30 +33,7 @@ const ResultScreen = () => {
           <DateandTime>
             {date} {startTime}
           </DateandTime>
-          <Titlecontainer>
-            {isEditMode ? (
-              <>
-                <TitleInput
-                  value={editTitle}
-                  onChangeText={setEditTitle}
-                  placeholder="운동 제목을 입력하세요"
-                  autoFocus
-                  returnKeyType="done"
-                  onSubmitEditing={handleEditComplete}
-                />
-                <TouchableOpacity onPress={handleEditComplete}>
-                  <EditTitleBtn>완료</EditTitleBtn>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <>
-                <ResultTitle>{editTitle || `${startTime} 의 운동`}</ResultTitle>
-                <TouchableOpacity onPress={() => setIsEditMode(true)}>
-                  <EditTitleBtn>수정</EditTitleBtn>
-                </TouchableOpacity>
-              </>
-            )}
-          </Titlecontainer>
+          <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>
@@ -222,23 +188,6 @@ const DateandTime = styled.Text`
   color: #7b7b7b;
   text-align: center;
 `;
-const Titlecontainer = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 5px;
-`;
-const EditTitleBtn = styled.Text`
-  font-size: 11px;
-  color: #02adb5;
-  text-align: center;
-  font-weight: bold;
-  padding: 5px 7px;
-  border-radius: 5px;
-  background-color: #f0f0f0;
-  transition: background-color 0.3s ease;
-`;
 const ResultTitle = styled.Text`
   font-size: 19px;
   color: #222831;
@@ -288,16 +237,4 @@ const CategoryText = styled.Text`
   color: #7b7b7b;
   text-align: center;
   margin-bottom: 10px;
-`;
-
-const TitleInput = styled.TextInput`
-  flex: 1;
-  font-size: 19px;
-  color: #222831;
-  font-weight: bold;
-  text-align: left;
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-right: 10px;
 `;
