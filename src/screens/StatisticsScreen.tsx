@@ -43,6 +43,11 @@ const StatisticsScreen = () => {
       .then(response => {
         const {exercises} = response.data;
         console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
+        // 프론트에서 최근순으로 정렬
+        exercises.sort(
+          (a: any, b: any) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        );
         if (Array.isArray(exercises)) {
           setRecentExercises(exercises.map(toExerciseType));
         }
