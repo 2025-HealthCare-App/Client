@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {PanResponder, Animated, Dimensions} from 'react-native';
-import {setMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
+import {postOrPatchMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
 
 interface GoalModalProps {
   modalVisible: boolean;
@@ -82,14 +82,14 @@ const GoalModal = ({
           <CloseButton
             onPress={() => {
               setModalVisible(false);
-              setGoal(goalKm); // 목표 설정 후 부모 컴포넌트에 전달
+              setGoal(goalKm * 1000); // 목표 설정 후 부모 컴포넌트에 전달
               setRealGoalBarWidth(0); // 모달 닫을 때 바 초기화
               setContainerWidth(270); // 모달 닫을 때 컨테이너 폭 초기화
               setGoalKm(0); // 목표 거리 초기화
               setIsGoalSet(true); // 목표 설정 여부 업데이트
 
               //목표 설정 API 호출
-              setMyWeekGoalAPI(goalKm)
+              postOrPatchMyWeekGoalAPI(goalKm * 1000)
                 .then(() => {
                   console.log('목표 설정 성공:', goalKm);
                 })

@@ -20,22 +20,27 @@ export const getMyWeekGoalAPI = async () => {
 };
 
 //나의 이번주 목표 설정 API
-export const setMyWeekGoalAPI = async target_distance => {
+export const postOrPatchMyWeekGoalAPI = async target_distance => {
   try {
     const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('토큰이 없습니다.');
+    }
 
     const response = await axios.post(
       `${API_BASE_URL}/week-ex`,
-      {target_distance: target_distance * 1000}, // m 단위로 변환하여 전송
+      {target_distance},
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       },
     );
-    console.log('setMyWeekGoalAPI response:', response.data); //TODO: remove this log in production
+
     return response.data;
   } catch (error) {
+    console.error('주간 목표 설정/수정 실패:', error);
     throw error;
   }
 };

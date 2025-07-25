@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {Image} from 'react-native';
+import {Image, Touchable, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
@@ -66,6 +66,9 @@ const MainContents = () => {
           <TitleText>
             {currentMonth}월 {currentWeek}주차 목표
           </TitleText>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <EditBtn>수정</EditBtn>
+          </TouchableOpacity>
         </GoalTitle>
 
         {isGoalSet ? (
@@ -137,6 +140,17 @@ const TitleText = styled.Text`
   color: #ffffff;
   text-align: center;
   font-weight: bold;
+`;
+const EditBtn = styled.Text`
+  font-size: 10px;
+  color: #cdd800;
+  font-weight: bold;
+  text-align: center;
+  width: 40px;
+  height: 16px;
+  background-color: #393e46;
+  border-radius: 10px;
+  border: 1px solid #cdd800;
 `;
 
 const GoalBarContainer = styled.View`
