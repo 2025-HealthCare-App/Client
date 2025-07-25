@@ -1,15 +1,44 @@
 import {useNavigation} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
+import {useRecoilValue} from 'recoil';
+import {userInfoAtom} from '../recoil/atom';
+
+// Define your stack param list
+type RootStackParamList = {
+  Character: undefined;
+  // add other screens here if needed
+};
 
 const HealthRoadScreen = () => {
-  const navigation = useNavigation();
+  const userInfo = useRecoilValue(userInfoAtom);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   //before버튼 누르면 communityScreen으로 이동
   const handleBeforeButtonPress = () => {
     navigation.navigate('Character');
+  };
+
+  //userInfo.level에 따라서 다른 healthroad 이미지 보여주기
+  const getHealthRoadImageSource = (level: number | undefined) => {
+    switch (level) {
+      case 1:
+        return require('../images/healthroads/healthroad_1.png');
+      case 2:
+        return require('../images/healthroads/healthroad_2.png');
+      case 3:
+        return require('../images/healthroads/healthroad_3.png');
+      case 4:
+        return require('../images/healthroads/healthroad_4.png');
+      case 5:
+        return require('../images/healthroads/healthroad_5.png');
+      default:
+        return require('../images/healthroads/healthroad_1.png');
+    }
   };
 
   return (
@@ -22,7 +51,7 @@ const HealthRoadScreen = () => {
       </Header>
       <Main>
         <HealthRoadImage
-          source={require('../images/characterScreen/health-road.png')}
+          source={getHealthRoadImageSource(userInfo?.level)}
           resizeMode="contain"
         />
       </Main>
