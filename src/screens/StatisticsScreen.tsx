@@ -319,7 +319,7 @@ const Bar = styled.View<BarProps>`
   height: ${props => (props.height / 100) * 200}px;
   background-color: ${props => props.color};
   border-radius: 2px;
-  min-height: 4px;
+  min-height: 0px;
 `;
 
 const DayLabel = styled.Text`
