@@ -73,9 +73,9 @@ export const patchMyExerciseTitleAPI = async (exerciseId, ex_title) => {
     if (!token) {
       throw new Error('토큰이 존재하지 않습니다.');
     }
-
+    console.log(`${API_BASE_URL}/exercises/${exerciseId}/title`);
     const response = await axios.patch(
-      `${API_BASE_URL}/exercise/${exerciseId}/title`,
+      `${API_BASE_URL}/exercises/${exerciseId}/title`,
       {ex_title},
       {
         headers: {

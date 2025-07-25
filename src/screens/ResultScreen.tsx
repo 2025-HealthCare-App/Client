@@ -1,9 +1,9 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList} from '../types/exerciseType';
-import {Touchable, TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -20,7 +20,17 @@ const ResultScreen = () => {
     date,
     points,
   } = route.params;
+  // 수정 모드 상태 및 타이틀 입력 상태 추가
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editTitle, setEditTitle] = useState(exTitle || '');
   const navigation = useNavigation();
+
+  // (수정) 완료 버튼 클릭 시
+  const handleEditComplete = () => {
+    setIsEditMode(false);
+    Alert.alert('운동 제목이 수정되었습니다.', editTitle);
+    // 실제 API 호출은 여기서 처리
+  };
 
   return (
     <Wrapper>
@@ -35,10 +45,28 @@ const ResultScreen = () => {
             {date} {startTime}
           </DateandTime>
           <Titlecontainer>
-            <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
-            <TouchableOpacity>
-              <EditTitleBtn>수정</EditTitleBtn>
-            </TouchableOpacity>
+            {isEditMode ? (
+              <>
+                <TitleInput
+                  value={editTitle}
+                  onChangeText={setEditTitle}
+                  placeholder="운동 제목을 입력하세요"
+                  autoFocus
+                  returnKeyType="done"
+                  onSubmitEditing={handleEditComplete}
+                />
+                <TouchableOpacity onPress={handleEditComplete}>
+                  <EditTitleBtn>완료</EditTitleBtn>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <ResultTitle>{editTitle || `${startTime} 의 운동`}</ResultTitle>
+                <TouchableOpacity onPress={() => setIsEditMode(true)}>
+                  <EditTitleBtn>수정</EditTitleBtn>
+                </TouchableOpacity>
+              </>
+            )}
           </Titlecontainer>
         </ResultTitleContainer>
         <ContentsContainer>
@@ -260,4 +288,16 @@ const CategoryText = styled.Text`
   color: #7b7b7b;
   text-align: center;
   margin-bottom: 10px;
+`;
+
+const TitleInput = styled.TextInput`
+  flex: 1;
+  font-size: 19px;
+  color: #222831;
+  font-weight: bold;
+  text-align: left;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 10px;
 `;
