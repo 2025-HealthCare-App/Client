@@ -12,7 +12,7 @@ const LoginScreen = () => {
 
   return (
     <Wrapper>
-      <Title>달려</Title>
+      <Title />
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>

@@ -28,3 +28,17 @@ export const convertTo24Hour = (timeStr: string): string => {
   const pad = (num: number): string => String(num).padStart(2, '0');
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
+
+// startTime과 endTime을 받아서 초 단위로 경과 시간 계산
+export const calculateElapsedSec = (
+  startTime: string,
+  endTime: string,
+): number => {
+  const [startH, startM, startS] = startTime.split(':').map(Number);
+  const [endH, endM, endS] = endTime.split(':').map(Number);
+
+  const startTotalSec = startH * 3600 + startM * 60 + startS;
+  const endTotalSec = endH * 3600 + endM * 60 + endS;
+
+  return endTotalSec - startTotalSec;
+};

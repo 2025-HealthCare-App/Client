@@ -2,7 +2,8 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
-import {ExerciseParamList, ExerciseType} from '../types/exercise';
+import {ExerciseParamList, ExerciseType} from '../types/exerciseType';
+import {calculateElapsedSec} from '../utils/timeUtil';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -26,7 +27,11 @@ const Result2Screen = () => {
 
   useEffect(() => {
     console.log('여기서는 post 안하고 only 운동 기록 조회용!!');
-  }, []);
+    console.log('운동 기록:', JSON.stringify(exercise, null, 2));
+    console.log('기존의 elapsedSec:', exercise.elapsedSec);
+    exercise.elapsedSec = elapsedSec;
+    console.log('계산된 elapsedSec:', exercise.elapsedSec);
+  }, [exercise, startTime, elapsedSec]);
 
   return (
     <Wrapper>

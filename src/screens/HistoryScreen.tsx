@@ -4,7 +4,7 @@ import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
-import {ExerciseType, toExerciseType} from '../types/exercise';
+import {ExerciseType, toExerciseType} from '../types/exerciseType';
 import {
   getExerciseDaysByMonthAPI,
   getExercisesByDateAPI,
@@ -16,7 +16,7 @@ const HistoryScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [dayExercises, setDayExercises] = useState<ExerciseType[]>([]);
 
-  // 운동한 날짜들 표시(서버에서 받아온다고 가정)
+  // 운동한 날짜들 표시(서버에서 받아옴)
   const [exerciseDays, setExerciseDays] = useState<{
     [key: string]: {
       marked?: boolean;

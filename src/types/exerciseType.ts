@@ -1,5 +1,3 @@
-import {getElapsedSec} from '../utils/timeUtil';
-
 export type ExerciseType = {
   exerciseId: number;
   distance: number;
@@ -10,8 +8,8 @@ export type ExerciseType = {
   endTime: string;
   exTitle: string | '오늘의 운동';
   points: number | 0;
-  staticMapUrl:
-    | string
+  staticMapUrl: //TODO: 그냥 없애기?
+  | string
     | 'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg';
   date: string;
 };
@@ -26,7 +24,7 @@ export const toExerciseType = (ex: any): ExerciseType => ({
   exerciseId: ex.exercise_id,
   distance: ex.ex_distance,
   steps: ex.ex_steps,
-  elapsedSec: getElapsedSec(ex.ex_start_time, ex.ex_end_time),
+  elapsedSec: ex.elapsedSec,
   Kcal: ex.ex_kcal,
   startTime: ex.ex_start_time,
   endTime: ex.ex_end_time,

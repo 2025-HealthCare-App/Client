@@ -234,6 +234,7 @@ const RunningScreen = () => {
         second: '2-digit',
       }), // 결과 예: "13:42:00"
       ex_route_image: staticMapUrl || '',
+      elapsedSec: elapsedSec,
     };
     console.log('운동 기록:', JSON.stringify(newExercise, null, 2));
     postMyExercisesAPI(newExercise)
@@ -334,7 +335,6 @@ const RecordsContainer = styled.View<{isRunning: boolean}>`
   background-color: ${({isRunning}) => (isRunning ? '#ffffff' : '#171b21')};
   justify-content: center;
   align-items: center;
-  elevation: 10;
 `;
 const Category = styled.View`
   width: 33%;

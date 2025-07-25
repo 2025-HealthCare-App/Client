@@ -4,7 +4,7 @@ import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import {useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
-import {ExerciseType, toExerciseType} from '../types/exercise';
+import {ExerciseType, toExerciseType} from '../types/exerciseType';
 import Exercise from '../components/StatisticsScreen/Exercise';
 import {
   getMyWeekAvgDistanceAPI,
@@ -42,6 +42,7 @@ const StatisticsScreen = () => {
     getMyRecentExercisesAPI()
       .then(response => {
         const {exercises} = response.data;
+        console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
         if (Array.isArray(exercises)) {
           setRecentExercises(exercises.map(toExerciseType));
         }

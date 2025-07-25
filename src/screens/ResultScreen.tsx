@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
-import {ExerciseParamList} from '../types/exercise';
+import {ExerciseParamList} from '../types/exerciseType';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 

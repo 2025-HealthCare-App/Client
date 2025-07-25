@@ -3,7 +3,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../../utils/util';
-import {ExerciseType} from '../../types/exercise';
+import {ExerciseType} from '../../types/exerciseType';
 
 // props 타입을 ExerciseType으로 바로 지정
 const Exercise = ({
