@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Main"
+          initialRouteName="Login"
           screenOptions={{headerShown: false, animation: 'none'}}>
           <Stack.Screen name="Main" component={MainScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />

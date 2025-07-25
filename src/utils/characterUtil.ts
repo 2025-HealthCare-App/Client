@@ -1,4 +1,5 @@
 import {Alert} from 'react-native';
+import {levelUpAPI} from '../apis/character/characterAPI';
 
 //캐릭터 레벨에 따라 다음 레벨로 업그레이드 하기위한 포인트 반환
 export const getPointsForNextLevel = (level: number): number | string => {
@@ -22,11 +23,20 @@ export const levelUp = (curPoints: number, level: number): boolean => {
   if (typeof pointsForNextLevel === 'number') {
     if (curPoints >= pointsForNextLevel) {
       //API 호출로 레벨 업 처리
-      Alert.alert(
-        '레벨 업!',
-        `축하합니다! 레벨이 ${level + 1}로 업그레이드 되었습니다.`,
-        [{text: '확인'}],
-      );
+      levelUpAPI()
+        .then(() => {
+          Alert.alert('레벨 업 성공', '축하합니다! 레벨이 올랐습니다.', [
+            {text: '확인'},
+          ]);
+        })
+        .catch(error => {
+          console.error('레벨 업 실패:', error);
+          Alert.alert(
+            '레벨 업 실패',
+            '레벨 업에 실패했습니다. 다시 시도해주세요.',
+            [{text: '확인'}],
+          );
+        });
       return true;
     } // 다음 레벨로 진급 가능
   } else {
