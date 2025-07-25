@@ -3,12 +3,12 @@ import styled from 'styled-components/native';
 import HealthRoadContainer from './HealthRoadContainer';
 import TextBubble from './TextBubble';
 import {userInfoAtom} from '../../recoil/atom';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {getCharacterMessage} from '../../constants/characterMsg';
 import {getPointsForNextLevel, levelUp} from '../../utils/characterUtil';
 
 const CharacterContents = () => {
-  const userInfo = useRecoilValue(userInfoAtom);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
 
   // 버튼 비활성화 조건: 최대 레벨이거나 포인트 부족
   const isButtonDisabled =
@@ -33,6 +33,15 @@ const CharacterContents = () => {
     }
   };
 
+  //레벨업 후, 새로고침 하지 않아도 변경된 레벨과 포인트를 반영하기 위해
+  const handleLevelUp = (newLevel: number, newPoints: number) => {
+    setUserInfo(prevState => ({
+      ...prevState,
+      level: newLevel,
+      points: newPoints,
+    }));
+  };
+
   return (
     <Wrapper>
       <HealthRoadContainer />
@@ -45,7 +54,13 @@ const CharacterContents = () => {
         <LvUpButton
           disabled={isButtonDisabled}
           isDisabled={isButtonDisabled}
-          onPress={() => levelUp(userInfo?.points, userInfo?.level)}>
+          onPress={() => {
+            levelUp(userInfo?.points, userInfo?.level);
+            handleLevelUp(
+              userInfo?.level + 1,
+              userInfo?.points - Number(getPointsForNextLevel(userInfo?.level)),
+            );
+          }}>
           <LVUpButtonText isDisabled={isButtonDisabled}>
             {userInfo?.level === 5
               ? 'Max Level'
