@@ -1,3 +1,5 @@
+import {Reward} from './rewardType';
+
 export type ExerciseType = {
   exerciseId: number;
   distance: number;
@@ -7,11 +9,11 @@ export type ExerciseType = {
   startTime: string;
   endTime: string;
   exTitle: string | '오늘의 운동';
-  points: number | 0;
   staticMapUrl: //TODO: 그냥 없애기?
   | string
     | 'https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=color:0xff0000ff|weight:5|37.5031393,126.9571197&key=AIzaSyBEyEYuNOq8OreVSXUgbPSJDurTYlM6vTg';
   date: string;
+  rewards?: Reward[]; // 포인트 적립 정보
 };
 
 export type ExerciseParamList = {

@@ -21,6 +21,7 @@ import {
 } from '../utils/util';
 import Config from 'react-native-config';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
+import {Reward} from '../types/rewardType';
 type RootStackParamList = {
   Running: undefined;
   Result: {
@@ -46,7 +47,7 @@ const RunningScreen = () => {
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
-  const [distance, setDistance] = useState(0); // meters
+  const [distance, setDistance] = useState(1200); // meters
   const [prevLocation, setPrevLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -59,7 +60,9 @@ const RunningScreen = () => {
 
   const [initialRegion, setInitialRegion] = useState<Region | null>(null);
 
-  //이동 관련 useEffect
+  const [rewards, setRewards] = useState<Reward[]>([]);
+
+  // 1. 이동 관련 useEffect
   useEffect(() => {
     const requestPermissions = async () => {
       if (Platform.OS === 'android') {
@@ -180,7 +183,7 @@ const RunningScreen = () => {
     };
   }, [prevLocation]);
 
-  // 타이머 관련 useEffect
+  // 2. 타이머 관련 useEffect
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
@@ -200,6 +203,7 @@ const RunningScreen = () => {
     };
   }, [isRunning]); // 💡 isRunning을 의존성에 추가!
 
+  // 3. 버튼 클릭 이벤트
   const handleRunningButtonPress = () => {
     setIsRunning(prev => !prev);
   };
@@ -239,7 +243,19 @@ const RunningScreen = () => {
     console.log('운동 기록:', JSON.stringify(newExercise, null, 2));
     postMyExercisesAPI(newExercise)
       .then(response => {
-        console.log('운동 기록 저장 성공:', response.data);
+        const receivedRewards = response.data.rewards || [];
+        console.log('recievedRewards:', receivedRewards);
+        setRewards(receivedRewards);
+        navigation.replace('Result', {
+          distance,
+          steps,
+          elapsedSec,
+          Kcal: steps * 0.04,
+          startTime: formattedStartTime,
+          staticMapUrl,
+          rewards: receivedRewards, // 여기서 바로 넘겨줌!
+          points: 100,
+        });
       })
       .catch(error => {
         console.error('운동 기록 저장 실패:', error);
@@ -253,7 +269,7 @@ const RunningScreen = () => {
       Kcal: steps * 0.04,
       startTime: formattedStartTime,
       staticMapUrl: staticMapUrl,
-      // TODO:API로 몇 point 얻었는지 구해서 추가
+      rewards: rewards,
       points: 100, // 예시로 100 포인트 추가
     });
     //타이머 정지

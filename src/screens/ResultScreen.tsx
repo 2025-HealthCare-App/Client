@@ -1,8 +1,9 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList} from '../types/exerciseType';
+import {convertActionCodeToText} from '../utils/actionCodeUtil';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -16,9 +17,16 @@ const ResultScreen = () => {
     startTime,
     staticMapUrl,
     date,
-    points,
+    rewards,
   } = route.params;
   const navigation = useNavigation();
+
+  const totalPoints =
+    rewards?.reduce((acc, reward) => acc + reward.points, 0) || 0;
+
+  useEffect(() => {
+    console.log('rewards:', rewards);
+  }, [rewards]);
 
   return (
     <Wrapper>
@@ -54,18 +62,17 @@ const ResultScreen = () => {
             </Category>
           </OthersContainer>
           <PointsContainer>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ 100</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ 100</PointValue>
-            </PointRow>
+            {rewards?.map((reward, index) => (
+              <PointRow key={index}>
+                <CheckBox />
+                <PointText>
+                  {convertActionCodeToText(reward.action_code)}
+                </PointText>
+                <PointValue>+ {reward.points} P</PointValue>
+              </PointRow>
+            ))}
             <TotalPointRow>
-              <TotalPointText>{points} P를 획득했어요!</TotalPointText>
+              <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
           <ResultMap
