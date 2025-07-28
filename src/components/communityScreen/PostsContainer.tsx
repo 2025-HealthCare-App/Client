@@ -11,7 +11,7 @@ const PostsContainer = () => {
     getPostsAPI(1) //TODO: 무한 스크롤 구현을 위해 페이지 번호를 동적으로 변경
       .then(data => {
         // //data를 json 형태로 예쁘게 출력
-        // console.log('게시글 조회 성공:', JSON.stringify(data, null, 2));
+        console.log('게시글 조회 성공:', JSON.stringify(data, null, 2));
         setPosts(
           data.posts.map((post: any) => ({
             postId: post.post_id,
@@ -21,6 +21,8 @@ const PostsContainer = () => {
             heartsNum: post.hearts_num,
             createdAt: post.created_at,
             liked: post.liked,
+            tier: post.tier, // 작성자 티어
+            name: post.name, // 작성자 이름
           })),
         );
       })

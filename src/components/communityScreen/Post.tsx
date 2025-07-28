@@ -12,6 +12,22 @@ const Post = ({post}: Props) => {
   const [isHearted, setIsHearted] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.heartsNum);
 
+  // tier에 따라 뱃지 이미지 경로 선택
+  const getTierBadgeSource = (tier: number) => {
+    switch (tier) {
+      case 1:
+        return require('../../images/tiers/tier_1.png');
+      case 2:
+        return require('../../images/tiers/tier_2.png');
+      case 3:
+        return require('../../images/tiers/tier_3.png');
+      case 4:
+        return require('../../images/tiers/tier_4.png');
+      default:
+        return require('../../images/tiers/tier_1.png'); // 기본값
+    }
+  };
+
   // 하트 클릭 핸들러
   const handleHeartPress = () => {
     //하트 숫자 증가 API 호출
@@ -69,8 +85,8 @@ const Post = ({post}: Props) => {
       <PostTextContainer>
         <NameAndDate>
           <UserName>
-            <Text>User {post.Uid}</Text>
-            <TierBadge source={require('../../images/tierBadge.png')} />
+            <Text>{post.name}</Text>
+            <TierBadge source={getTierBadgeSource(post.tier)} />
           </UserName>
           <Date>{post.createdAt.split('T')[0]}</Date>
         </NameAndDate>
