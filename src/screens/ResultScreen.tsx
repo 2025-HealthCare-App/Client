@@ -15,7 +15,6 @@ const ResultScreen = () => {
     Kcal,
     startTime,
     staticMapUrl,
-    exTitle,
     date,
     points,
   } = route.params;
@@ -33,7 +32,7 @@ const ResultScreen = () => {
           <DateandTime>
             {date} {startTime}
           </DateandTime>
-          <ResultTitle>{exTitle || `${startTime} 의 운동`}</ResultTitle>
+          <ResultTitle>{`${startTime} 의 운동`}</ResultTitle>
         </ResultTitleContainer>
         <ContentsContainer>
           <KMContainer>

@@ -253,6 +253,8 @@ const RunningScreen = () => {
       Kcal: steps * 0.04,
       startTime: formattedStartTime,
       staticMapUrl: staticMapUrl,
+      // TODO:API로 몇 point 얻었는지 구해서 추가
+      points: 100, // 예시로 100 포인트 추가
     });
     //타이머 정지
     setIsRunning(false);
