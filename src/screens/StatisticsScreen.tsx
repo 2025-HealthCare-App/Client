@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
@@ -39,7 +39,7 @@ const StatisticsScreen = () => {
 
   //1. 나의 운동 받아오기(매번 StatisticsScreen이 포커스될 때마다)
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       getMyRecentExercisesAPI()
         .then(response => {
           const {exercises} = response.data;

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
@@ -9,14 +9,13 @@ import {
   getExerciseDaysByMonthAPI,
   getExercisesByDateAPI,
 } from '../apis/history/dateExAPI';
+import {useFocusEffect} from '@react-navigation/native';
 
 const HistoryScreen = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [dayExercises, setDayExercises] = useState<ExerciseType[]>([]);
-
-  // 운동한 날짜들 표시(서버에서 받아옴)
   const [exerciseDays, setExerciseDays] = useState<{
     [key: string]: {
       marked?: boolean;
@@ -25,9 +24,8 @@ const HistoryScreen = () => {
     };
   }>({});
 
-  //날짜 눌렀을 때 함수
+  // 날짜 눌렀을 때 함수
   const handleDayPress = (day: {dateString: string}) => {
-    console.log('선택된 날짜:', day.dateString);
     setSelectedDate(day.dateString);
     getExercisesByDateAPI(day.dateString)
       .then(data => {
@@ -37,6 +35,21 @@ const HistoryScreen = () => {
         console.error('운동 데이터 가져오기 실패:', error);
       });
   };
+
+  // 화면이 포커스를 받을 때마다 오늘 날짜 운동 데이터 최신화
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedDate) {
+        getExercisesByDateAPI(selectedDate)
+          .then(data => {
+            setDayExercises(data.exercises.map(toExerciseType));
+          })
+          .catch(error => {
+            console.error('운동 데이터 가져오기 실패:', error);
+          });
+      }
+    }, [selectedDate]),
+  );
 
   // 컴포넌트가 마운트될 때 현재 날짜로 초기화
   useEffect(() => {
@@ -48,23 +61,13 @@ const HistoryScreen = () => {
     setSelectedYear(year);
     setSelectedMonth(month);
     setSelectedDate(`${year}-${month}-${date}`);
-
-    // 초기 로드 시 오늘 날짜의 운동 데이터 가져오기
-    getExercisesByDateAPI(`${year}-${month}-${date}`)
-      .then(data => {
-        setDayExercises(data.exercises.map(toExerciseType));
-      })
-      .catch(error => {
-        console.error('운동 데이터 가져오기 실패:', error);
-      });
   }, []);
 
-  //해당하는 년, 월의 며칠에 운동했는지 조회하는 API 호출
+  // 해당하는 년, 월의 며칠에 운동했는지 조회하는 API 호출
   useEffect(() => {
     if (selectedYear && selectedMonth) {
       getExerciseDaysByMonthAPI(selectedYear, selectedMonth)
         .then(days => {
-          console.log('days: ', days);
           const markedDays: {
             [key: string]: {
               marked?: boolean;
