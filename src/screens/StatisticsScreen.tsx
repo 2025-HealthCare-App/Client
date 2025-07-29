@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {ExerciseType, toExerciseType} from '../types/exerciseType';
 import Exercise from '../components/StatisticsScreen/Exercise';
@@ -37,25 +37,28 @@ const StatisticsScreen = () => {
   const [maxDistance, setMaxDistance] = useState<number>(100);
   const navigation = useNavigation();
 
-  //1. 나의 운동 받아오기
-  useEffect(() => {
-    getMyRecentExercisesAPI()
-      .then(response => {
-        const {exercises} = response.data;
-        console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
-        // 프론트에서 최근순으로 정렬
-        exercises.sort(
-          (a: any, b: any) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-        );
-        if (Array.isArray(exercises)) {
-          setRecentExercises(exercises.map(toExerciseType));
-        }
-      })
-      .catch(error => {
-        console.error('나의 운동 데이터 가져오기 실패:', error);
-      });
-  }, []);
+  //1. 나의 운동 받아오기(매번 StatisticsScreen이 포커스될 때마다)
+  useFocusEffect(
+    React.useCallback(() => {
+      getMyRecentExercisesAPI()
+        .then(response => {
+          const {exercises} = response.data;
+          console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
+          // 프론트에서 최근순으로 정렬
+          exercises.sort(
+            (a: any, b: any) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime(),
+          );
+          if (Array.isArray(exercises)) {
+            setRecentExercises(exercises.map(toExerciseType));
+          }
+        })
+        .catch(error => {
+          console.error('나의 운동 데이터 가져오기 실패:', error);
+        });
+    }, []),
+  );
 
   useEffect(() => {
     const fetchWeeklyData = async () => {

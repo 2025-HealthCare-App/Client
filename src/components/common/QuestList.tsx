@@ -16,7 +16,7 @@ const QuestList = () => {
     getMyTodayQuestAPI()
       .then(data => {
         setQuests(data.quests);
-        console.log('퀘스트 조회 성공:', JSON.stringify(data.quests, null, 2));
+        // console.log('퀘스트 조회 성공:', JSON.stringify(data.quests, null, 2));
       })
       .catch(error => {
         console.error('퀘스트 조회 실패:', error);
@@ -25,20 +25,6 @@ const QuestList = () => {
 
   return (
     <Wrapper>
-      {/* {questData.map(quest => (
-        <Quest key={quest.id}>
-          <CheckBox completed={completedQuests[quest.id]}>
-            {completedQuests[quest.id] && <CheckMark>✓</CheckMark>}
-          </CheckBox>
-          <QuestText completed={completedQuests[quest.id]}>
-            {quest.text}
-          </QuestText>
-          <PointContainer>
-            <PointIcon source={require('../../images/point.png')} />
-            <PointText>{quest.points}</PointText>
-          </PointContainer>
-        </Quest>
-      ))} */}
       {quests.map((quest, index) => (
         <Quest key={index}>
           <CheckBox completed={quest.completed}>

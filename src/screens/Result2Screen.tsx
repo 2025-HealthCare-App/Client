@@ -21,7 +21,6 @@ const Result2Screen = () => {
     staticMapUrl,
     exTitle,
     date,
-    points,
   } = exercise;
   // 수정 모드 상태 및 타이틀 입력 상태 추가
   const [isEditMode, setIsEditMode] = useState(false);
@@ -35,8 +34,8 @@ const Result2Screen = () => {
       Alert.alert('운동 제목을 입력해주세요.');
       return;
     }
-    if (editTitle.length > 20) {
-      Alert.alert('운동 제목은 20자 이내로 입력해주세요.');
+    if (editTitle.length > 30) {
+      Alert.alert('운동 제목은 30자 이내로 입력해주세요.');
       return;
     }
 
@@ -124,7 +123,7 @@ const Result2Screen = () => {
               <PointValue>+ 100</PointValue>
             </PointRow>
             <TotalPointRow>
-              <TotalPointText>{points} P를 획득했어요!</TotalPointText>
+              <TotalPointText>TODO P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
           <ResultMap
