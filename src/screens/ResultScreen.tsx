@@ -62,7 +62,7 @@ const ResultScreen = () => {
             </Category>
           </OthersContainer>
           <PointsContainer>
-            {rewards?.map((reward, index) => (
+            {/* {rewards?.map((reward, index) => (
               <PointRow key={index}>
                 <CheckBox />
                 <PointText>
@@ -70,7 +70,37 @@ const ResultScreen = () => {
                 </PointText>
                 <PointValue>+ {reward.points} P</PointValue>
               </PointRow>
-            ))}
+            ))} */}
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
+            <PointRow>
+              <CheckBox />
+              <PointText>포인트 적립</PointText>
+              <PointValue>+ {totalPoints} P</PointValue>
+            </PointRow>
             <TotalPointRow>
               <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
@@ -96,6 +126,7 @@ const ResultMap = styled.Image`
   object-fit: cover;
   object-position: center;
   border-radius: 10px;
+  margin-bottom: 20px;
 `;
 
 const PointsContainer = styled.View`
@@ -107,6 +138,7 @@ const PointsContainer = styled.View`
   border-radius: 10px;
   padding: 10px 20px;
   margin-bottom: 20px;
+  margin-top: 20px;
 `;
 const PointRow = styled.View`
   width: 100%;
@@ -147,11 +179,11 @@ const TotalPointText = styled.Text`
   font-weight: bold;
 `;
 
-const Wrapper = styled.View`
+const Wrapper = styled.ScrollView`
   height: 100%;
   width: 100%;
   background-color: #ffffff;
-  padding: 15px 20px;
+  padding: 10px 20px;
 `;
 
 const Header = styled.View`
@@ -205,7 +237,7 @@ const ContentsContainer = styled.View`
   width: 100%;
   margin-top: 20px;
   display: flex;
-
+  padding-bottom: 50px;
   align-items: center;
 `;
 const KMContainer = styled.View`
