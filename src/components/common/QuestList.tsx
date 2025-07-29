@@ -1,26 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
+import {getMyTodayQuestAPI} from '../../apis/quest/questAPI';
 
-type QuestId = 'quest1' | 'quest2' | 'quest3' | 'quest4';
+type Quest = {
+  action_code: string;
+  description: string;
+  points: number;
+  completed: boolean;
+};
 
 const QuestList = () => {
-  const completedQuests: Record<QuestId, boolean> = {
-    quest1: true, // 오늘 운동 시작하기는 완료된 상태
-    quest2: true,
-    quest3: false,
-    quest4: false,
-  };
+  const [quests, setQuests] = useState<Quest[]>([]);
 
-  const questData: {id: QuestId; text: string; points: string}[] = [
-    {id: 'quest1', text: '오늘 운동 시작하기', points: '50 P'},
-    {id: 'quest2', text: '1km 걷기', points: '100 P'},
-    {id: 'quest3', text: '3km 걷기', points: '150 P'},
-    {id: 'quest4', text: '오늘의 게시글 작성하기', points: '100 P'},
-  ];
+  useEffect(() => {
+    getMyTodayQuestAPI()
+      .then(data => {
+        setQuests(data.quests);
+        console.log('퀘스트 조회 성공:', JSON.stringify(data.quests, null, 2));
+      })
+      .catch(error => {
+        console.error('퀘스트 조회 실패:', error);
+      });
+  }, []);
 
   return (
     <Wrapper>
-      {questData.map(quest => (
+      {/* {questData.map(quest => (
         <Quest key={quest.id}>
           <CheckBox completed={completedQuests[quest.id]}>
             {completedQuests[quest.id] && <CheckMark>✓</CheckMark>}
@@ -28,6 +33,18 @@ const QuestList = () => {
           <QuestText completed={completedQuests[quest.id]}>
             {quest.text}
           </QuestText>
+          <PointContainer>
+            <PointIcon source={require('../../images/point.png')} />
+            <PointText>{quest.points}</PointText>
+          </PointContainer>
+        </Quest>
+      ))} */}
+      {quests.map((quest, index) => (
+        <Quest key={index}>
+          <CheckBox completed={quest.completed}>
+            {quest.completed && <CheckMark>✓</CheckMark>}
+          </CheckBox>
+          <QuestText completed={quest.completed}>{quest.description}</QuestText>
           <PointContainer>
             <PointIcon source={require('../../images/point.png')} />
             <PointText>{quest.points}</PointText>

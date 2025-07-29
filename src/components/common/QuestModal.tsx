@@ -21,7 +21,7 @@ const QuestModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
             <XbuttonText>x</XbuttonText>
           </Xbutton>
           <ModalTop>
-            <ModalTitle>일일 퀘스트</ModalTitle>
+            <ModalTitle>오늘의 퀘스트</ModalTitle>
             <QuestList />
           </ModalTop>
         </ModalContainer>
