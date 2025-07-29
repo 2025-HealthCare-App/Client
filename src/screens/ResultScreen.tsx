@@ -62,7 +62,7 @@ const ResultScreen = () => {
             </Category>
           </OthersContainer>
           <PointsContainer>
-            {/* {rewards?.map((reward, index) => (
+            {rewards?.map((reward, index) => (
               <PointRow key={index}>
                 <CheckBox />
                 <PointText>
@@ -70,37 +70,7 @@ const ResultScreen = () => {
                 </PointText>
                 <PointValue>+ {reward.points} P</PointValue>
               </PointRow>
-            ))} */}
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ {totalPoints} P</PointValue>
-            </PointRow>
+            ))}
             <TotalPointRow>
               <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
@@ -170,7 +140,9 @@ const TotalPointRow = styled.View`
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 20px 0;
+  border-top-width: 1px;
+  border-top-color: #dfdfdf;
 `;
 const TotalPointText = styled.Text`
   font-size: 16px;
