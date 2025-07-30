@@ -51,15 +51,23 @@ const Profile = ({
 
   return (
     <Wrapper isSecond={isSecond} isThird={isThird}>
-      <ImageContainer>
-        <ProfileImage
-          source={getProfileImageSource(imgSrc)}
-          isFirst={isFirst}
-        />
-        {getRankImage() && <RankBadge source={getRankImage()} />}
-      </ImageContainer>
-      <ProfileName>{name}</ProfileName>
-      <Km>{(total_distance / 1000).toLocaleString()}km</Km>
+      {total_distance > 0 ? (
+        <>
+          <ImageContainer>
+            <ProfileImage
+              source={getProfileImageSource(imgSrc)}
+              isFirst={isFirst}
+            />
+            {getRankImage() && <RankBadge source={getRankImage()} />}
+          </ImageContainer>
+          <ProfileName>{name}</ProfileName>
+          <Km>{(total_distance / 1000).toLocaleString()}km</Km>
+        </>
+      ) : (
+        <NoProfileContainer>
+          <NoProfileText>아직 유저가 달리지 않았어요!</NoProfileText>
+        </NoProfileContainer>
+      )}
     </Wrapper>
   );
 };
@@ -90,7 +98,7 @@ const ProfileImage = styled.Image<ImageProps>`
   width: ${props => (props.isFirst ? '100px' : '80px')};
   height: ${props => (props.isFirst ? '100px' : '80px')};
   border-radius: 100px;
-  border: 1px solid #ffffff;
+  border: 1px solid #93a7c9;
 `;
 
 const ProfileName = styled.Text`
@@ -106,4 +114,19 @@ const Km = styled.Text`
   color: #ffffff;
   text-align: center;
   text-decoration: underline;
+`;
+
+const NoProfileContainer = styled.View`
+  width: 80px;
+  height: 80px;
+  border: 1px solid #4d596d;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NoProfileText = styled.Text`
+  font-size: 12px;
+  color: #93a7c9;
+  text-align: center;
+  padding: 5px;
 `;

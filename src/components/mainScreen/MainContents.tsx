@@ -22,8 +22,7 @@ const MainContents = () => {
           setIsGoalSet(false);
           return;
         }
-        // console.log('이번주 목표:', data.target_distance, 'm');
-        // console.log('이번주 달린 거리:', data.total_distance, 'm');
+
         setIsGoalSet(true);
         setWeekGoal(data.target_distance); // m 단위로 저장
         setCurrentDistance(data.total_distance); // m 단위 그대로 저장

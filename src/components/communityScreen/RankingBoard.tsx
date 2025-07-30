@@ -22,13 +22,6 @@ const RankingBoard = () => {
   const userInfo = useRecoilValue(userInfoAtom); // Recoil 상태에서 유저 정보 가져오기
   const animatedHeight = useRef(new Animated.Value(1)).current; // 1 = 펼쳐진 상태
 
-  const profileImages = {
-    // 이미지 경로를 객체로 관리 TODO: 임시
-    profileImg1: require('../../images/profileImgs/profileImg1.jpg'),
-    profileImg2: require('../../images/profileImgs/profileImg2.png'),
-    profileImg3: require('../../images/profileImgs/profileImg3.png'),
-  };
-
   const toggleRankingBoard = () => {
     const toValue = isCollapsed ? 1 : 0; // 0 = 접힌 상태
 
@@ -46,11 +39,17 @@ const RankingBoard = () => {
     getRankingsAPI()
       .then(data => {
         console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
-        // rank 기준으로 정렬 (1,2,3위 순서)
+        // topUsers가 3명이 아니면 빈 배열로 채움
         const sortedUsers = (data.topUsers || [])
           .slice()
           .sort((a: RankingUser, b: RankingUser) => a.rank - b.rank);
-        setRankUsers(sortedUsers);
+
+        // 3명 미만이면 빈 객체로 채움
+        const filledUsers = Array(3)
+          .fill(null)
+          .map((_, i) => sortedUsers[i] || null);
+
+        setRankUsers(filledUsers);
       })
       .catch(error => {
         console.error('랭킹 조회 실패:', error);
@@ -87,21 +86,30 @@ const RankingBoard = () => {
 
         <ProfilesContainer>
           <Profile
-            name={rankUsers[1]?.name || '익명'}
+            name={rankUsers[1]?.name || ' '}
             total_distance={rankUsers[1]?.total_distance || 0}
-            imgSrc={rankUsers[1]?.profile_image || profileImages.profileImg2}
+            imgSrc={
+              rankUsers[1]?.profile_image ||
+              require('../../images/profileImgs/profileImg_default.png')
+            }
             isSecond={true} // 2등 표시
           />
           <Profile
-            name={rankUsers[0]?.name || '익명'}
+            name={rankUsers[0]?.name || ' '}
             total_distance={rankUsers[0]?.total_distance || 0}
-            imgSrc={rankUsers[0]?.profile_image || profileImages.profileImg1}
+            imgSrc={
+              rankUsers[0]?.profile_image ||
+              require('../../images/profileImgs/profileImg_default.png')
+            }
             isFirst={true} // 1등 표시
           />
           <Profile
-            name={rankUsers[2]?.name || '익명'}
+            name={rankUsers[2]?.name || ' '}
             total_distance={rankUsers[2]?.total_distance || 0}
-            imgSrc={rankUsers[2]?.profile_image || profileImages.profileImg3}
+            imgSrc={
+              rankUsers[2]?.profile_image ||
+              require('../../images/profileImgs/profileImg_default.png')
+            }
             isThird={true} // 3등 표시
           />
         </ProfilesContainer>
