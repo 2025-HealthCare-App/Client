@@ -14,7 +14,7 @@ export const getPostsAPI = async (page = 1) => {
         Authorization: `Bearer ${token}`, // ✅ 토큰 추가
       },
     });
-    console.log('게시물 조회 성공:', JSON.stringify(response.data, null, 2));
+    // console.log('게시물 조회 성공:', JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
     console.error('게시물 조회 실패:', error?.response?.data || error.message);

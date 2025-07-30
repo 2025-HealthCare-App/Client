@@ -26,7 +26,7 @@ export const getMyRankAPI = async () => {
       },
     );
 
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }

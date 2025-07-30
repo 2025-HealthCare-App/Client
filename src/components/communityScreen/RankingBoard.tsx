@@ -19,6 +19,7 @@ const RankingBoard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [rankUsers, setRankUsers] = useState<RankingUser[]>([]); // 랭킹 사용자 목록
   const [percentile, setPercentile] = useState<number>(0); // 나의 상위 퍼센트
+  const [isRanThisWeek, setIsRanThisWeek] = useState<boolean>(false); // 이번주 달린 기록 여부
   const userInfo = useRecoilValue(userInfoAtom); // Recoil 상태에서 유저 정보 가져오기
   const animatedHeight = useRef(new Animated.Value(1)).current; // 1 = 펼쳐진 상태
 
@@ -59,6 +60,14 @@ const RankingBoard = () => {
   useEffect(() => {
     getMyRankAPI()
       .then(response => {
+        //나의 이번주 기록 없으면(status 204)
+        if (response.status === 204) {
+          console.log('이번주 달린 기록이 없습니다.');
+          setIsRanThisWeek(false);
+          setPercentile(0);
+          return;
+        }
+        setIsRanThisWeek(true);
         setPercentile(response.data.percentile);
       })
       .catch(error => {
@@ -115,10 +124,19 @@ const RankingBoard = () => {
         </ProfilesContainer>
 
         <PercentText>
-          <UserName>{userInfo.name}</UserName>
-          <Text> 님은 현재 </Text>
-          <Percent>상위 {percentile}%</Percent>
-          <Text>에 있어요!</Text>
+          {isRanThisWeek ? (
+            <>
+              <UserName>{userInfo.name}</UserName>
+              <Text> 님은 현재 </Text>
+              <Percent>상위 {percentile}%</Percent>
+              <Text>에 있어요!</Text>
+            </>
+          ) : (
+            <>
+              <UserName>{userInfo.name}</UserName>
+              <Text> 님은 이번주 달린 기록이 없어요! </Text>
+            </>
+          )}
         </PercentText>
       </Wrapper>
     </Animated.View>

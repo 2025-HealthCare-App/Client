@@ -61,7 +61,11 @@ const UserBar = () => {
       />
       <UserInfoContainer onPress={() => navigation.navigate('Mypage')}>
         <ProfileImg
-          source={require('../../images/profileImgs/profileImg1.jpg')}
+          source={
+            userInfo?.profileImage
+              ? {uri: userInfo.profileImage}
+              : require('../../images/profileImgs/profileImg_default.png')
+          }
         />
         <TierBadge source={getTierBadgeSource(userInfo?.tier)} />
         <UserName>{userInfo?.name}</UserName>
@@ -128,6 +132,7 @@ const ProfileImg = styled(Image)`
   width: 50px;
   height: 50px;
   border-radius: 50px;
+  margin-right: 10px;
 `;
 const TierBadge = styled(Image)`
   width: 30px;
