@@ -31,7 +31,7 @@ const MainScreen = () => {
 export default MainScreen;
 
 const Wrapper = styled.View`
-  height: 100%;
+  flex: 1; /* height: 100% 대신 flex: 1 */
   justify-content: flex-start;
   align-items: center;
   background-color: #222831;
