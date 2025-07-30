@@ -4,15 +4,20 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList, ExerciseType} from '../types/exerciseType';
 import {Alert, TouchableOpacity} from 'react-native';
-import {patchMyExerciseTitleAPI} from '../apis/exercise/exerciseAPI';
+import {
+  getMyExercisePointsAPI,
+  patchMyExerciseTitleAPI,
+} from '../apis/exercise/exerciseAPI';
+import {Reward} from '../types/rewardType';
+import {convertActionCodeToText} from '../utils/actionCodeUtil';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
 const Result2Screen = () => {
   const route = useRoute<ResultScreenRouteProp>();
   const exercise: ExerciseType = route.params;
-
   const {
+    exerciseId,
     distance,
     steps,
     elapsedSec,
@@ -25,8 +30,12 @@ const Result2Screen = () => {
   // 수정 모드 상태 및 타이틀 입력 상태 추가
   const [isEditMode, setIsEditMode] = useState(false);
   const [editTitle, setEditTitle] = useState(exTitle || '');
+  // 포인트 획득 내역
+  const [rewards, setRewards] = useState<Reward[]>([]);
 
   const navigation = useNavigation();
+  const totalPoints =
+    rewards?.reduce((acc, reward) => acc + reward.points, 0) || 0;
 
   // (수정) 완료 버튼 클릭 시
   const handleEditComplete = () => {
@@ -51,9 +60,11 @@ const Result2Screen = () => {
   };
 
   useEffect(() => {
-    console.log('여기서는 post 안하고 only 운동 기록 조회용!!');
-    // console.log('운동 기록:', JSON.stringify(exercise, null, 2));
-  }, [exercise, startTime, elapsedSec]);
+    getMyExercisePointsAPI(exerciseId).then(data => {
+      console.log('포인트 적립 정보:', JSON.stringify(data, null, 2));
+      setRewards(data.logs || []);
+    });
+  }, [exerciseId]);
 
   return (
     <Wrapper>
@@ -112,18 +123,17 @@ const Result2Screen = () => {
             </Category>
           </OthersContainer>
           <PointsContainer>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ 100</PointValue>
-            </PointRow>
-            <PointRow>
-              <CheckBox />
-              <PointText>포인트 적립</PointText>
-              <PointValue>+ 100</PointValue>
-            </PointRow>
+            {rewards.map((reward, index) => (
+              <PointRow key={index}>
+                <CheckBox />
+                <PointText>
+                  {convertActionCodeToText(reward.action_code)}
+                </PointText>
+                <PointValue>+ {reward.points} P</PointValue>
+              </PointRow>
+            ))}
             <TotalPointRow>
-              <TotalPointText>TODO P를 획득했어요!</TotalPointText>
+              <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
             </TotalPointRow>
           </PointsContainer>
           <ResultMap

@@ -31,7 +31,6 @@ export const toExerciseType = (ex: any): ExerciseType => ({
   startTime: ex.ex_start_time,
   endTime: ex.ex_end_time,
   exTitle: ex.ex_title,
-  points: ex.points,
   staticMapUrl: ex.ex_route_image,
   date: ex.created_at.split('T')[0],
 });

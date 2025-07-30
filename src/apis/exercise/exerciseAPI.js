@@ -91,3 +91,26 @@ export const patchMyExerciseTitleAPI = async (exerciseId, ex_title) => {
     throw error;
   }
 };
+
+// 해당 운동의 포인트 획득 내역 조회하는 API
+export const getMyExercisePointsAPI = async exerciseId => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('토큰이 존재하지 않습니다.');
+    }
+
+    const response = await axios.get(
+      `${API_BASE_URL}/points/exercise/${exerciseId}/points`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('포인트 로그 조회 실패:', error);
+    throw error;
+  }
+};

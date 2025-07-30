@@ -43,7 +43,7 @@ const StatisticsScreen = () => {
       getMyRecentExercisesAPI()
         .then(response => {
           const {exercises} = response.data;
-          console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
+          // console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
           // 프론트에서 최근순으로 정렬
           exercises.sort(
             (a: any, b: any) =>
