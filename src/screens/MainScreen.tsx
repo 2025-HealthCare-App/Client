@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import UserBar from '../components/mainScreen/UserBar';
 import StyledTextTicker from '../components/mainScreen/StyledTextTicker';
 import MainContents from '../components/mainScreen/MainContents';
 import BottomBar from '../components/common/BottomBar';
+import useWeeklyRewardAlert from '../hooks/useWeeklyRewardAlert';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MainScreen = () => {
+  useWeeklyRewardAlert();
+  // useEffect(() => {
+  //   const clearRewardWeek = async () => {
+  //     await AsyncStorage.removeItem('lastRewardAlertWeek');
+  //     console.log('lastRewardAlertWeek 삭제 완료');
+  //   };
+
+  //   clearRewardWeek(); // 앱 실행 시 바로 삭제
+  // }, []);
+
   return (
     <Wrapper>
       <UserBar />
