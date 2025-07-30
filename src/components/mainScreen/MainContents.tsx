@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {Image, Touchable, TouchableOpacity} from 'react-native';
+import {Alert, Image, Touchable, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
@@ -39,6 +39,25 @@ const MainContents = () => {
       fetchWeekGoal();
     }, [fetchWeekGoal]),
   );
+
+  const handleStartBtnPress = () => {
+    if (!isGoalSet) {
+      Alert.alert(
+        '목표 설정',
+        '이번주 목표를 설정해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => setModalVisible(true),
+          },
+        ],
+        {cancelable: false},
+      );
+      // 목표가 설정되지 않았을 때는 Running 화면으로 이동하지 않음
+      return;
+    }
+    navigation.navigate('Running');
+  };
 
   // 목표 달성률 계산
   const getProgressPercentage = () => {
@@ -99,7 +118,7 @@ const MainContents = () => {
         />
       </CharacterContainer>
 
-      <StartButton onPress={() => navigation.navigate('Running')}>
+      <StartButton onPress={handleStartBtnPress}>
         <TextContainer>
           <StartButtonText>START</StartButtonText>
         </TextContainer>
