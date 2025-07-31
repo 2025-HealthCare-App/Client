@@ -36,6 +36,7 @@ type RootStackParamList = {
     Kcal: number;
     startTime: string;
     staticMapUrl: string;
+    rewards?: Reward[];
   };
 };
 
@@ -261,7 +262,6 @@ const RunningScreen = () => {
           startTime: formattedStartTime,
           staticMapUrl,
           rewards: receivedRewards, // 여기서 바로 넘겨줌!
-          points: 100,
         });
       })
       .catch(error => {
@@ -277,7 +277,6 @@ const RunningScreen = () => {
       startTime: formattedStartTime,
       staticMapUrl: staticMapUrl,
       rewards: rewards,
-      points: 100, // 예시로 100 포인트 추가
     });
     //타이머 정지
     setIsRunning(false);
@@ -329,7 +328,14 @@ const RunningScreen = () => {
           style={{width: '100%', height: '100%'}}
           showsUserLocation={true}
           followsUserLocation={true}
-          initialRegion={initialRegion}
+          initialRegion={
+            initialRegion ?? {
+              latitude: 37.5665,
+              longitude: 126.978,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }
+          }
         />
         <ButtonContainer>
           {isRunning ? (
