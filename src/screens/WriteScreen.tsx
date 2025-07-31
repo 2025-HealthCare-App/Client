@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import {uploadPost} from '../apis/community/postAPI';
@@ -15,7 +15,7 @@ const WriteScreen = () => {
     try {
       const response = await uploadPost({postContent, imageUri: selectedImage});
       if (response.success) {
-        console.log('게시글 작성 성공:', response);
+        Alert.alert('게시글 작성 완료', '게시글이 성공적으로 작성되었습니다!');
         navigation.navigate('Community'); // 게시글 작성 후 커뮤니티 화면으로 이동
       } else {
         console.error('게시글 작성 실패:', response.message);
