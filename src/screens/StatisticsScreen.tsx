@@ -14,37 +14,67 @@ import dayjs from 'dayjs';
 
 type weeklyDataType = {
   day: string;
-  myDistance: number;
-  avgDistance: number;
+  myDistance: number; // km 단위
+  avgDistance: number; // km 단위
 };
+
+// ✅ 서버(m) → km 변환 후 주간 데이터 매핑
 export const mapWeeklyData = (
   myDistances: {[date: string]: number},
   avgDistances: {[date: string]: number},
 ): weeklyDataType[] => {
-  // 날짜 오름차순 정렬
   const sortedDates = Object.keys(myDistances).sort();
-
   return sortedDates.map(date => ({
-    day: dayjs(date).format('ddd'), // 예: "Mon", "Tue"
-    myDistance: myDistances[date] || 0,
-    avgDistance: avgDistances[date] || 0,
+    day: dayjs(date).format('ddd'),
+    myDistance: (myDistances[date] || 0) / 1000,
+    avgDistance: (avgDistances[date] || 0) / 1000,
   }));
+};
+
+// 📌 Y축 라벨 생성
+const getYAxisLabels = (maxDistance: number) => {
+  const roundedMax = Math.ceil(maxDistance);
+  const step = Math.ceil(roundedMax / 3);
+  return [0, step, step * 2, roundedMax];
 };
 
 const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
   const [weeklyData, setWeeklyData] = useState<weeklyDataType[]>([]);
-  const [maxDistance, setMaxDistance] = useState<number>(100);
+  const [maxDistance, setMaxDistance] = useState<number>(1);
   const navigation = useNavigation();
 
-  //1. 나의 운동 받아오기(매번 StatisticsScreen이 포커스될 때마다)
+  // 📌 주간 데이터 + 최대 거리 계산
+  const fetchWeeklyData = async () => {
+    try {
+      const [avgRes, myRes] = await Promise.all([
+        getWeekAvgDistanceAPI(),
+        getMyWeekAvgDistanceAPI(),
+      ]);
+
+      const mapped = mapWeeklyData(
+        myRes.myWeeklyDistances,
+        avgRes.weeklyAverages,
+      );
+      setWeeklyData(mapped);
+
+      // 📌 최대 거리 계산 시 최소 3km 이상으로 고정
+      const max = Math.max(
+        ...mapped.map(item => Math.max(item.myDistance, item.avgDistance)),
+      );
+      const adjustedMax = Math.max(max, 3); // 최소 3km
+      setMaxDistance(adjustedMax);
+    } catch (err) {
+      console.error('주간 평균 거리 데이터 조회 실패:', err);
+    }
+  };
+
+  // 📌 최근 운동 데이터
   useFocusEffect(
     useCallback(() => {
       getMyRecentExercisesAPI()
         .then(response => {
           const {exercises} = response.data;
-          // console.log('나의 운동 데이터:', JSON.stringify(exercises, null, 2));
-          // 프론트에서 최근순으로 정렬
           exercises.sort(
             (a: any, b: any) =>
               new Date(b.created_at).getTime() -
@@ -53,39 +83,13 @@ const StatisticsScreen = () => {
           if (Array.isArray(exercises)) {
             setRecentExercises(exercises.map(toExerciseType));
           }
+          fetchWeeklyData(); // 포커스될 때 주간 데이터도 갱신
         })
         .catch(error => {
           console.error('나의 운동 데이터 가져오기 실패:', error);
         });
     }, []),
   );
-
-  useEffect(() => {
-    const fetchWeeklyData = async () => {
-      try {
-        const [avgRes, myRes] = await Promise.all([
-          getWeekAvgDistanceAPI(),
-          getMyWeekAvgDistanceAPI(),
-        ]);
-
-        const mapped = mapWeeklyData(
-          myRes.myWeeklyDistances,
-          avgRes.weeklyAverages,
-        );
-        setWeeklyData(mapped);
-
-        // ✅ 최대 거리 계산
-        const max = Math.max(
-          ...mapped.map(item => Math.max(item.myDistance, item.avgDistance)),
-        );
-        setMaxDistance(max === 0 ? 1 : max); // 0일 경우 대비
-      } catch (err) {
-        console.error('주간 평균 거리 데이터 조회 실패:', err);
-      }
-    };
-
-    fetchWeeklyData();
-  }, []);
 
   return (
     <Wrapper>
@@ -110,10 +114,11 @@ const StatisticsScreen = () => {
           </GraphHeader>
           <GraphContainer>
             <YAxisContainer>
-              <YAxisLabel>7km</YAxisLabel>
-              <YAxisLabel>5km</YAxisLabel>
-              <YAxisLabel>3km</YAxisLabel>
-              <YAxisLabel>0km</YAxisLabel>
+              {getYAxisLabels(maxDistance)
+                .sort((a, b) => b - a)
+                .map((label, idx) => (
+                  <YAxisLabel key={idx}>{label}km</YAxisLabel>
+                ))}
             </YAxisContainer>
             <ChartArea>
               <GridLines>

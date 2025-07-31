@@ -10,7 +10,6 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
-import com.obesityapp.ReactNativeFlipper //Flipper 사용을 위해서 새로 import
 import androidx.multidex.MultiDexApplication
 
 class MainApplication : MultiDexApplication(), ReactApplication {
@@ -35,7 +34,6 @@ class MainApplication : MultiDexApplication(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-    ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager) // Flipper 사용 위한 한 줄
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.

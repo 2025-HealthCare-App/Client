@@ -115,11 +115,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1' // ✅ 이 줄 추가 또는 수정
     implementation 'androidx.multidex:multidex:2.0.1'                      // ✅ 여기
 
-    //Flipper 관련
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}")
-    debugImplementation("com.facebook.soloader:soloader:0.10.5")
-
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

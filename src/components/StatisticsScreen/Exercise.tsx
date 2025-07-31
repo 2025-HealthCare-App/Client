@@ -14,7 +14,6 @@ const Exercise = ({
   startTime,
   staticMapUrl,
   exTitle,
-  points,
   date,
   ...rest
 }: ExerciseType) => {
@@ -29,7 +28,6 @@ const Exercise = ({
       startTime,
       staticMapUrl,
       exTitle,
-      points,
       date,
       ...rest,
     });
@@ -42,7 +40,7 @@ const Exercise = ({
           <Date>
             {date} {startTime}
           </Date>
-          <Point>+ {points} P</Point>
+          {/* <Point>+ P</Point> */}
         </DateAndPoint>
         <ExerciseTitle>{exTitle}</ExerciseTitle>
       </Top>
@@ -100,13 +98,13 @@ const Date = styled.Text`
   text-align: center;
   color: #6f6f6f;
 `;
-const Point = styled.Text`
-  font-size: 11px;
-  color: #393e46;
-  font-weight: bold;
-  text-align: center;
-  color: #6f6f6f;
-`;
+// const Point = styled.Text`
+//   font-size: 11px;
+//   color: #393e46;
+//   font-weight: bold;
+//   text-align: center;
+//   color: #6f6f6f;
+// `;
 const ExerciseTitle = styled.Text`
   width: 100%;
   font-size: 13px;

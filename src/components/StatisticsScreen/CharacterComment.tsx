@@ -1,16 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import SpeechBubble from './SpeechBubble';
 import {Image} from 'react-native';
+import {getMyTotalDistanceAPI} from '../../apis/user/userInfoAPI';
+import {convertMetersToKilometers} from '../../utils/distanceUtil';
 
 const CharacterComment = () => {
+  const [totalDistance, setTotalDistance] = useState<number>(0);
+
+  // 나의 총 누적 거리 받아오기
+  useEffect(() => {
+    getMyTotalDistanceAPI()
+      .then(response => {
+        setTotalDistance(
+          //정수로 반올림
+          Math.round(convertMetersToKilometers(response.data.totalDistance)),
+        );
+      })
+      .catch(error => {
+        console.error('나의 총 누적 거리 가져오기 실패:', error);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <CharacterAndKm>
         <CharacterImg
           source={require('../../images/characters/character1.png')}
         />
-        <KmText>5km</KmText>
+        <KmText>{totalDistance}km</KmText>
       </CharacterAndKm>
       <SpeechBubble />
     </Wrapper>
