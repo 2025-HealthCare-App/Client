@@ -51,3 +51,21 @@ export const levelUp = (curPoints: number, level: number): boolean => {
   Alert.alert('레벨 업 불가', '이미 최고 레벨입니다.', [{text: '확인'}]);
   return false; // 5레벨 이상은 진급 불가
 };
+
+//캐릭터 레벨에 따라 이미지를 불러오는 함수
+export const getCharacterImageSource = (level: number | undefined) => {
+  switch (level) {
+    case 1:
+      return require('../images/characters/character1.png');
+    case 2:
+      return require('../images/characters/character2.png');
+    case 3:
+      return require('../images/characters/character3.png');
+    case 4:
+      return require('../images/characters/character4.png');
+    case 5:
+      return require('../images/characters/character5.png');
+    default:
+      return require('../images/characters/character1.png');
+  }
+};

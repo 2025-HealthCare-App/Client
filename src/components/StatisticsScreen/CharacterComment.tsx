@@ -4,9 +4,13 @@ import SpeechBubble from './SpeechBubble';
 import {Image} from 'react-native';
 import {getMyTotalDistanceAPI} from '../../apis/user/userInfoAPI';
 import {convertMetersToKilometers} from '../../utils/distanceUtil';
+import {useRecoilValue} from 'recoil';
+import {userInfoAtom} from '../../recoil/atom';
+import {getCharacterImageSource} from '../../utils/characterUtil';
 
 const CharacterComment = () => {
   const [totalDistance, setTotalDistance] = useState<number>(0);
+  const userInfo = useRecoilValue(userInfoAtom);
 
   // 나의 총 누적 거리 받아오기
   useEffect(() => {
@@ -25,9 +29,7 @@ const CharacterComment = () => {
   return (
     <Wrapper>
       <CharacterAndKm>
-        <CharacterImg
-          source={require('../../images/characters/character1.png')}
-        />
+        <CharacterImg source={getCharacterImageSource(userInfo.level)} />
         <KmText>{totalDistance}km</KmText>
       </CharacterAndKm>
       <SpeechBubble />
@@ -54,8 +56,8 @@ const CharacterAndKm = styled.View`
   align-items: center;
 `;
 const CharacterImg = styled(Image)`
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
 `;
 const KmText = styled.Text`
   font-size: 12px;

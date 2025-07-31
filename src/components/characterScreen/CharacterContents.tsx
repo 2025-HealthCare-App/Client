@@ -5,7 +5,11 @@ import TextBubble from './TextBubble';
 import {userInfoAtom} from '../../recoil/atom';
 import {useRecoilState} from 'recoil';
 import {getCharacterMessage} from '../../constants/characterMsg';
-import {getPointsForNextLevel, levelUp} from '../../utils/characterUtil';
+import {
+  getCharacterImageSource,
+  getPointsForNextLevel,
+  levelUp,
+} from '../../utils/characterUtil';
 
 const CharacterContents = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
@@ -15,23 +19,6 @@ const CharacterContents = () => {
     userInfo?.level === 5 ||
     typeof userInfo?.points !== 'number' ||
     userInfo?.points < Number(getPointsForNextLevel(userInfo?.level));
-
-  const getCharacterImageSource = (level: number | undefined) => {
-    switch (level) {
-      case 1:
-        return require('../../images/characters/character1.png');
-      case 2:
-        return require('../../images/characters/character2.png');
-      case 3:
-        return require('../../images/characters/character3.png');
-      case 4:
-        return require('../../images/characters/character4.png');
-      case 5:
-        return require('../../images/characters/character5.png');
-      default:
-        return require('../../images/characters/character1.png');
-    }
-  };
 
   //레벨업 후, 새로고침 하지 않아도 변경된 레벨과 포인트를 반영하기 위해
   const handleLevelUp = (newLevel: number, newPoints: number) => {

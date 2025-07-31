@@ -4,9 +4,13 @@ import {Alert, Image, Touchable, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import GoalModal from './GoalModal';
 import {getMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
+import {userInfoAtom} from '../../recoil/atom';
+import {useRecoilValue} from 'recoil';
+import {getCharacterImageSource} from '../../utils/characterUtil';
 
 const MainContents = () => {
   const navigation = useNavigation();
+  const userInfo = useRecoilValue(userInfoAtom);
   const [modalVisible, setModalVisible] = useState(false);
   const [isGoalSet, setIsGoalSet] = useState(false);
   const [weekGoal, setWeekGoal] = useState(0); // 주간 목표 거리 (단위: m)
@@ -112,7 +116,7 @@ const MainContents = () => {
 
       <CharacterContainer>
         <Image
-          source={require('../../images/characters/character4.png')}
+          source={getCharacterImageSource(userInfo?.level)}
           style={{width: 260, height: 260}}
         />
       </CharacterContainer>
