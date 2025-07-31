@@ -75,7 +75,7 @@ const UserBar = () => {
           source={require('../../images/point.png')}
           style={{width: 30, height: 30, marginRight: -15, zIndex: 999}}
         />
-        <PointTextContainer>
+        <PointTextContainer onPress={() => navigation.navigate('RecentPoints')}>
           <PointText>{userInfo?.points.toLocaleString()} P</PointText>
         </PointTextContainer>
       </PointContainer>
@@ -112,7 +112,7 @@ const PointContainer = styled.View`
   flex-direction: row;
   align-items: center;
 `;
-const PointTextContainer = styled.View`
+const PointTextContainer = styled.TouchableOpacity`
   width: 100px;
   height: 30px;
   background-color: #00494d;

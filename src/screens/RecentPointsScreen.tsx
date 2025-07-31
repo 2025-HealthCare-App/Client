@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import {getRecentPoints} from '../apis/points/pointsAPI';
 import {formatDate} from '../utils/util';
 import {convertActionCodeToText} from '../utils/actionCodeUtil';
+import {useNavigation} from '@react-navigation/native';
 
 type PointHistory = {
   id: number;
@@ -15,30 +16,7 @@ type PointHistory = {
 
 const RecentPointsScreen = () => {
   const [pointHistories, setPointHistories] = useState<PointHistory[]>([]);
-
-  // 예시 데이터 (API에서 받아온 데이터라고 가정)
-  const pointHistory = [
-    {date: '2023-10-01', points: +100, description: '운동 참여'},
-    {date: '2023-10-02', points: +150, description: '식사 기록'},
-    {date: '2023-10-03', points: -500, description: '캐릭터 진화'},
-    {date: '2023-10-04', points: +120, description: '1km 걷기'},
-    {date: '2023-10-05', points: +150, description: '3km 걷기'},
-    {date: '2023-10-01', points: +100, description: '운동 참여'},
-    {date: '2023-10-02', points: +150, description: '식사 기록'},
-    {date: '2023-10-03', points: -500, description: '캐릭터 진화'},
-    {date: '2023-10-04', points: +120, description: '1km 걷기'},
-    {date: '2023-10-05', points: +150, description: '3km 걷기'},
-    {date: '2023-10-01', points: +100, description: '운동 참여'},
-    {date: '2023-10-02', points: +150, description: '식사 기록'},
-    {date: '2023-10-03', points: -500, description: '캐릭터 진화'},
-    {date: '2023-10-04', points: +120, description: '1km 걷기'},
-    {date: '2023-10-05', points: +150, description: '3km 걷기'},
-    {date: '2023-10-01', points: +100, description: '운동 참여'},
-    {date: '2023-10-02', points: +150, description: '식사 기록'},
-    {date: '2023-10-03', points: -500, description: '캐릭터 진화'},
-    {date: '2023-10-04', points: +120, description: '1km 걷기'},
-    {date: '2023-10-05', points: +150, description: '3km 걷기'},
-  ];
+  const navigation = useNavigation();
 
   useEffect(() => {
     getRecentPoints()

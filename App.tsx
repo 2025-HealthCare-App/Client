@@ -62,7 +62,7 @@ function App(): React.JSX.Element {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={showOnboarding ? 'Onboarding' : 'RecentPoints'}
+          initialRouteName={showOnboarding ? 'Onboarding' : 'Login'}
           screenOptions={{headerShown: false, animation: 'none'}}>
           {/* <Stack.Navigator
           initialRouteName="DebugReset" // 임시로 이걸로 바꾸면
