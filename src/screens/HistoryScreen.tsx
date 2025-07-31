@@ -184,10 +184,10 @@ const Title = styled.Text`
 
 const CalendarContainer = styled.View`
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 const ActivitiesContainer = styled.View`
   flex: 1;
-  width: 95%;
+  width: 90%;
 `;

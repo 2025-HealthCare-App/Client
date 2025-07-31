@@ -53,7 +53,7 @@ const RunningScreen = () => {
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
-  const [distance, setDistance] = useState(1200); // meters
+  const [distance, setDistance] = useState(0); // meters
   const [prevLocation, setPrevLocation] = useState<{
     latitude: number;
     longitude: number;
