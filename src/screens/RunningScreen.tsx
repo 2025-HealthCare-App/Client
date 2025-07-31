@@ -8,7 +8,12 @@ import {
   accelerometer,
 } from 'react-native-sensors';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, {Polyline, Marker, Region} from 'react-native-maps';
+import MapView, {
+  Polyline,
+  Marker,
+  Region,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import {map, filter} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -58,7 +63,9 @@ const RunningScreen = () => {
   const watchId = useRef<number | null>(null);
   const mapRef = useRef<MapView | null>(null);
 
-  const [initialRegion, setInitialRegion] = useState<Region | null>(null);
+  const [initialRegion, setInitialRegion] = useState<Region | undefined>(
+    undefined,
+  );
 
   const [rewards, setRewards] = useState<Reward[]>([]);
 
@@ -303,7 +310,7 @@ const RunningScreen = () => {
           <Time isRunning={isRunning}>{formatTime(elapsedSec)}</Time>
         </TimeContainer>
 
-        <MapView
+        {/* <MapView
           ref={mapRef}
           style={{width: '100%', height: '100%'}}
           showsUserLocation={true}
@@ -315,6 +322,14 @@ const RunningScreen = () => {
               longitudeDelta: 0.01,
             }
           }
+        /> */}
+        <MapView
+          ref={mapRef}
+          provider={PROVIDER_GOOGLE}
+          style={{width: '100%', height: '100%'}}
+          showsUserLocation={true}
+          followsUserLocation={true}
+          initialRegion={initialRegion}
         />
         <ButtonContainer>
           {isRunning ? (
