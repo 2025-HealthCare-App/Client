@@ -15,7 +15,7 @@ const QuestModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
       visible={modalVisible}
       animationType="fade" // fade or slide
       onRequestClose={() => setModalVisible(false)}>
-      <ModalBackground>
+      <ModalBackground onPress={() => setModalVisible(false)}>
         <ModalContainer>
           <Xbutton onPress={() => setModalVisible(false)}>
             <XbuttonText>x</XbuttonText>
@@ -33,7 +33,7 @@ const QuestModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
 export default QuestModal;
 
 //// 모달 ////
-const ModalBackground = styled.View`
+const ModalBackground = styled.Pressable`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;

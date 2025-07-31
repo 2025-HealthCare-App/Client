@@ -9,8 +9,8 @@ import {
 } from 'react-native-sensors';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {
-  Polyline,
-  Marker,
+  // Polyline,
+  // Marker,
   Region,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
