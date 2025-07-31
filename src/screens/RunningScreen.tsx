@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {PermissionsAndroid, Platform} from 'react-native';
+import {Alert, AppState, PermissionsAndroid, Platform} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -27,6 +27,7 @@ import {
 import Config from 'react-native-config';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {Reward} from '../types/rewardType';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type RootStackParamList = {
   Running: undefined;
   Result: {
@@ -50,6 +51,102 @@ const RunningScreen = () => {
   //시작 시각을 저장
   const startTime = useRef(new Date().getTime());
   const formattedStartTime = formatStartTime(startTime.current);
+  const appState = useRef(AppState.currentState);
+  // 운동이 일시정지된 시간 누적 (초)
+  const pausedTimeAccum = useRef(0);
+  // 마지막으로 일시정지 시작된 시각
+  const pauseStartTime = useRef<number | null>(null);
+  // 🚀 타이머 함수
+  const startTimer = () => {
+    if (intervalRef.current) {
+      return;
+    } // 이미 돌고 있으면 무시
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        setElapsedSec(prev => prev + 1);
+      }, 1000);
+    }
+  };
+
+  const stopTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // AppState 감지 (수정)
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async nextState => {
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextState === 'active'
+        ) {
+          const savedStart = await AsyncStorage.getItem('running_start_time');
+          const savedPaused = parseInt(
+            (await AsyncStorage.getItem('running_paused_time')) || '0',
+            10,
+          );
+          const savedPauseStart = parseInt(
+            (await AsyncStorage.getItem('running_pause_start')) || '0',
+            10,
+          );
+
+          if (savedStart) {
+            let totalPaused = savedPaused;
+
+            // ⬅️ running 상태일 때는 절대 pause 시간 합산 X
+            if (!isRunning && savedPauseStart) {
+              totalPaused += Math.floor((Date.now() - savedPauseStart) / 1000);
+            }
+
+            const diff = Math.floor(
+              (Date.now() - parseInt(savedStart, 10)) / 1000,
+            );
+
+            setElapsedSec(diff - totalPaused);
+          }
+
+          if (isRunning) {
+            startTimer();
+          }
+        } else if (nextState.match(/inactive|background/)) {
+          await AsyncStorage.setItem(
+            'running_start_time',
+            String(startTime.current),
+          );
+          await AsyncStorage.setItem(
+            'running_paused_time',
+            String(pausedTimeAccum.current),
+          );
+          if (pauseStartTime.current) {
+            await AsyncStorage.setItem(
+              'running_pause_start',
+              String(pauseStartTime.current),
+            );
+          }
+          stopTimer();
+        }
+
+        appState.current = nextState;
+      },
+    );
+
+    return () => subscription.remove();
+  }, [isRunning]);
+
+  // 🚀 최초 실행 시 타이머 시작
+  useEffect(() => {
+    if (isRunning) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+
+    return () => stopTimer();
+  }, [isRunning]);
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
@@ -139,11 +236,9 @@ const RunningScreen = () => {
         console.log('GPS', latitude, longitude);
         console.log('Accuracy', accuracy);
 
-        // ✅ 정확도가 낮으면 무시
-        // if (accuracy > 10) {
-        //   console.log(`Ignored due to low accuracy (${accuracy}m)`);
-        //   return;
-        // }
+        if (accuracy > 10) {
+          return;
+        } // 10m 이상 오차는 무시
 
         if (prevLocation) {
           const d = getDistance(
@@ -191,30 +286,33 @@ const RunningScreen = () => {
     };
   }, [prevLocation]);
 
-  // 2. 타이머 관련 useEffect
-  useEffect(() => {
+  // pause 상태 시작 시
+  const handleRunningButtonPress = async () => {
     if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setElapsedSec(prev => prev + 1);
-      }, 1000);
+      // 운동 → 일시정지
+      pauseStartTime.current = Date.now();
+      await AsyncStorage.setItem(
+        'running_pause_start',
+        String(pauseStartTime.current),
+      );
+      stopTimer();
     } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      // 일시정지 → 운동 재개
+      const pauseStart =
+        pauseStartTime.current ??
+        parseInt(
+          (await AsyncStorage.getItem('running_pause_start')) || '0',
+          10,
+        );
+      // 일시정지 해제 시
+      if (pauseStart) {
+        pausedTimeAccum.current += Math.floor((Date.now() - pauseStart) / 1000);
       }
+      startTimer();
     }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isRunning]); // 💡 isRunning을 의존성에 추가!
-
-  // 3. 버튼 클릭 이벤트
-  const handleRunningButtonPress = () => {
     setIsRunning(prev => !prev);
   };
+
   //운동 종료 처리하는 함수
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
@@ -239,21 +337,41 @@ const RunningScreen = () => {
         minute: '2-digit',
         second: '2-digit',
       }), // 결과 예: "13:42:00"
-      ex_end_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
-        hour12: false, // 24시간제
+      ex_end_time: new Date(Date.now()).toLocaleTimeString('en-GB', {
+        hour12: false,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-      }), // 결과 예: "13:42:00"
+      }),
       ex_route_image: staticMapUrl || '',
       elapsedSec: elapsedSec,
     };
     console.log('운동 기록:', JSON.stringify(newExercise, null, 2));
+
     postMyExercisesAPI(newExercise)
-      .then(response => {
+      .then(async response => {
         const receivedRewards = response.data.rewards || [];
         console.log('recievedRewards:', receivedRewards);
         setRewards(receivedRewards);
+
+        // ✅ AsyncStorage 값 삭제 (완전 초기화)
+        await AsyncStorage.multiRemove([
+          'running_start_time',
+          'running_paused_time',
+          'running_pause_start',
+        ]);
+
+        // ✅ 저장 성공 시에만 상태 초기화
+        stopTimer(); // 타이머 완전 정지
+        setIsRunning(false);
+        setElapsedSec(0); // 타이머 초기화
+        setDistance(0); // 거리 초기화
+        setSteps(0); // 스텝 초기화
+        setRoute([]); // 경로 초기화
+        setPrevLocation(null); // 위치 초기화
+        pausedTimeAccum.current = 0;
+        pauseStartTime.current = null;
+
         navigation.replace('Result', {
           distance,
           steps,
@@ -261,30 +379,16 @@ const RunningScreen = () => {
           Kcal: steps * 0.04,
           startTime: formattedStartTime,
           staticMapUrl,
-          rewards: receivedRewards, // 여기서 바로 넘겨줌!
+          rewards: receivedRewards,
         });
       })
       .catch(error => {
         console.error('운동 기록 저장 실패:', error);
+        Alert.alert(
+          '저장 실패',
+          '네트워크 문제로 운동 기록을 저장하지 못했습니다.\n다시 시도해주세요.',
+        );
       });
-
-    //다음 페이지로 값들을 전달
-    navigation.replace('Result', {
-      distance: distance,
-      steps: steps,
-      elapsedSec: elapsedSec,
-      Kcal: steps * 0.04,
-      startTime: formattedStartTime,
-      staticMapUrl: staticMapUrl,
-      rewards: rewards,
-    });
-    //타이머 정지
-    setIsRunning(false);
-    setElapsedSec(0); // 타이머 초기화
-    setDistance(0); // 거리 초기화 (선택)
-    setSteps(0); // 스텝 초기화 (선택)
-    setRoute([]); // 경로 초기화 (선택)
-    setPrevLocation(null); // 위치 초기화 (선택)
   };
 
   return (
