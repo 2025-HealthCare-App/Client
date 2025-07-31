@@ -186,105 +186,101 @@ const RunningScreen = () => {
           return;
         }
 
-        // useEffect 내부: 위치 권한 요청 후 최초 1회 위치 가져오기
-        Geolocation.getCurrentPosition(
-          position => {
-            const {latitude, longitude} = position.coords;
-            setInitialRegion({
-              latitude,
-              longitude,
-              latitudeDelta: 0.001,
-              longitudeDelta: 0.001,
-            });
+        // ✅ getCurrentPosition 제거
 
-            // 초기 위치도 prevLocation과 route에 추가
+        // 걸음 센서
+        setUpdateIntervalForType(SensorTypes.accelerometer, 400);
+        let localSteps = 0;
+        const sensorSub = accelerometer
+          .pipe(
+            map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
+            filter(mag => mag > 12),
+          )
+          .subscribe(() => {
+            localSteps++;
+            setSteps(localSteps);
+          });
+
+        // ✅ 위치 추적 & 초기 위치 설정
+        let firstLocationSet = false;
+        watchId.current = Geolocation.watchPosition(
+          position => {
+            const {latitude, longitude, accuracy} = position.coords;
+
+            if (!firstLocationSet) {
+              firstLocationSet = true;
+              setInitialRegion({
+                latitude,
+                longitude,
+                latitudeDelta: 0.001,
+                longitudeDelta: 0.001,
+              });
+              setPrevLocation({latitude, longitude});
+              setRoute([{latitude, longitude}]);
+
+              // 📍 첫 위치에서 지도 카메라 이동
+              mapRef.current?.animateToRegion(
+                {
+                  latitude,
+                  longitude,
+                  latitudeDelta: 0.001,
+                  longitudeDelta: 0.001,
+                },
+                500,
+              );
+            }
+
+            if (accuracy > 10) {
+              return;
+            } // 오차 10m 이상 무시
+
+            if (prevLocation) {
+              const d = getDistance(
+                prevLocation.latitude,
+                prevLocation.longitude,
+                latitude,
+                longitude,
+              );
+              setDistance(prev => prev + d);
+            }
+
             setPrevLocation({latitude, longitude});
-            setRoute([{latitude, longitude}]);
+            setRoute(prev => [...prev, {latitude, longitude}]);
+
+            // 📍 실시간 지도 이동
+            mapRef.current?.animateToRegion(
+              {
+                latitude,
+                longitude,
+                latitudeDelta: 0.001,
+                longitudeDelta: 0.001,
+              },
+              500,
+            );
           },
           error => {
-            console.warn('초기 위치 못 가져옴:', error);
+            console.warn('Location error:', error);
           },
           {
             enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 1000,
+            distanceFilter: 1,
+            interval: 3000,
+            fastestInterval: 2000,
+            showsBackgroundLocationIndicator: true,
           },
         );
+
+        return () => {
+          sensorSub.unsubscribe();
+          if (watchId.current) {
+            Geolocation.clearWatch(watchId.current);
+          }
+        };
       }
     };
+
     requestPermissions();
-
-    // 걸음 센서
-    setUpdateIntervalForType(SensorTypes.accelerometer, 400);
-    let localSteps = 0;
-    const sensorSub = accelerometer
-      .pipe(
-        map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
-        filter(mag => mag > 12),
-      )
-      .subscribe(() => {
-        localSteps++;
-        setSteps(localSteps);
-        console.log('Step!', localSteps);
-      });
-
-    // 위치 추적
-    watchId.current = Geolocation.watchPosition(
-      position => {
-        const {latitude, longitude, accuracy} = position.coords;
-
-        console.log('GPS', latitude, longitude);
-        console.log('Accuracy', accuracy);
-
-        if (accuracy > 10) {
-          return;
-        } // 10m 이상 오차는 무시
-
-        if (prevLocation) {
-          const d = getDistance(
-            prevLocation.latitude,
-            prevLocation.longitude,
-            latitude,
-            longitude,
-          );
-
-          setDistance(prev => prev + d);
-          console.log(`Moved ${d.toFixed(2)} m`);
-        }
-
-        setPrevLocation({latitude, longitude});
-        setRoute(prev => [...prev, {latitude, longitude}]);
-
-        // 📍 지도 카메라 따라가기
-        mapRef.current?.animateToRegion(
-          {
-            latitude,
-            longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
-          },
-          500,
-        );
-      },
-      error => {
-        console.warn('Location error:', error);
-      },
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 1,
-        interval: 3000,
-        fastestInterval: 2000,
-        showsBackgroundLocationIndicator: true,
-      },
-    );
-
-    return () => {
-      sensorSub.unsubscribe();
-      if (watchId.current) {
-        Geolocation.clearWatch(watchId.current);
-      }
-    };
-  }, [prevLocation]);
+  }, []); // ✅ prevLocation 의존성 제거
 
   // pause 상태 시작 시
   const handleRunningButtonPress = async () => {
