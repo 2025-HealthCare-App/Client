@@ -21,20 +21,23 @@ const ResultScreen = () => {
   } = route.params;
   const navigation = useNavigation();
 
+  // ✅ 포인트 합산 (문자열 방지 + null/undefined 안전 처리)
   const totalPoints =
-    rewards?.reduce((acc, reward) => acc + reward.points, 0) || 0;
+    rewards?.reduce((acc, reward) => acc + Number(reward.points || 0), 0) ?? 0;
 
   useEffect(() => {
     console.log('rewards:', rewards);
-  }, [rewards]);
+    console.log('totalPoints:', totalPoints);
+  }, [rewards, totalPoints]);
 
   return (
     <Wrapper>
       <Header>
-        <BeforeButton onPress={() => navigation.navigate('Main')}>
+        <BeforeButton onPress={() => navigation.navigate('Statistics')}>
           <BeforeText>&lt;</BeforeText>
         </BeforeButton>
       </Header>
+
       <Main>
         <ResultTitleContainer>
           <DateandTime>
@@ -42,11 +45,15 @@ const ResultScreen = () => {
           </DateandTime>
           <ResultTitle>{`${startTime} 의 운동`}</ResultTitle>
         </ResultTitleContainer>
+
         <ContentsContainer>
+          {/* 거리 */}
           <KMContainer>
             <KM>{(distance / 1000).toFixed(2)}</KM>
             <CategoryText>Km</CategoryText>
           </KMContainer>
+
+          {/* 기타 정보 */}
           <OthersContainer>
             <Category>
               <Value>{formatElapsedTime(elapsedSec)}</Value>
@@ -61,6 +68,8 @@ const ResultScreen = () => {
               <CategoryText>Kcal</CategoryText>
             </Category>
           </OthersContainer>
+
+          {/* 포인트 내역 */}
           <PointsContainer>
             {rewards?.map((reward, index) => (
               <PointRow key={index}>
@@ -71,14 +80,27 @@ const ResultScreen = () => {
                 <PointValue>+ {reward.points} P</PointValue>
               </PointRow>
             ))}
-            <TotalPointRow>
-              <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
-            </TotalPointRow>
+            {totalPoints > 0 ? (
+              <TotalPointRow>
+                <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
+              </TotalPointRow>
+            ) : (
+              <TotalPointRow>
+                <TotalPointText
+                  style={{
+                    color: '#919191',
+                    fontWeight: 'normal',
+                    fontSize: 14,
+                  }}>
+                  획득한 포인트가 없어요
+                </TotalPointText>
+              </TotalPointRow>
+            )}
           </PointsContainer>
+
+          {/* 지도 */}
           <ResultMap
-            source={{
-              uri: staticMapUrl,
-            }}
+            source={{uri: staticMapUrl}}
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />

@@ -309,19 +309,6 @@ const RunningScreen = () => {
           <Time isRunning={isRunning}>{formatTime(elapsedSec)}</Time>
         </TimeContainer>
 
-        {/* <MapView
-          ref={mapRef}
-          style={{width: '100%', height: '100%'}}
-          showsUserLocation={true}
-          initialRegion={
-            initialRegion ?? {
-              latitude: 37.5665,
-              longitude: 126.978,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }
-          }
-        /> */}
         <MapView
           ref={mapRef}
           provider={PROVIDER_GOOGLE}

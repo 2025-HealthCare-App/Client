@@ -132,9 +132,22 @@ const Result2Screen = () => {
                 <PointValue>+ {reward.points} P</PointValue>
               </PointRow>
             ))}
-            <TotalPointRow>
-              <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
-            </TotalPointRow>
+            {totalPoints > 0 ? (
+              <TotalPointRow>
+                <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
+              </TotalPointRow>
+            ) : (
+              <TotalPointRow>
+                <TotalPointText
+                  style={{
+                    color: '#919191',
+                    fontWeight: 'normal',
+                    fontSize: 14,
+                  }}>
+                  획득한 포인트가 없어요
+                </TotalPointText>
+              </TotalPointRow>
+            )}
           </PointsContainer>
           <ResultMap
             source={{
