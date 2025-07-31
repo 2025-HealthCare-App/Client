@@ -22,6 +22,7 @@ import Result2Screen from './src/screens/Result2Screen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen'; // 튜토리얼 화면 추가
 import DebugResetScreen from './src/screens/DebugResetScreen';
+import RecentPointsScreen from './src/screens/RecentPointsScreen';
 
 TrackPlayer.registerPlaybackService(
   () => require('./src/utils/TrackPlayerService').default,
@@ -61,7 +62,7 @@ function App(): React.JSX.Element {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={showOnboarding ? 'Onboarding' : 'Login'}
+          initialRouteName={showOnboarding ? 'Onboarding' : 'RecentPoints'}
           screenOptions={{headerShown: false, animation: 'none'}}>
           {/* <Stack.Navigator
           initialRouteName="DebugReset" // 임시로 이걸로 바꾸면
@@ -80,6 +81,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
           <Stack.Screen name="Activities" component={ActivitiesScreen} />
           <Stack.Screen name="Signup" component={SignUpScreen} />
+          <Stack.Screen name="RecentPoints" component={RecentPointsScreen} />
           <Stack.Screen name="Test" component={TestScreen} />
 
           <Stack.Screen name="DebugReset" component={DebugResetScreen} />

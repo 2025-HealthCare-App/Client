@@ -150,7 +150,7 @@ const RunningScreen = () => {
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
-  const [distance, setDistance] = useState(0); // meters
+  const [distance, setDistance] = useState(1100); // meters
   const [prevLocation, setPrevLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -164,8 +164,6 @@ const RunningScreen = () => {
   const [initialRegion, setInitialRegion] = useState<Region | undefined>(
     undefined,
   );
-
-  const [rewards, setRewards] = useState<Reward[]>([]);
 
   // 1. 이동 관련 useEffect
   useEffect(() => {
@@ -347,8 +345,6 @@ const RunningScreen = () => {
     postMyExercisesAPI(newExercise)
       .then(async response => {
         const receivedRewards = response.data.rewards || [];
-        console.log('recievedRewards:', receivedRewards);
-        setRewards(receivedRewards);
 
         // ✅ AsyncStorage 값 삭제 (완전 초기화)
         await AsyncStorage.multiRemove([

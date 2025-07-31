@@ -11,6 +11,8 @@ export const convertActionCodeToText = (actionCode: string): string => {
       return '오늘의 게시글 작성';
     case 'WALK_DISTANCE_BONUS':
       return '거리별 보너스';
+    case 'LEVEL_UP':
+      return '캐릭터 진화';
     default:
       return actionCode; // 알 수 없는 코드인 경우 그대로 반환
   }
