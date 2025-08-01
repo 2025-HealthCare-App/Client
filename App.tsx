@@ -34,7 +34,7 @@ function App(): React.JSX.Element {
   const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setupPlayer();
+    setupPlayer(); // TrackPlayer 초기화
 
     const checkFirstLaunch = async () => {
       try {
@@ -67,7 +67,6 @@ function App(): React.JSX.Element {
           {/* <Stack.Navigator
           initialRouteName="DebugReset" // 임시로 이걸로 바꾸면
           screenOptions={{headerShown: false, animation: 'none'}}> */}
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Main" component={MainScreen} />
           <Stack.Screen name="Statistics" component={StatisticsScreen} />
@@ -82,6 +81,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name="Activities" component={ActivitiesScreen} />
           <Stack.Screen name="Signup" component={SignUpScreen} />
           <Stack.Screen name="RecentPoints" component={RecentPointsScreen} />
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Test" component={TestScreen} />
 
           <Stack.Screen name="DebugReset" component={DebugResetScreen} />

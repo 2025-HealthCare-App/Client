@@ -24,28 +24,28 @@ const LevelModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
           <LevelsContainer>
             <Row>
               <Level>
-                <TierBadge source={require('../../images/tierBadge.png')} />
+                <TierBadge source={require('../../images/tiers/tier_4.png')} />
                 <LevelText>지존</LevelText>
               </Level>
               <Description>상위 25%</Description>
             </Row>
             <Row>
               <Level>
-                <TierBadge source={require('../../images/tierBadge.png')} />
+                <TierBadge source={require('../../images/tiers/tier_3.png')} />
                 <LevelText>고수</LevelText>
               </Level>
               <Description>상위 50%</Description>
             </Row>
             <Row>
               <Level>
-                <TierBadge source={require('../../images/tierBadge.png')} />
+                <TierBadge source={require('../../images/tiers/tier_2.png')} />
                 <LevelText>중수</LevelText>
               </Level>
               <Description>상위 75%</Description>
             </Row>
             <Row>
               <Level>
-                <TierBadge source={require('../../images/tierBadge.png')} />
+                <TierBadge source={require('../../images/tiers/tier_1.png')} />
                 <LevelText>하수</LevelText>
               </Level>
               <Description>상위 100%</Description>
