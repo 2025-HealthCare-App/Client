@@ -12,10 +12,23 @@ const WriteScreen = () => {
 
   //게시글 post API
   const handlePostSubmit = async () => {
+    // 유효성 검사
+    if (!postContent.trim()) {
+      Alert.alert('입력 오류', '게시글 내용을 입력해주세요.');
+      return;
+    }
+    if (!selectedImage) {
+      Alert.alert('입력 오류', '이미지를 선택해주세요.');
+      return;
+    }
+
     try {
       const response = await uploadPost({postContent, imageUri: selectedImage});
       if (response.success) {
-        Alert.alert('게시글 작성 완료', '게시글이 성공적으로 작성되었습니다!');
+        Alert.alert(
+          '게시글 작성 완료',
+          '게시글이 성공적으로 작성되었습니다! \n500P를 획득했습니다.',
+        );
         navigation.navigate('Community'); // 게시글 작성 후 커뮤니티 화면으로 이동
       } else {
         console.error('게시글 작성 실패:', response.message);
@@ -61,10 +74,10 @@ const WriteScreen = () => {
       </Header>
       <Main>
         <TextInput
-          placeholder="본문을 작성해주세요.(최대 50자)"
+          placeholder="본문을 작성해주세요.(최대 150자)"
           placeholderTextColor="#9ca3af"
           multiline={true} // ✅ 줄바꿈 가능
-          maxLength={50} // ✅ 최대 글자 수 제한
+          maxLength={150} // ✅ 최대 글자 수 제한
           textAlignVertical="top" // ✅ 입력 내용 위쪽부터 시작
           value={postContent}
           onChangeText={text => setPostContent(text)}
@@ -156,7 +169,7 @@ const ImageUploadButtonText = styled.Text`
 `;
 const TextInput = styled.TextInput`
   width: 350px;
-  height: 80px;
+  height: 105px;
   background-color: #343d4a;
   border-radius: 5px;
   font-size: 12px;

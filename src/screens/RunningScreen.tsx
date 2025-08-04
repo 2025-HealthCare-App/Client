@@ -188,15 +188,23 @@ const RunningScreen = () => {
 
         // 걸음 센서
         setUpdateIntervalForType(SensorTypes.accelerometer, 400);
-        let localSteps = 0;
+        // let localSteps = 0;
+        // const sensorSub = accelerometer
+        //   .pipe(
+        //     map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
+        //     filter(mag => mag > 12),
+        //   )
+        //   .subscribe(() => {
+        //     localSteps++;
+        //     setSteps(localSteps);
+        //   });
         const sensorSub = accelerometer
           .pipe(
             map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
             filter(mag => mag > 12),
           )
           .subscribe(() => {
-            localSteps++;
-            setSteps(localSteps);
+            setSteps(prev => prev + 1); // 이렇게!
           });
 
         // ✅ 위치 추적 & 초기 위치 설정
@@ -395,8 +403,9 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{addComma(steps * 0.04)}</Value>
-          {/* Kcal 계산식 */}
+          <Value isRunning={isRunning}>
+            {addComma(Math.floor(steps * 0.04))}
+          </Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
       </RecordsContainer>

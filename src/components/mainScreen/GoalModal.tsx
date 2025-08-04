@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Pressable} from 'react-native';
+import {Alert, Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {PanResponder, Animated, Dimensions} from 'react-native';
 import {postOrPatchMyWeekGoalAPI} from '../../apis/week-ex/weekExApi';
@@ -92,6 +92,10 @@ const GoalModal = ({
               postOrPatchMyWeekGoalAPI(goalKm * 1000)
                 .then(() => {
                   console.log('목표 설정 성공:', goalKm);
+                  Alert.alert(
+                    '목표 설정 완료',
+                    `이번 주 목표는 ${goalKm}km 입니다!`,
+                  );
                 })
                 .catch(error => {
                   console.error('목표 설정 실패:', error);
