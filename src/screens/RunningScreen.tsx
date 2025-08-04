@@ -150,6 +150,7 @@ const RunningScreen = () => {
 
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
+  const [kcal, setKcal] = useState(0); // kcal
   const [distance, setDistance] = useState(1100); // meters
   const [prevLocation, setPrevLocation] = useState<{
     latitude: number;
@@ -188,16 +189,6 @@ const RunningScreen = () => {
 
         // 걸음 센서
         setUpdateIntervalForType(SensorTypes.accelerometer, 400);
-        // let localSteps = 0;
-        // const sensorSub = accelerometer
-        //   .pipe(
-        //     map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
-        //     filter(mag => mag > 12),
-        //   )
-        //   .subscribe(() => {
-        //     localSteps++;
-        //     setSteps(localSteps);
-        //   });
         const sensorSub = accelerometer
           .pipe(
             map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
@@ -391,6 +382,13 @@ const RunningScreen = () => {
       });
   };
 
+  //steps 변화에 따라 실시간으로 kcal도 변화하도록
+  useEffect(() => {
+    const newKcal = Math.floor(steps * 0.04);
+    setKcal(newKcal);
+    // console.log('Kcal updated:', newKcal);
+  }, [steps]);
+
   return (
     <Wrapper isRunning={isRunning}>
       <RecordsContainer isRunning={isRunning}>
@@ -404,7 +402,7 @@ const RunningScreen = () => {
         </Category>
         <Category>
           <Value isRunning={isRunning}>
-            {addComma(Math.floor(steps * 0.04))}
+            {addComma(Number(kcal.toFixed(1)))}
           </Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
