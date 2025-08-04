@@ -151,7 +151,7 @@ const RunningScreen = () => {
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
   const [kcal, setKcal] = useState(0); // kcal
-  const [distance, setDistance] = useState(1100); // meters
+  const [distance, setDistance] = useState(0); // meters
   const [prevLocation, setPrevLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -386,7 +386,6 @@ const RunningScreen = () => {
   useEffect(() => {
     const newKcal = Math.floor(steps * 0.04);
     setKcal(newKcal);
-    // console.log('Kcal updated:', newKcal);
   }, [steps]);
 
   return (
