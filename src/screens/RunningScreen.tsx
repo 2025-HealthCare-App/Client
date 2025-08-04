@@ -345,21 +345,20 @@ const RunningScreen = () => {
       .then(async response => {
         const receivedRewards = response.data.rewards || [];
 
-        // ✅ AsyncStorage 값 삭제 (완전 초기화)
+        // ✅ 성공 시에만 AsyncStorage 및 상태 초기화
         await AsyncStorage.multiRemove([
           'running_start_time',
           'running_paused_time',
           'running_pause_start',
         ]);
 
-        // ✅ 저장 성공 시에만 상태 초기화
-        stopTimer(); // 타이머 완전 정지
+        stopTimer();
         setIsRunning(false);
-        setElapsedSec(0); // 타이머 초기화
-        setDistance(0); // 거리 초기화
-        setSteps(0); // 스텝 초기화
-        setRoute([]); // 경로 초기화
-        setPrevLocation(null); // 위치 초기화
+        setElapsedSec(0);
+        setDistance(0);
+        setSteps(0);
+        setRoute([]);
+        setPrevLocation(null);
         pausedTimeAccum.current = 0;
         pauseStartTime.current = null;
 
@@ -377,7 +376,22 @@ const RunningScreen = () => {
         console.error('운동 기록 저장 실패:', error);
         Alert.alert(
           '저장 실패',
-          '네트워크 문제로 운동 기록을 저장하지 못했습니다.\n다시 시도해주세요.',
+          '네트워크 문제로 운동 기록을 저장하지 못했습니다.',
+          [
+            {
+              text: '다시 시도',
+              onPress: () => handleStopButtonPress(), // 🔄 재시도
+            },
+            {
+              text: '나중에',
+              style: 'cancel',
+              onPress: () => {
+                // 🔄 운동 재개 상태로 복원
+                setIsRunning(true);
+                startTimer();
+              },
+            },
+          ],
         );
       });
   };
