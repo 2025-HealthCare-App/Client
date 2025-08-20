@@ -156,6 +156,9 @@ const Result2Screen = () => {
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
+          <DeleteBtn onPress={() => console.log('Delete button pressed')}>
+            <DeleteText>삭제</DeleteText>
+          </DeleteBtn>
         </ContentsContainer>
       </Main>
     </Wrapper>
@@ -248,15 +251,14 @@ const BeforeText = styled.Text`
   font-weight: bold;
 `;
 
-const Main = styled.View`
+const Main = styled.ScrollView`
   width: 100%;
-  height: 100%;
-  align-items: center;
-  /* border: 1px solid #3d4859; */
+  margin-top: 15px;
 `;
 
 const ResultTitleContainer = styled.View`
   width: 90%;
+  align-self: center;
   justify-content: center;
   align-items: flex-start;
   border-bottom-width: 1px;
@@ -346,4 +348,19 @@ const TitleInput = styled.TextInput`
   border-radius: 5px;
   padding: 5px 10px;
   margin-right: 10px;
+`;
+
+const DeleteBtn = styled.TouchableOpacity`
+  background-color: #ff6e64;
+  padding: 10px 20px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const DeleteText = styled.Text`
+  font-size: 16px;
+  color: #ffffff;
+  /* font-weight: bold; */
 `;

@@ -82,7 +82,7 @@ const ResultScreen = () => {
             ))}
             {totalPoints > 0 ? (
               <TotalPointRow>
-                <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
+                <TotalPointText>{totalPoints} P를 획득했어!</TotalPointText>
               </TotalPointRow>
             ) : (
               <TotalPointRow>
@@ -104,6 +104,10 @@ const ResultScreen = () => {
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
+
+          <DeleteBtn onPress={() => console.log('Delete button pressed')}>
+            <DeleteText>삭제</DeleteText>
+          </DeleteBtn>
         </ContentsContainer>
       </Main>
     </Wrapper>
@@ -200,11 +204,9 @@ const BeforeText = styled.Text`
   font-weight: bold;
 `;
 
-const Main = styled.View`
+const Main = styled.ScrollView`
   width: 100%;
-  height: 100%;
-  align-items: center;
-  /* border: 1px solid #3d4859; */
+  margin-top: 15px;
 `;
 
 const ResultTitleContainer = styled.View`
@@ -214,6 +216,7 @@ const ResultTitleContainer = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: #dfdfdf;
   padding-bottom: 15px;
+  align-self: center;
 `;
 const DateandTime = styled.Text`
   font-size: 16px;
@@ -269,4 +272,18 @@ const CategoryText = styled.Text`
   color: #7b7b7b;
   text-align: center;
   margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled.TouchableOpacity`
+  background-color: #ff6e64;
+  padding: 10px 20px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DeleteText = styled.Text`
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: bold;
 `;

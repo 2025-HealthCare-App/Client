@@ -393,6 +393,7 @@ const RunningScreen = () => {
             },
           ],
         );
+        Alert.alert(error);
       });
   };
 
