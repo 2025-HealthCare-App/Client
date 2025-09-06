@@ -60,6 +60,30 @@ const Result2Screen = () => {
       });
   };
 
+  const handleDelete = () => {
+    Alert.alert('운동 기록 삭제', '정말로 이 운동 기록을 삭제하시겠습니까?', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '삭제',
+        style: 'destructive',
+        onPress: () => {
+          deleteMyExerciseAPI(exerciseId)
+            .then(() => {
+              Alert.alert('운동 기록이 삭제되었습니다.');
+              navigation.goBack();
+            })
+            .catch(error => {
+              console.error('운동 기록 삭제 실패:', error);
+              Alert.alert('운동 기록 삭제에 실패했습니다. 다시 시도해주세요.');
+            });
+        },
+      },
+    ]);
+  };
+
   useEffect(() => {
     getMyExercisePointsAPI(exerciseId).then(data => {
       console.log('포인트 적립 정보:', JSON.stringify(data, null, 2));
@@ -157,7 +181,7 @@ const Result2Screen = () => {
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
-          <DeleteBtn onPress={() => deleteMyExerciseAPI(exerciseId)}>
+          <DeleteBtn onPress={handleDelete}>
             <DeleteText>삭제</DeleteText>
           </DeleteBtn>
         </ContentsContainer>
@@ -352,7 +376,7 @@ const TitleInput = styled.TextInput`
 `;
 
 const DeleteBtn = styled.TouchableOpacity`
-  background-color: #ff6e64;
+  background-color: #e3e3e3;
   padding: 10px 20px;
   border-radius: 5px;
   align-items: center;
