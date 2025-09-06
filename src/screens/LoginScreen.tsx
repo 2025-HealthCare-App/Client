@@ -51,7 +51,7 @@ const LoginScreen = () => {
                 );
               });
           }}>
-          <Text>로그인</Text>
+          <Text style={{color: '#ffffff'}}>로그인</Text>
         </LoginBtn>
       </LoginWrapper>
     </Wrapper>

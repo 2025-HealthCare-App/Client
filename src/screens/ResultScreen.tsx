@@ -9,6 +9,7 @@ type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
 const ResultScreen = () => {
   const route = useRoute<ResultScreenRouteProp>();
+  const navigation = useNavigation();
   const {
     distance,
     steps,
@@ -19,7 +20,6 @@ const ResultScreen = () => {
     date,
     rewards,
   } = route.params;
-  const navigation = useNavigation();
 
   // ✅ 포인트 합산 (문자열 방지 + null/undefined 안전 처리)
   const totalPoints =
@@ -32,11 +32,7 @@ const ResultScreen = () => {
 
   return (
     <Wrapper>
-      <Header>
-        <BeforeButton onPress={() => navigation.navigate('Statistics')}>
-          <BeforeText>&lt;</BeforeText>
-        </BeforeButton>
-      </Header>
+      <Header />
 
       <Main>
         <ResultTitleContainer>
@@ -82,7 +78,7 @@ const ResultScreen = () => {
             ))}
             {totalPoints > 0 ? (
               <TotalPointRow>
-                <TotalPointText>{totalPoints} P를 획득했어!</TotalPointText>
+                <TotalPointText>{totalPoints} P를 획득했어요!</TotalPointText>
               </TotalPointRow>
             ) : (
               <TotalPointRow>
@@ -105,9 +101,17 @@ const ResultScreen = () => {
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
 
-          <DeleteBtn onPress={() => console.log('Delete button pressed')}>
-            <DeleteText>삭제</DeleteText>
-          </DeleteBtn>
+          <BtnsContainer>
+            {/* 완료, 삭제 버튼 */}
+            <DeleteBtn onPress={() => navigation.navigate('Main' as never)}>
+              <DeleteText>완료</DeleteText>
+            </DeleteBtn>
+            <DeleteBtn
+              onPress={() => console.log('삭제 button pressed')}
+              style={{backgroundColor: '#e3e3e3'}}>
+              <DeleteText>삭제</DeleteText>
+            </DeleteBtn>
+          </BtnsContainer>
         </ContentsContainer>
       </Main>
     </Wrapper>
@@ -186,22 +190,13 @@ const Wrapper = styled.ScrollView`
 
 const Header = styled.View`
   width: 100%;
-  height: 7%;
+  height: 4%;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   padding: 0 10px;
   gap: 10px;
   /* background-color: #ffdfdf; */
-`;
-const BeforeButton = styled.TouchableOpacity`
-  height: 100%;
-  justify-content: center;
-`;
-const BeforeText = styled.Text`
-  font-size: 20px;
-  color: #222831;
-  font-weight: bold;
 `;
 
 const Main = styled.ScrollView`
@@ -274,8 +269,16 @@ const CategoryText = styled.Text`
   margin-bottom: 10px;
 `;
 
+const BtnsContainer = styled.View`
+  width: 90%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
 const DeleteBtn = styled.TouchableOpacity`
-  background-color: #ff6e64;
+  background-color: #c5cf00;
   padding: 10px 20px;
   border-radius: 5px;
   align-items: center;

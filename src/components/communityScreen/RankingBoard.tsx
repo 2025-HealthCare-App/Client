@@ -39,7 +39,7 @@ const RankingBoard = () => {
   useEffect(() => {
     getRankingsAPI()
       .then(data => {
-        console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
+        // console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
         // topUsers가 3명이 아니면 빈 배열로 채움
         const sortedUsers = (data.topUsers || [])
           .slice()
@@ -68,7 +68,9 @@ const RankingBoard = () => {
           return;
         }
         setIsRanThisWeek(true);
-        setPercentile(response.data.percentile);
+        const resPercentile = response.data.data.percentile;
+        //resPercentile이 0이면 1로 세팅 (상위 0%는 말이 안되니까)
+        setPercentile(resPercentile === 0 ? 1 : resPercentile);
       })
       .catch(error => {
         console.error('나의 상위 퍼센트 조회 실패:', error);

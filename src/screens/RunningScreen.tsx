@@ -321,7 +321,7 @@ const RunningScreen = () => {
       )} ${String(startDate.getHours()).padStart(2, '0')}:${String(
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
-      ex_distance: distance,
+      ex_distance: 1200, //TODO: 테스트용 하드코딩
       ex_kcal: steps * 0.04,
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
@@ -374,25 +374,21 @@ const RunningScreen = () => {
       })
       .catch(error => {
         console.error('운동 기록 저장 실패:', error);
-        Alert.alert(
-          '저장 실패',
-          '네트워크 문제로 운동 기록을 저장하지 못했습니다.',
-          [
-            {
-              text: '다시 시도',
-              onPress: () => handleStopButtonPress(), // 🔄 재시도
+        Alert.alert('저장 실패', '운동 기록을 저장하지 못했습니다.', [
+          {
+            text: '다시 시도',
+            onPress: () => handleStopButtonPress(), // 🔄 재시도
+          },
+          {
+            text: '나중에',
+            style: 'cancel',
+            onPress: () => {
+              // 🔄 운동 재개 상태로 복원
+              setIsRunning(true);
+              startTimer();
             },
-            {
-              text: '나중에',
-              style: 'cancel',
-              onPress: () => {
-                // 🔄 운동 재개 상태로 복원
-                setIsRunning(true);
-                startTimer();
-              },
-            },
-          ],
-        );
+          },
+        ]);
         Alert.alert(error);
       });
   };
@@ -464,7 +460,6 @@ export default RunningScreen;
 const Wrapper = styled.View<{isRunning: boolean}>`
   height: 100%;
   width: 100%;
-  /* padding: 50px 0; */
   background-color: ${({isRunning}) => (isRunning ? '#ffffff' : '#ffffff')};
 `;
 
@@ -518,7 +513,7 @@ const Time = styled.Text<{isRunning: boolean}>`
   font-style: italic;
   font-weight: bold;
   text-align: center;
-  color: ${({isRunning}) => (isRunning ? '#CDD800' : '#171b21')};
+  color: ${({isRunning}) => (isRunning ? '#ff5664' : '#171b21')};
 `;
 
 const ButtonContainer = styled.View`

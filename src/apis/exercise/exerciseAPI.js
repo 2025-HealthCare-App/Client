@@ -114,3 +114,27 @@ export const getMyExercisePointsAPI = async exerciseId => {
     throw error;
   }
 };
+
+// 운동 삭제하는 API
+export const deleteMyExerciseAPI = async exerciseId => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('토큰이 존재하지 않습니다.');
+    }
+
+    const response = await axios.delete(
+      `${API_BASE_URL}/exercises/${exerciseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('운동 삭제 실패:', error);
+    throw error;
+  }
+};

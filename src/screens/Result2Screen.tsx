@@ -5,6 +5,7 @@ import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList, ExerciseType} from '../types/exerciseType';
 import {Alert, TouchableOpacity} from 'react-native';
 import {
+  deleteMyExerciseAPI,
   getMyExercisePointsAPI,
   patchMyExerciseTitleAPI,
 } from '../apis/exercise/exerciseAPI';
@@ -156,7 +157,7 @@ const Result2Screen = () => {
             resizeMode="cover"
             onError={e => console.warn('Image load error', e.nativeEvent)}
           />
-          <DeleteBtn onPress={() => console.log('Delete button pressed')}>
+          <DeleteBtn onPress={() => deleteMyExerciseAPI(exerciseId)}>
             <DeleteText>삭제</DeleteText>
           </DeleteBtn>
         </ContentsContainer>

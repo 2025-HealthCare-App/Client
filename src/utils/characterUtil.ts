@@ -3,7 +3,7 @@ import {levelUpAPI} from '../apis/character/characterAPI';
 import {playLevelUpSound} from './playLevelUpSound';
 
 //캐릭터 레벨에 따라 다음 레벨로 업그레이드 하기위한 포인트 반환
-export const getPointsForNextLevel = (level: number): number | string => {
+export const getPointsForNextLevel = (level: number): number => {
   switch (level) {
     case 1:
       return 1500;

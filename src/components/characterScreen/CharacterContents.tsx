@@ -10,6 +10,7 @@ import {
   getPointsForNextLevel,
   levelUp,
 } from '../../utils/characterUtil';
+import {addComma} from '../../utils/util';
 
 const CharacterContents = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
@@ -58,7 +59,7 @@ const CharacterContents = () => {
         </LvUpButton>
         <PointText>
           {userInfo?.points?.toLocaleString()} /{' '}
-          {getPointsForNextLevel(userInfo?.level)} P
+          {addComma(getPointsForNextLevel(userInfo?.level))} P
         </PointText>
       </LvUpContainer>
     </Wrapper>
