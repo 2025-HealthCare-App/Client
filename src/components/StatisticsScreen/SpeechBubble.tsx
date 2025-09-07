@@ -9,7 +9,7 @@ const BalloonWrapper = styled.View`
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: #02adb5;
+  background-color: #e58787c7;
   border-radius: 10px;
   align-self: flex-start;
   margin-left: 10px;
@@ -28,7 +28,7 @@ const BalloonTail = styled.View`
   border-style: solid;
   border-top-color: transparent;
   border-bottom-color: transparent;
-  border-right-color: #02adb5;
+  border-right-color: #e58787c7;
 `;
 
 const BalloonText = styled.Text`
@@ -38,9 +38,8 @@ const BalloonText = styled.Text`
 `;
 
 const BoldText = styled(BalloonText)`
-  font-weight: bold;
   font-size: 13px;
-  text-align: center;
+  text-align: left;
 `;
 
 const SpeechBubble = () => {

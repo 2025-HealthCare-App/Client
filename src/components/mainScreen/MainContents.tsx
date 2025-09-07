@@ -238,7 +238,7 @@ const CharacterContainer = styled.View`
 const StartButton = styled.TouchableOpacity`
   width: 200px;
   height: 60px;
-  background-color: #00adb5;
+  background-color: #efe833e6;
   border: 3px solid #ffffff;
   border-radius: 50px;
   justify-content: center;

@@ -314,7 +314,7 @@ const DeleteBtn = styled.TouchableOpacity`
 `;
 
 const DeleteText = styled.Text`
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
   font-weight: bold;
 `;
