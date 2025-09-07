@@ -122,11 +122,12 @@ const NoProfileContainer = styled.View`
   border: 1px solid #4d596d;
   justify-content: center;
   align-items: center;
+  border-radius: 100px;
 `;
 
 const NoProfileText = styled.Text`
-  font-size: 12px;
-  color: #93a7c9;
+  font-size: 10px;
+  color: #8b9cbb;
   text-align: center;
   padding: 5px;
 `;
