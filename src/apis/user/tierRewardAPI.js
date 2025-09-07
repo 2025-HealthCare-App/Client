@@ -17,10 +17,10 @@ export const getWeeklyRewardStatusAPI = async () => {
         },
       },
     );
-    console.log('주간 보상 상태 조회 응답:', response.data);
+    // console.log('주간 보상 상태 조회 응답:', response.data);
     return response.data; // { success: true, received: false } 또는 { success: true, received: true, tier: 2, rewardPoints: 200 }
   } catch (error) {
-    console.error('주간 보상 상태 조회 실패:', error);
+    // console.error('주간 보상 상태 조회 실패:', error);
     throw error;
   }
 };

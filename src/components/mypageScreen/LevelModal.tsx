@@ -27,28 +27,27 @@ const LevelModal = ({modalVisible, setModalVisible}: GoalModalProps) => {
                 <TierBadge source={require('../../images/tiers/tier_4.png')} />
                 <LevelText>지존</LevelText>
               </Level>
-              <Description>상위 25%</Description>
             </Row>
+            <Description>--- 상위 25%</Description>
             <Row>
               <Level>
                 <TierBadge source={require('../../images/tiers/tier_3.png')} />
                 <LevelText>고수</LevelText>
               </Level>
-              <Description>상위 50%</Description>
             </Row>
+            <Description>--- 상위 50%</Description>
             <Row>
               <Level>
                 <TierBadge source={require('../../images/tiers/tier_2.png')} />
                 <LevelText>중수</LevelText>
               </Level>
-              <Description>상위 75%</Description>
             </Row>
+            <Description>--- 상위 75%</Description>
             <Row>
               <Level>
                 <TierBadge source={require('../../images/tiers/tier_1.png')} />
                 <LevelText>하수</LevelText>
               </Level>
-              <Description>상위 100%</Description>
             </Row>
           </LevelsContainer>
           <Caution>러너 등급은 지난주에 달린 거리로 결정돼요.</Caution>
@@ -70,7 +69,7 @@ const ModalBackground = styled(Pressable)`
 
 const ModalContainer = styled.View`
   width: 80%;
-  padding: 40px 20px 35px 20px;
+  padding: 40px 20px 30px 20px;
   background-color: white;
   border-radius: 15px;
   align-items: center;
@@ -98,17 +97,17 @@ const ModalTitle = styled.Text`
 `;
 
 const LevelsContainer = styled.View`
-  width: 100%;
-  justify-content: space-between;
+  width: 70%;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 5px;
 `;
 const Row = styled.View`
   flex-direction: row;
-  width: 60%;
-  justify-content: space-between;
+  width: 100%;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 3px;
 `;
 const Level = styled.View`
   flex-direction: row;
@@ -117,6 +116,7 @@ const Level = styled.View`
   align-items: center;
   background-color: #ffebc0;
   border: 2px solid #c0b08f;
+  align-self: center;
   border-radius: 50px;
   gap: 10px;
 `;
@@ -129,6 +129,7 @@ const Description = styled.Text`
   font-size: 10px;
   color: #c0c0c0;
   text-align: center;
+  align-self: flex-end;
 `;
 const TierBadge = styled(Image)`
   width: 35px;

@@ -28,7 +28,6 @@ export default function useWeeklyRewardAlert() {
         }
 
         const res = await getWeeklyRewardStatusAPI();
-        console.log('주간 보상 상태:', res);
 
         if (res.success && res.received) {
           Alert.alert(

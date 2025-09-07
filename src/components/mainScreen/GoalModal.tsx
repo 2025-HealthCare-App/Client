@@ -55,7 +55,7 @@ const GoalModal = ({
           <ModalTop>
             <ModalTitle>이번주 얼마나 달릴까?</ModalTitle>
             <ModalText>
-              한 번 정한 목표는 다음주까지 수정할 수 없어요!
+              목표는 수정할 수 있지만 자주 바꾸는 건 좋지 않아요.
             </ModalText>
           </ModalTop>
           <GoalBarContainer
@@ -121,12 +121,12 @@ const ModalBackground = styled.View`
 
 const ModalContainer = styled.View`
   width: 80%;
-  padding: 40px 20px 35px 20px;
+  padding: 40px 20px 30px 20px;
   background-color: white;
   border-radius: 15px;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  gap: 25px;
 `;
 
 const Xbutton = styled(Pressable)`

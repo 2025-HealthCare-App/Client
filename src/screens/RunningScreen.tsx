@@ -340,11 +340,10 @@ const RunningScreen = () => {
       ex_route_image: staticMapUrl || '',
       elapsedSec: elapsedSec,
     };
-    console.log('백에 보낸 운동 기록:', JSON.stringify(newExercise, null, 2));
+    // console.log('백에 보낸 운동 기록:', JSON.stringify(newExercise, null, 2));
 
     postMyExercisesAPI(newExercise)
       .then(async response => {
-        console.log('운동 기록 저장 응답:', response.data);
         const receivedRewards = response.data.rewards || [];
         const exerciseId = response.data.insertId;
 
