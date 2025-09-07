@@ -38,6 +38,7 @@ type RootStackParamList = {
     startTime: string;
     staticMapUrl: string;
     rewards?: Reward[];
+    exerciseId: number;
   };
 };
 
@@ -306,7 +307,7 @@ const RunningScreen = () => {
     setIsRunning(prev => !prev);
   };
 
-  //운동 종료 처리하는 함수
+  //!!운동 종료 처리하는 함수!!
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
     const staticMapUrl = createStaticMapUrl(route, String(apiKey));
@@ -339,11 +340,13 @@ const RunningScreen = () => {
       ex_route_image: staticMapUrl || '',
       elapsedSec: elapsedSec,
     };
-    console.log('운동 기록:', JSON.stringify(newExercise, null, 2));
+    console.log('백에 보낸 운동 기록:', JSON.stringify(newExercise, null, 2));
 
     postMyExercisesAPI(newExercise)
       .then(async response => {
+        console.log('운동 기록 저장 응답:', response.data);
         const receivedRewards = response.data.rewards || [];
+        const exerciseId = response.data.insertId;
 
         // ✅ 성공 시에만 AsyncStorage 및 상태 초기화
         await AsyncStorage.multiRemove([
@@ -370,6 +373,7 @@ const RunningScreen = () => {
           startTime: formattedStartTime,
           staticMapUrl,
           rewards: receivedRewards,
+          exerciseId,
         });
       })
       .catch(error => {

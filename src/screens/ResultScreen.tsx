@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
 import {ExerciseParamList} from '../types/exerciseType';
 import {convertActionCodeToText} from '../utils/actionCodeUtil';
+import {deleteMyExerciseAPI} from '../apis/exercise/exerciseAPI';
+import {Alert} from 'react-native';
 
 type ResultScreenRouteProp = RouteProp<ExerciseParamList, 'Result'>;
 
@@ -19,16 +21,41 @@ const ResultScreen = () => {
     staticMapUrl,
     date,
     rewards,
+    exerciseId,
   } = route.params;
 
   // ✅ 포인트 합산 (문자열 방지 + null/undefined 안전 처리)
   const totalPoints =
     rewards?.reduce((acc, reward) => acc + Number(reward.points || 0), 0) ?? 0;
 
+  // 확인용
   useEffect(() => {
-    console.log('rewards:', rewards);
-    console.log('totalPoints:', totalPoints);
-  }, [rewards, totalPoints]);
+    console.log('exerciseId:', exerciseId);
+  }, [exerciseId]);
+
+  const handleDelete = () => {
+    Alert.alert('운동 기록 삭제', '정말로 이 운동 기록을 삭제하시겠습니까?', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '삭제',
+        style: 'destructive',
+        onPress: () => {
+          deleteMyExerciseAPI(exerciseId)
+            .then(() => {
+              Alert.alert('운동 기록이 삭제되었습니다.');
+              navigation.goBack();
+            })
+            .catch(error => {
+              console.error('운동 기록 삭제 실패:', error);
+              Alert.alert('운동 기록 삭제에 실패했습니다. 다시 시도해주세요.');
+            });
+        },
+      },
+    ]);
+  };
 
   return (
     <Wrapper>
@@ -103,11 +130,12 @@ const ResultScreen = () => {
 
           <BtnsContainer>
             {/* 완료, 삭제 버튼 */}
-            <DeleteBtn onPress={() => navigation.navigate('Main' as never)}>
+            <DeleteBtn
+              onPress={() => navigation.navigate('Statistics' as never)}>
               <DeleteText>완료</DeleteText>
             </DeleteBtn>
             <DeleteBtn
-              onPress={() => console.log('삭제 button pressed')}
+              onPress={handleDelete}
               style={{backgroundColor: '#e3e3e3'}}>
               <DeleteText>삭제</DeleteText>
             </DeleteBtn>
