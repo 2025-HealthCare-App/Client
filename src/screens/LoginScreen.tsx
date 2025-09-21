@@ -41,7 +41,7 @@ const LoginScreen = () => {
                 }
 
                 // 로그인 성공 후 화면 이동
-                navigation.navigate('MainApp');
+                navigation.replace('MainApp');
               })
               .catch(error => {
                 console.error('로그인 실패:', error);
