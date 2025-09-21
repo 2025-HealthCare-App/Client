@@ -8,7 +8,7 @@ const StatissticsStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {/* 기본 */}
-      <Stack.Screen name="Statistics" component={StatisticsScreen} />
+      <Stack.Screen name="StatisticsScreen" component={StatisticsScreen} />
 
       <Stack.Screen name="Result2" component={Result2Screen} />
     </Stack.Navigator>

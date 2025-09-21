@@ -23,7 +23,7 @@ const MainScreen = () => {
       <UserBar />
       <StyledTextTicker text="이번주 목표를 달성할 수 있을까요? 오늘도 함께 달려요!  이번주 목표를 달성할 수 있을까요? 오늘도 함께 달려요!" />
       <MainContents />
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };

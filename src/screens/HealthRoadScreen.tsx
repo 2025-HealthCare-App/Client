@@ -55,7 +55,7 @@ const HealthRoadScreen = () => {
           resizeMode="contain"
         />
       </Main>
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };

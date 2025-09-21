@@ -8,7 +8,7 @@ const HistoryStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {/* 기본 */}
-      <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen name="HistoryScreen" component={HistoryScreen} />
 
       <Stack.Screen name="Result2" component={Result2Screen} />
     </Stack.Navigator>

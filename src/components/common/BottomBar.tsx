@@ -1,59 +1,47 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
 import React from 'react';
-import {Image} from 'react-native';
 import styled from 'styled-components/native';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs'; // 타입 import
 
-const BottomBar = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-
-  const handleNavigation = (screen: string) => {
-    navigation.navigate(screen as never);
-  };
-
-  // 탭 정보 배열
-  const tabs = [
-    {
-      screen: 'Main',
-      label: '홈',
-      icon: require('../../images/navigation-icons/HomeIcon.png'),
-    },
-    {
-      screen: 'Statistics',
-      label: '통계',
-      icon: require('../../images/navigation-icons/StatisticsIcon.png'),
-    },
-    {
-      screen: 'History',
-      label: '기록',
-      icon: require('../../images/navigation-icons/CalendarIcon.png'),
-    },
-    {
-      screen: 'Character',
-      label: '캐릭터',
-      icon: require('../../images/navigation-icons/CharacterIcon.png'),
-    },
-    {
-      screen: 'Community',
-      label: '커뮤니티',
-      icon: require('../../images/navigation-icons/CommunityIcon.png'),
-    },
-  ];
-
+// 훅 대신 props를 받도록 수정합니다. (타입은 BottomTabBarProps)
+const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   return (
     <Wrapper>
-      {tabs.map(tab => {
-        const isActive = route.name === tab.screen;
+      {state.routes.map((route, index) => {
+        // descriptors에서 각 탭의 옵션(이름, 아이콘 등)을 가져옵니다.
+        const {options} = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? (options.tabBarLabel as string)
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        // 현재 활성화된 탭인지 확인합니다.
+        const isFocused = state.index === index;
+
+        // 탭을 눌렀을 때 실행될 함수
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        // options.tabBarIcon을 통해 아이콘을 렌더링합니다.
+        const icon = options.tabBarIcon
+          ? options.tabBarIcon({focused: isFocused, color: '#fff', size: 24})
+          : null;
+
         return (
-          <Section
-            key={tab.screen}
-            onPress={() => handleNavigation(tab.screen)}>
-            <SectionIcon
-              source={tab.icon}
-              style={{tintColor: isActive ? '#fff' : '#888'}}
-            />
-            <SectionText style={{color: isActive ? '#fff' : '#888'}}>
-              {tab.label}
+          <Section key={route.key} onPress={onPress}>
+            {icon}
+            <SectionText style={{color: isFocused ? '#fff' : '#888'}}>
+              {label}
             </SectionText>
           </Section>
         );
@@ -64,6 +52,7 @@ const BottomBar = () => {
 
 export default BottomBar;
 
+// styled-components 부분은 그대로 유지
 const Wrapper = styled.View`
   width: 100%;
   height: 63px;
@@ -73,9 +62,6 @@ const Wrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* 맨 밑으로 고정 */
-  position: absolute;
-  bottom: 0;
 `;
 
 const Section = styled.TouchableOpacity`
@@ -85,19 +71,9 @@ const Section = styled.TouchableOpacity`
   align-items: center;
   gap: 5px;
 `;
-const SectionIcon = styled(Image)`
-  /* width: 20px;
-  height: 20px; */
-  width: 24px;
-  height: 24px;
-  resize-mode: contain;
-  max-width: 100%;
-  max-height: 100%;
 
-  flex: 1;
-  object-fit: contain;
-  object-position: center;
-`;
+// SectionIcon 컴포넌트는 이제 사용되지 않으므로 삭제하거나,
+// tabBarIcon 내부에서 Image 대신 사용하려면 스타일을 유지할 수 있습니다.
 const SectionText = styled.Text`
   color: #ffffff;
   font-size: 9px;

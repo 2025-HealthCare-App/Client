@@ -10,7 +10,7 @@ const CommunityStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {/* 기본 */}
-      <Stack.Screen name="Community" component={CommunityScreen} />
+      <Stack.Screen name="CommunityScreen" component={CommunityScreen} />
 
       <Stack.Screen name="Write" component={WriteScreen} />
       <Stack.Screen name="RecentPoints" component={RecentPointsScreen} />

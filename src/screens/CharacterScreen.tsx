@@ -11,7 +11,7 @@ const CharacterScreen = () => {
       <UserBar />
       <StyledTextTicker text="포인트를 모아 캐릭터를 진화시켜보세요! 열심히 운동하면 포인트가 쌓여요! 포인트" />
       <CharacterContents />
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };

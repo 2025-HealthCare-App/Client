@@ -30,7 +30,7 @@ const CommunityScreen = () => {
       <RankingBoard />
       <WriteButton isPosted={isPosted} />
       <PostsContainer />
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };

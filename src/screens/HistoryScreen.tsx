@@ -152,7 +152,7 @@ const HistoryScreen = () => {
         </ScrollView>
       </ActivitiesContainer>
 
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };

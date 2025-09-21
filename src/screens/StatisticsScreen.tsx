@@ -159,7 +159,7 @@ const StatisticsScreen = () => {
           </PlusButton>
         </Section>
       </Main>
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   );
 };
