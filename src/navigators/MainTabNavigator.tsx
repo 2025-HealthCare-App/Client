@@ -22,7 +22,6 @@ const HomeIcon = ({focused}: {focused: boolean}) => (
     }}
   />
 );
-
 const StatisticsIcon = ({focused}: {focused: boolean}) => (
   <Image
     source={require('../images/navigation-icons/StatisticsIcon.png')}
@@ -33,7 +32,6 @@ const StatisticsIcon = ({focused}: {focused: boolean}) => (
     }}
   />
 );
-
 const HistoryIcon = ({focused}: {focused: boolean}) => (
   <Image
     source={require('../images/navigation-icons/CalendarIcon.png')}
@@ -44,7 +42,6 @@ const HistoryIcon = ({focused}: {focused: boolean}) => (
     }}
   />
 );
-
 const CharacterIcon = ({focused}: {focused: boolean}) => (
   <Image
     source={require('../images/navigation-icons/CharacterIcon.png')}
@@ -55,7 +52,6 @@ const CharacterIcon = ({focused}: {focused: boolean}) => (
     }}
   />
 );
-
 const CommunityIcon = ({focused}: {focused: boolean}) => (
   <Image
     source={require('../images/navigation-icons/CommunityIcon.png')}

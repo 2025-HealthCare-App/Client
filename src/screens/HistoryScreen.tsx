@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import BottomBar from '../components/common/BottomBar';
 import {Calendar} from 'react-native-calendars';
 import {ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
@@ -151,8 +150,6 @@ const HistoryScreen = () => {
           )}
         </ScrollView>
       </ActivitiesContainer>
-
-      {/* <BottomBar /> */}
     </Wrapper>
   );
 };
@@ -165,7 +162,6 @@ const Wrapper = styled.View`
   justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding-bottom: 60px; /* bottomBar 높이만큼 여백 추가 */
 `;
 
 const Header = styled.View`

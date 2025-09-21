@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import BottomBar from '../components/common/BottomBar';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {getMyRecentExercisesAPI} from '../apis/exercise/exerciseAPI';
@@ -159,7 +158,6 @@ const StatisticsScreen = () => {
           </PlusButton>
         </Section>
       </Main>
-      {/* <BottomBar /> */}
     </Wrapper>
   );
 };
@@ -172,7 +170,6 @@ const Wrapper = styled.View`
   justify-content: space-between;
   align-items: center;
   background-color: #222831;
-  padding-bottom: 60px;
 `;
 
 const Header = styled.View`

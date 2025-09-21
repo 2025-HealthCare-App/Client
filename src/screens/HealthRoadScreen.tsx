@@ -3,7 +3,6 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import BottomBar from '../components/common/BottomBar';
 import {useRecoilValue} from 'recoil';
 import {userInfoAtom} from '../recoil/atom';
 
@@ -55,7 +54,6 @@ const HealthRoadScreen = () => {
           resizeMode="contain"
         />
       </Main>
-      {/* <BottomBar /> */}
     </Wrapper>
   );
 };
@@ -67,7 +65,6 @@ const Wrapper = styled.View`
   justify-content: flex-start;
   align-items: center;
   background-color: #222831;
-  padding-bottom: 70px; /* bottomBar 높이만큼 여백 추가 */
   padding-top: 20px;
   gap: 15px;
 `;

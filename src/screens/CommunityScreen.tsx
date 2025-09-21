@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import BottomBar from '../components/common/BottomBar';
 import RankingBoard from '../components/communityScreen/RankingBoard';
 import WriteButton from '../components/communityScreen/WriteButton';
 import PostsContainer from '../components/communityScreen/PostsContainer';
@@ -30,7 +29,6 @@ const CommunityScreen = () => {
       <RankingBoard />
       <WriteButton isPosted={isPosted} />
       <PostsContainer />
-      {/* <BottomBar /> */}
     </Wrapper>
   );
 };
@@ -43,5 +41,4 @@ const Wrapper = styled.View`
   justify-content: flex-start;
   align-items: center;
   background-color: #222831;
-  padding-bottom: 60px; /* bottomBar 높이만큼 여백 추가 */
 `;
