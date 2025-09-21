@@ -38,9 +38,10 @@ export default MainScreen;
 // `;
 
 const Wrapper = styled.View`
-  width: 100%;
   height: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   background-color: #222831;
+  padding-top: 20px;
+  gap: 15px;
 `;
