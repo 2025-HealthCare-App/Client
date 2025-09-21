@@ -154,7 +154,7 @@ const StatisticsScreen = () => {
               <Exercise key={index} {...exercise} />
             ))}
           </ActivitiesContainer>
-          <PlusButton onPress={() => navigation.navigate('Activities')}>
+          <PlusButton onPress={() => navigation.navigate('History')}>
             <PlusButtonText>더보기</PlusButtonText>
           </PlusButton>
         </Section>

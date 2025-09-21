@@ -24,7 +24,7 @@ const BottomBar = () => {
       icon: require('../../images/navigation-icons/StatisticsIcon.png'),
     },
     {
-      screen: 'Activities',
+      screen: 'History',
       label: '기록',
       icon: require('../../images/navigation-icons/CalendarIcon.png'),
     },

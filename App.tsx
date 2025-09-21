@@ -17,9 +17,8 @@ import TestScreen from './src/screens/TestScreen';
 import ResultScreen from './src/screens/ResultScreen';
 import WriteScreen from './src/screens/WriteScreen';
 import HealthRoadScreen from './src/screens/HealthRoadScreen';
-import ActivitiesScreen from './src/screens/HistoryScreen';
+import HistoryScreen from './src/screens/HistoryScreen';
 import Result2Screen from './src/screens/Result2Screen';
-import SignUpScreen from './src/screens/SignUpScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen'; // 튜토리얼 화면 추가
 import DebugResetScreen from './src/screens/DebugResetScreen';
 import RecentPointsScreen from './src/screens/RecentPointsScreen';
@@ -78,9 +77,9 @@ function App(): React.JSX.Element {
           <Stack.Screen name="Result2" component={Result2Screen} />
           <Stack.Screen name="Write" component={WriteScreen} />
           <Stack.Screen name="HealthRoad" component={HealthRoadScreen} />
-          <Stack.Screen name="Activities" component={ActivitiesScreen} />
-          <Stack.Screen name="Signup" component={SignUpScreen} />
+          <Stack.Screen name="History" component={HistoryScreen} />
           <Stack.Screen name="RecentPoints" component={RecentPointsScreen} />
+
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Test" component={TestScreen} />
 
