@@ -1,27 +1,25 @@
 import React from 'react';
+// 👇 1. StyleSheet를 react-native에서 import 합니다.
+import StyleSheet from 'react-native';
 import styled from 'styled-components/native';
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs'; // 타입 import
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
-// 훅 대신 props를 받도록 수정합니다. (타입은 BottomTabBarProps)
 const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
-  // 👇 --- 여기가 핵심 수정 부분입니다 --- 👇
-  // 1. 현재 활성화된 라우트(경로) 정보를 가져옵니다.
   const focusedRoute = state.routes[state.index];
-  // 2. 해당 라우트의 옵션(tabBarStyle 등)을 가져옵니다.
   const {options} = descriptors[focusedRoute.key];
-  const tabBarStyle = options.tabBarStyle;
 
-  // 3. tabBarStyle 옵션에 display: 'none'이 설정되어 있다면,
-  //    아무것도 렌더링하지 않고 컴포넌트를 종료합니다(null 반환).
-  if (tabBarStyle && tabBarStyle.display === 'none') {
+  // 👇 2. StyleSheet.flatten을 사용하여 tabBarStyle을 안전한 객체 형태로 변환합니다.
+  const flatTabBarStyle = StyleSheet.flatten(options.tabBarStyle);
+
+  // 👇 3. 변환된 객체를 사용하여 display 속성을 확인합니다.
+  if (flatTabBarStyle && flatTabBarStyle.display === 'none') {
     return null;
   }
-  // 🔼 --- 여기까지가 핵심 수정 부분입니다 --- 🔼
 
   return (
     <Wrapper>
       {state.routes.map((route, index) => {
-        // descriptors에서 각 탭의 옵션(이름, 아이콘 등)을 가져옵니다.
+        // ... (이하 코드는 모두 동일)
         const {options} = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
@@ -30,10 +28,8 @@ const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             ? options.title
             : route.name;
 
-        // 현재 활성화된 탭인지 확인합니다.
         const isFocused = state.index === index;
 
-        // 탭을 눌렀을 때 실행될 함수
         const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',
@@ -46,7 +42,6 @@ const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           }
         };
 
-        // options.tabBarIcon을 통해 아이콘을 렌더링합니다.
         const icon = options.tabBarIcon
           ? options.tabBarIcon({focused: isFocused, color: '#fff', size: 24})
           : null;
@@ -66,7 +61,7 @@ const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
 
 export default BottomBar;
 
-// styled-components 부분은 그대로 유지
+// ... (styled-components 코드는 동일)
 const Wrapper = styled.View`
   width: 100%;
   height: 63px;
