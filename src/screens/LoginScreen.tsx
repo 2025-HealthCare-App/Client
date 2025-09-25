@@ -4,10 +4,13 @@ import {loginAPI} from '../apis/user/loginAPI';
 import {Alert, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSetRecoilState} from 'recoil';
+import {authState} from '../recoil/authState';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const setAuthState = useSetRecoilState(authState); // Recoil 상태 변경 함수
   const navigation = useNavigation();
 
   return (
@@ -41,7 +44,8 @@ const LoginScreen = () => {
                 }
 
                 // 로그인 성공 후 화면 이동
-                navigation.replace('MainApp');
+                // navigation.replace('MainApp');
+                setAuthState({isLoggedIn: true}); // ✅ Recoil 상태를 true로 변경
               })
               .catch(error => {
                 console.error('로그인 실패:', error);
