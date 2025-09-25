@@ -12,7 +12,7 @@ const LoginScreen = () => {
 
   return (
     <Wrapper>
-      <Title />
+      <Title>Obesity App</Title>
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>
@@ -71,7 +71,7 @@ const Wrapper = styled.View`
 
 const LoginWrapper = styled.View`
   width: 100%;
-  height: 100%;
+  height: 80%;
   justify-content: center;
   align-items: center;
 `;
@@ -80,6 +80,7 @@ const Title = styled.Text`
   color: #ffffff;
   font-size: 30px;
   font-weight: bold;
+  margin-top: 50px;
 `;
 
 const Row = styled.View`
