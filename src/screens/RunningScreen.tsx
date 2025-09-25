@@ -57,7 +57,7 @@ const RunningScreen = () => {
   const pausedTimeAccum = useRef(0);
   // 마지막으로 일시정지 시작된 시각
   const pauseStartTime = useRef<number | null>(null);
-  // 🚀 타이머 함수
+  //  타이머 함수
   const startTimer = () => {
     if (intervalRef.current) {
       return;
