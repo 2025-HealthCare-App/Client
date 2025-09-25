@@ -4,6 +4,20 @@ import {BottomTabBarProps} from '@react-navigation/bottom-tabs'; // 타입 impor
 
 // 훅 대신 props를 받도록 수정합니다. (타입은 BottomTabBarProps)
 const BottomBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
+  // 👇 --- 여기가 핵심 수정 부분입니다 --- 👇
+  // 1. 현재 활성화된 라우트(경로) 정보를 가져옵니다.
+  const focusedRoute = state.routes[state.index];
+  // 2. 해당 라우트의 옵션(tabBarStyle 등)을 가져옵니다.
+  const {options} = descriptors[focusedRoute.key];
+  const tabBarStyle = options.tabBarStyle;
+
+  // 3. tabBarStyle 옵션에 display: 'none'이 설정되어 있다면,
+  //    아무것도 렌더링하지 않고 컴포넌트를 종료합니다(null 반환).
+  if (tabBarStyle && tabBarStyle.display === 'none') {
+    return null;
+  }
+  // 🔼 --- 여기까지가 핵심 수정 부분입니다 --- 🔼
+
   return (
     <Wrapper>
       {state.routes.map((route, index) => {
