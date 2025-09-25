@@ -310,6 +310,18 @@ const RunningScreen = () => {
   //!!운동 종료 처리하는 함수!!
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
+    // --- 구글 API의 URL 길이 제한(8,192자)---
+    const MAX_POINTS = 300; // URL 길이를 고려한 최대 좌표 수 (조절 가능)
+    let simplifiedRoute = route;
+
+    if (route.length > MAX_POINTS) {
+      simplifiedRoute = [];
+      const step = Math.ceil(route.length / MAX_POINTS);
+      for (let i = 0; i < route.length; i += step) {
+        simplifiedRoute.push(route[i]);
+      }
+    }
+
     const staticMapUrl = createStaticMapUrl(route, String(apiKey));
     const startDate = new Date(startTime.current);
 
@@ -322,7 +334,7 @@ const RunningScreen = () => {
       )} ${String(startDate.getHours()).padStart(2, '0')}:${String(
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
-      ex_distance: 1200, //TODO: 테스트용 하드코딩
+      ex_distance: distance,
       ex_kcal: steps * 0.04,
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
