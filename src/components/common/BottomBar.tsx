@@ -1,6 +1,6 @@
 import React from 'react';
 // 👇 1. StyleSheet를 react-native에서 import 합니다.
-import StyleSheet from 'react-native';
+import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
