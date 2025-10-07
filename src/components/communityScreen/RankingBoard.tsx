@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import styled from 'styled-components/native';
 import Profile from './Profile';
 import {Text, Animated, TouchableOpacity} from 'react-native';
 import {getMyRankAPI, getRankingsAPI} from '../../apis/community/rankAPI';
 import {useRecoilValue} from 'recoil';
 import {userInfoAtom} from '../../recoil/atom';
+import {useFocusEffect} from '@react-navigation/native';
 
 type RankingUser = {
   name: string;
@@ -36,46 +37,51 @@ const RankingBoard = () => {
   };
 
   //랭킹 조회 API 호출
-  useEffect(() => {
-    getRankingsAPI()
-      .then(data => {
-        // console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
-        // topUsers가 3명이 아니면 빈 배열로 채움
-        const sortedUsers = (data.topUsers || [])
-          .slice()
-          .sort((a: RankingUser, b: RankingUser) => a.rank - b.rank);
+  useFocusEffect(
+    useCallback(() => {
+      getRankingsAPI()
+        .then(data => {
+          // console.log('랭킹 조회 성공:', JSON.stringify(data, null, 2));
+          // topUsers가 3명이 아니면 빈 배열로 채움
+          const sortedUsers = (data.topUsers || [])
+            .slice()
+            .sort((a: RankingUser, b: RankingUser) => a.rank - b.rank);
 
-        // 3명 미만이면 빈 객체로 채움
-        const filledUsers = Array(3)
-          .fill(null)
-          .map((_, i) => sortedUsers[i] || null);
+          // 3명 미만이면 빈 객체로 채움
+          const filledUsers = Array(3)
+            .fill(null)
+            .map((_, i) => sortedUsers[i] || null);
 
-        setRankUsers(filledUsers);
-      })
-      .catch(error => {
-        console.error('랭킹 조회 실패:', error);
-      });
-  }, []);
+          setRankUsers(filledUsers);
+        })
+        .catch(error => {
+          console.error('랭킹 조회 실패:', error);
+        });
+    }, []),
+  );
+
   //나의 상위 퍼센트 조회
-  useEffect(() => {
-    getMyRankAPI()
-      .then(response => {
-        //나의 이번주 기록 없으면(status 204)
-        if (response.status === 204) {
-          console.log('이번주 달린 기록이 없습니다.');
-          setIsRanThisWeek(false);
-          setPercentile(0);
-          return;
-        }
-        setIsRanThisWeek(true);
-        const resPercentile = response.data.data.percentile;
-        //resPercentile이 0이면 1로 세팅 (상위 0%는 말이 안되니까)
-        setPercentile(resPercentile === 0 ? 1 : resPercentile);
-      })
-      .catch(error => {
-        console.error('나의 상위 퍼센트 조회 실패:', error);
-      });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getMyRankAPI()
+        .then(response => {
+          //나의 이번주 기록 없으면(status 204)
+          if (response.status === 204) {
+            console.log('이번주 달린 기록이 없습니다.');
+            setIsRanThisWeek(false);
+            setPercentile(0);
+            return;
+          }
+          setIsRanThisWeek(true);
+          const resPercentile = response.data.data.percentile;
+          //resPercentile이 0이면 1로 세팅 (상위 0%는 말이 안되니까)
+          setPercentile(resPercentile === 0 ? 1 : resPercentile);
+        })
+        .catch(error => {
+          console.error('나의 상위 퍼센트 조회 실패:', error);
+        });
+    }, []),
+  );
 
   return (
     <Animated.View
