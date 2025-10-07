@@ -1,4 +1,9 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  RouteProp,
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {addComma, formatElapsedTime} from '../utils/util';
@@ -131,7 +136,8 @@ const ResultScreen = () => {
           <BtnsContainer>
             {/* 완료, 삭제 버튼 */}
             <DeleteBtn
-              onPress={() => navigation.navigate('Statistics' as never)}>
+              // 👇 navigation.navigate 대신 popToTop()을 사용
+              onPress={() => navigation.dispatch(StackActions.popToTop())}>
               <DeleteText>완료</DeleteText>
             </DeleteBtn>
             <DeleteBtn

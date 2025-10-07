@@ -39,7 +39,7 @@ const Wrapper = styled.TouchableOpacity<{isPosted: boolean}>`
   background-color: ${({isPosted}) => (isPosted ? '#656a00' : '#c0ca00')};
   border: 2px solid ${({isPosted}) => (isPosted ? '#b3b3b3' : '#ffffff')};
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   gap: 5px;
 `;
 
