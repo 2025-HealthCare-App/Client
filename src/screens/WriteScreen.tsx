@@ -7,12 +7,31 @@ import {uploadPost} from '../apis/community/postAPI';
 
 const WriteScreen = () => {
   const [postContent, setPostContent] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const navigation = useNavigation();
 
-  //게시글 post API
-  const handlePostSubmit = async () => {
-    // 유효성 검사
+  // 게시글 업로드 함수
+  const submitPost = async () => {
+    try {
+      const response = await uploadPost({postContent, imageUri: selectedImage});
+      if (response.success) {
+        Alert.alert(
+          '게시글 작성 완료',
+          '게시글이 성공적으로 작성되었습니다! \n500P를 획득했습니다.',
+        );
+        //뒤로가기
+        navigation.goBack();
+      } else {
+        Alert.alert('오류', response.message || '게시글 작성에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('게시글 작성 중 오류 발생:', error);
+      Alert.alert('오류', '게시글 작성 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 게시글 post API
+  const handlePostSubmit = () => {
     if (!postContent.trim()) {
       Alert.alert('입력 오류', '게시글 내용을 입력해주세요.');
       return;
@@ -21,22 +40,17 @@ const WriteScreen = () => {
       Alert.alert('입력 오류', '이미지를 선택해주세요.');
       return;
     }
-
-    try {
-      const response = await uploadPost({postContent, imageUri: selectedImage});
-      if (response.success) {
-        Alert.alert(
-          '게시글 작성 완료',
-          '게시글이 성공적으로 작성되었습니다! \n500P를 획득했습니다.',
-        );
-        navigation.navigate('Community'); // 게시글 작성 후 커뮤니티 화면으로 이동
-      } else {
-        console.error('게시글 작성 실패:', response.message);
-      }
-    } catch (error) {
-      console.error('게시글 작성 중 오류 발생:', error);
-    }
+    Alert.alert(
+      '게시글 작성',
+      '게시글을 작성할까요?\n한번 작성한 게시글은 수정할 수 없어요.',
+      [
+        {text: '취소', style: 'cancel'},
+        {text: '확인', onPress: submitPost},
+      ],
+    );
   };
+
+  // ... 나머지 코드 (이미지 업로드, 뒤로가기 등)
 
   // 이미지 업로드 핸들러
   const handleImageUpload = () => {
