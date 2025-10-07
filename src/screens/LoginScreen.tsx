@@ -15,7 +15,7 @@ const LoginScreen = () => {
 
   return (
     <Wrapper>
-      <Title>Obesity App</Title>
+      <Title>STEP BREW</Title>
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>

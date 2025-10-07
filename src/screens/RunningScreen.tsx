@@ -334,7 +334,8 @@ const RunningScreen = () => {
       )} ${String(startDate.getHours()).padStart(2, '0')}:${String(
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
-      ex_distance: distance,
+      // ex_distance: distance,
+      ex_distance: 1200, //테스트용
       ex_kcal: steps * 0.04,
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
