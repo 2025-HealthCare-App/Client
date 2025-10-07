@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
@@ -34,7 +34,7 @@ const UserBar = () => {
   // useFocusEffect를 사용하여 화면이 포커스될 때마다 유저 정보 갱신
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       getMyUserInfoAPI()
         .then(response => {
           const data = response.data;

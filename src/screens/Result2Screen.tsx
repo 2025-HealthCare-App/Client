@@ -52,7 +52,7 @@ const Result2Screen = () => {
     patchMyExerciseTitleAPI(exercise.exerciseId, editTitle)
       .then(() => {
         setIsEditMode(false);
-        Alert.alert('운동 제목이 수정되었습니다.', editTitle);
+        Alert.alert('운동 제목이 수정되었습니다.', `'${editTitle}'`);
       })
       .catch(error => {
         console.error('운동 제목 수정 실패:', error);
