@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getMyUserInfoAPI} from '../../apis/user/userInfoAPI';
 import {useRecoilState} from 'recoil';
 import {userInfoAtom} from '../../recoil/atom';
+import {useFocusEffect} from '@react-navigation/native';
 
 const UserBar = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태
@@ -30,27 +31,30 @@ const UserBar = () => {
   };
 
   //나의 유저 정보 API 호출 및 세팅
-  useEffect(() => {
-    getMyUserInfoAPI()
-      .then(response => {
-        // console.log('나의 유저 정보:', response.data);
-        const data = response.data;
-        setUserInfo({
-          Uid: data.Uid,
-          name: data.name,
-          gender: data.gender,
-          birth: data.birth,
-          profileImage: data.profile_image,
-          tier: data.tier,
-          points: data.points,
-          level: data.level,
-          totalDistance: data.total_distance,
+  // useFocusEffect를 사용하여 화면이 포커스될 때마다 유저 정보 갱신
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getMyUserInfoAPI()
+        .then(response => {
+          const data = response.data;
+          setUserInfo({
+            Uid: data.Uid,
+            name: data.name,
+            gender: data.gender,
+            birth: data.birth,
+            profileImage: data.profile_image,
+            tier: data.tier,
+            points: data.points,
+            level: data.level,
+            totalDistance: data.total_distance,
+          });
+        })
+        .catch(error => {
+          console.error('유저 정보 조회 실패:', error);
         });
-      })
-      .catch(error => {
-        console.error('유저 정보 조회 실패:', error);
-      });
-  }, [setUserInfo]);
+    }, [setUserInfo]),
+  );
 
   return (
     <Wrapper>

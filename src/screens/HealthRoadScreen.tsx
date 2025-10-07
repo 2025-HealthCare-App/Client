@@ -19,7 +19,9 @@ const HealthRoadScreen = () => {
 
   //before버튼 누르면 communityScreen으로 이동
   const handleBeforeButtonPress = () => {
-    navigation.navigate('Character');
+    // navigation.navigate('Character');
+    //popToTop()을 사용하여 스택의 맨 위로 이동
+    navigation.popToTop();
   };
 
   //userInfo.level에 따라서 다른 healthroad 이미지 보여주기
