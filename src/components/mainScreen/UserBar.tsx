@@ -106,8 +106,8 @@ const UserInfoContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  background-color: #00494d;
-  border: 3px solid #02adb5;
+  background-color: #ffffff;
+  border: 3px solid #e1e1e1;
   border-radius: 50px;
   padding: 5px 10px;
 `;
@@ -119,8 +119,8 @@ const PointContainer = styled.View`
 const PointTextContainer = styled.TouchableOpacity`
   width: 100px;
   height: 30px;
-  background-color: #00494d;
-  border: 3px solid #02adb5;
+  background-color: #ffffff;
+  border: 3px solid #e1e1e1;
   border-radius: 50px;
   justify-content: center;
   align-items: center;
@@ -128,7 +128,7 @@ const PointTextContainer = styled.TouchableOpacity`
 const PointText = styled.Text`
   font-size: 13px;
   /* font-weight: bold; */
-  color: white;
+  color: #353535;
   font-family: 'Pretendard';
 `;
 
@@ -144,7 +144,7 @@ const TierBadge = styled(Image)`
 `;
 const UserName = styled.Text`
   font-size: 15px;
-  color: #ffffff;
+  color: #353535;
   font-weight: bold;
   font-family: 'Pretendard';
   /* TODO: 여기서 글자수 제한 !! */
