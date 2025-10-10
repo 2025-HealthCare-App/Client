@@ -68,7 +68,7 @@ const Wrapper = styled.View`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
-  background-color: #222831;
+  background-color: #1a1a1a;
   padding-top: 20px;
   gap: 15px;
 `;
@@ -104,7 +104,7 @@ const RowText = styled.Text`
 const Input = styled.TextInput`
   width: 70%;
   height: 40px;
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 5px;
   padding: 10px;
   color: #ffffff;

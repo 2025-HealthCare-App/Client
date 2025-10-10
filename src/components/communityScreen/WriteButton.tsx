@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {Alert} from 'react-native';
 import styled from 'styled-components/native';
 
 interface WriteButtonProps {
@@ -10,6 +11,7 @@ const WriteButton = ({isPosted}: WriteButtonProps) => {
   const navigation = useNavigation();
   const handlePress = () => {
     if (isPosted) {
+      Alert.alert('알림', '오늘은 이미 게시글을 작성했어요.');
       return; // 이미 게시글을 작성한 경우 아무 동작도 하지 않음
     }
     // 게시글 작성 화면으로 이동
@@ -36,7 +38,7 @@ const Wrapper = styled.TouchableOpacity<{isPosted: boolean}>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: ${({isPosted}) => (isPosted ? '#656a00' : '#c0ca00')};
+  background-color: ${({isPosted}) => (isPosted ? '#044a29' : '#0cbd71')};
   border: 2px solid ${({isPosted}) => (isPosted ? '#b3b3b3' : '#ffffff')};
   margin-top: 20px;
   margin-bottom: 25px;

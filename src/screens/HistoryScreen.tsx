@@ -110,17 +110,17 @@ const HistoryScreen = () => {
           onDayPress={handleDayPress}
           markedDates={exerciseDays}
           theme={{
-            backgroundColor: '#222831',
-            calendarBackground: '#222831',
+            backgroundColor: '#1a1a1a',
+            calendarBackground: '#1a1a1a',
             textSectionTitleColor: '#ffffff',
-            selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#02ADB5',
-            todayTextColor: '#02ADB5',
+            selectedDayBackgroundColor: '#0da563',
+            selectedDayTextColor: '#17db86',
+            todayTextColor: '#17db86',
             dayTextColor: '#ffffff',
             textDisabledColor: '#d9e1e8',
-            dotColor: '#CDDC39',
-            selectedDotColor: '#CDDC39',
-            arrowColor: '#02ADB5',
+            dotColor: '#17db86',
+            selectedDotColor: '#17db86',
+            arrowColor: '#17db86',
             monthTextColor: '#ffffff',
           }}
           selected={selectedDate}
@@ -143,7 +143,7 @@ const HistoryScreen = () => {
                 textAlign: 'center',
                 marginTop: 20,
                 fontSize: 14,
-                color: '#4e5a6b',
+                color: '#4a4a4a',
               }}>
               선택한 날짜에 운동 기록이 없어요!
             </Title>
@@ -161,7 +161,7 @@ const Wrapper = styled.View`
   height: 100%;
   justify-content: space-between;
   align-items: center;
-  background-color: #222831;
+  background-color: #1a1a1a;
 `;
 
 const Header = styled.View`

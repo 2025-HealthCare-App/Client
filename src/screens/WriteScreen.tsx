@@ -89,7 +89,7 @@ const WriteScreen = () => {
       <Main>
         <TextInput
           placeholder="본문을 작성해주세요.(최대 150자)"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#7e7e7e"
           multiline={true} // ✅ 줄바꿈 가능
           maxLength={150} // ✅ 최대 글자 수 제한
           textAlignVertical="top" // ✅ 입력 내용 위쪽부터 시작
@@ -120,7 +120,7 @@ export default WriteScreen;
 const Wrapper = styled.View`
   height: 100%;
   width: 100%;
-  background-color: #222831;
+  background-color: #1a1a1a;
   padding: 20px 20px;
   gap: 30px;
 `;
@@ -159,13 +159,13 @@ const ImageUploadContainer = styled.View`
   border-radius: 10px;
   justify-content: center;
   align-items: center;
-  border: 1.5px solid #4f5661;
+  border: 1.5px solid #4d4d4d;
 `;
 const PreviewImage = styled.Image`
   width: 350px;
   height: 350px;
   border-radius: 10px;
-  border: 1.5px solid #4f5661;
+  border: 1.5px solid #4d4d4d;
 `;
 
 const ImageUploadButton = styled.TouchableOpacity`
@@ -179,12 +179,12 @@ const UploadImage = styled.Image`
 `;
 const ImageUploadButtonText = styled.Text`
   font-size: 14px;
-  color: #4b525c;
+  color: #4d4d4d;
 `;
 const TextInput = styled.TextInput`
   width: 350px;
   height: 105px;
-  background-color: #343d4a;
+  background-color: #262626;
   border-radius: 5px;
   font-size: 12px;
   padding: 20px;
@@ -193,7 +193,7 @@ const TextInput = styled.TextInput`
 const SubmitButton = styled.TouchableOpacity`
   width: 150px;
   height: 50px;
-  background-color: #bcc600;
+  background-color: #10cf7c;
   border: 2.5px solid #fff;
   border-radius: 10px;
   justify-content: center;

@@ -186,8 +186,8 @@ const CheckBox = styled.View`
   width: 5px;
   height: 5px;
   border-radius: 50px;
-  background-color: #222831;
-  border: 1px solid #222831;
+  background-color: #1a1a1a;
+  border: 1px solid #1a1a1a;
   justify-content: center;
 `;
 const PointText = styled.Text`
@@ -254,7 +254,7 @@ const DateandTime = styled.Text`
 `;
 const ResultTitle = styled.Text`
   font-size: 19px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
   text-align: center;
 `;
@@ -276,7 +276,7 @@ const KM = styled.Text`
   font-style: italic;
   font-weight: bold;
   text-align: center;
-  color: #222831;
+  color: #1a1a1a;
 `;
 
 const OthersContainer = styled.View`
@@ -292,7 +292,7 @@ const Category = styled.View`
 `;
 const Value = styled.Text`
   font-size: 27px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
   text-align: center;
 `;

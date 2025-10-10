@@ -159,7 +159,7 @@ const Wrapper = styled.View`
   border-bottom-right-radius: 20px;
   justify-content: flex-start;
   align-items: center;
-  background-color: #393e46;
+  background-color: #393939;
   padding: 30px 20px;
   gap: 15px;
 `;
@@ -208,7 +208,7 @@ const PercentText = styled.Text`
 
 const UserName = styled.Text`
   font-weight: bold;
-  color: #00adb5;
+  color: #0cbd71;
   font-size: 19px;
   font-weight: bold;
   text-decoration-line: underline;

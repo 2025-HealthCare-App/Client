@@ -103,7 +103,7 @@ const Wrapper = styled.View`
 
   justify-content: center;
   align-items: center;
-  border: 1px solid #7890b2;
+  border: 1px solid #595959;
   border-radius: 10px;
   padding: 10px 20px;
   margin-bottom: 15px;
@@ -152,7 +152,7 @@ const UserName = styled.Text`
 `;
 const Date = styled.Text`
   font-size: 12px;
-  color: #6d7c91;
+  color: #595959;
 `;
 const PostText = styled.Text`
   font-size: 13px;

@@ -30,9 +30,9 @@ export default RunningButton;
 const Wrapper = styled.TouchableOpacity<{option: 'pause' | 'start' | 'stop'}>`
   background-color: ${({option}) => {
     const colorMap = {
-      pause: '#222831',
+      pause: '#1a1a1a',
       start: '#CDD800',
-      stop: '#222831',
+      stop: '#1a1a1a',
     };
     return colorMap[option];
   }};

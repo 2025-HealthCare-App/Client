@@ -149,7 +149,7 @@ const ModalTop = styled.View`
 `;
 const ModalTitle = styled.Text`
   font-size: 18px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
 `;
 const ModalText = styled.Text`
@@ -157,18 +157,10 @@ const ModalText = styled.Text`
   color: #c1c1c1;
 `;
 
-// const CloseButton = styled(Pressable)`
-//   width: 82px;
-//   height: 40px;
-//   background-color: #cdd800;
-//   border-radius: 5px;
-//   justify-content: center;
-//   align-items: center;
-// `;
 const CloseButton = styled.TouchableOpacity`
   width: 82px;
   height: 40px;
-  background-color: #cdd800;
+  background-color: #007e54;
   border-radius: 5px;
   justify-content: center;
   align-items: center;
@@ -196,7 +188,7 @@ const GoalBar = styled.View`
 const RealGoalBar = styled.View`
   width: 50%;
   height: 100%;
-  background-color: #ff9292;
+  background-color: #00a971;
   border-radius: 20px;
 `;
 
@@ -217,13 +209,13 @@ const Thumb = styled(Animated.View)`
   width: 20px;
   height: 20px;
   border-radius: 10px;
-  background-color: #d06363;
+  background-color: #007e54;
   top: -3.5px; /* RealGoalBar보다 살짝 위로 */
 `;
 
 const RealGoalText = styled.Text`
   font-size: 20px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
   text-decoration: underline;
 `;

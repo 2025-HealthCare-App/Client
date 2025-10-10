@@ -65,7 +65,7 @@ const Wrapper = styled.View`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
-  background-color: #222831;
+  background-color: #1a1a1a;
   padding-top: 20px;
   gap: 15px;
 `;

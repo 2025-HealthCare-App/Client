@@ -184,7 +184,7 @@ export default MyPageScreen;
 const Wrapper = styled.View`
   height: 100%;
   width: 100%;
-  background-color: #222831;
+  background-color: #1a1a1a;
   padding: 20px 20px;
   gap: 30px;
 `;

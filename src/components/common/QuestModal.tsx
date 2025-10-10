@@ -71,7 +71,7 @@ const ModalTop = styled.View`
 const ModalTitle = styled.Text`
   width: 100%;
   font-size: 18px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
   margin-bottom: 25px;
 `;

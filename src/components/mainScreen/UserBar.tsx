@@ -106,8 +106,8 @@ const UserInfoContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  background-color: #ffffff;
-  border: 3px solid #e1e1e1;
+  background-color: #fcfcfc;
+  border: 3px solid #d0d0d0;
   border-radius: 50px;
   padding: 5px 10px;
 `;
@@ -119,15 +119,14 @@ const PointContainer = styled.View`
 const PointTextContainer = styled.TouchableOpacity`
   width: 100px;
   height: 30px;
-  background-color: #ffffff;
-  border: 3px solid #e1e1e1;
+  background-color: #fcfcfc;
+  border: 3px solid #d0d0d0;
   border-radius: 50px;
   justify-content: center;
   align-items: center;
 `;
 const PointText = styled.Text`
   font-size: 13px;
-  /* font-weight: bold; */
   color: #353535;
   font-family: 'Pretendard';
 `;

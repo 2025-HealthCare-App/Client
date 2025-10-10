@@ -94,13 +94,13 @@ const DateAndPoint = styled.View`
 `;
 const Date = styled.Text`
   font-size: 11px;
-  color: #393e46;
+  color: #393939;
   text-align: center;
   color: #6f6f6f;
 `;
 // const Point = styled.Text`
 //   font-size: 11px;
-//   color: #393e46;
+//   color: #393939;
 //   font-weight: bold;
 //   text-align: center;
 //   color: #6f6f6f;
@@ -108,7 +108,7 @@ const Date = styled.Text`
 const ExerciseTitle = styled.Text`
   width: 100%;
   font-size: 13px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
   text-align: left;
 `;
@@ -130,7 +130,7 @@ const Category = styled.View`
 `;
 const Value = styled.Text`
   font-size: 18px;
-  color: #222831;
+  color: #1a1a1a;
   font-weight: bold;
 `;
 const CategoryText = styled.Text`

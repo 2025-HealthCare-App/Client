@@ -27,8 +27,8 @@ const Wrapper = styled.View`
 const HealthRoadBox = styled.TouchableOpacity`
   width: 28%;
   height: 37px;
-  background-color: #ffb6b6;
-  border: 3px solid #ff9292;
+  background-color: #17db86;
+  border: 3px solid #0da563;
   border-radius: 100px;
   justify-content: center;
   align-items: center;

@@ -66,7 +66,7 @@ export default RecentPointsScreen;
 const Wrapper = styled.View`
   height: 100%;
   width: 100%;
-  background-color: #222831;
+  background-color: #1a1a1a;
   padding: 20px 20px;
   gap: 30px;
 `;
@@ -109,7 +109,7 @@ const PointsText = styled.Text`
 
 const PointsTable = styled.ScrollView`
   flex: 1; /* 화면에서 남은 공간 다 사용 */
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 10px;
 `;
 
@@ -117,7 +117,7 @@ const PointsHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
-  background-color: #393e46; /* 고정 영역 색상 */
+  background-color: #393939; /* 고정 영역 색상 */
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-width: 1px;

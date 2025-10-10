@@ -9,7 +9,7 @@ const BalloonWrapper = styled.View`
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: #e58787c7;
+  background-color: #0cbd71;
   border-radius: 10px;
   align-self: flex-start;
   margin-left: 10px;
@@ -28,7 +28,7 @@ const BalloonTail = styled.View`
   border-style: solid;
   border-top-color: transparent;
   border-bottom-color: transparent;
-  border-right-color: #e58787c7;
+  border-right-color: #0cbd71;
 `;
 
 const BalloonText = styled.Text`

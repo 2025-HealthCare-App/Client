@@ -138,7 +138,7 @@ const Wrapper = styled.View`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 18px;
   padding: 50px 0;
   font-family: 'Pretendard';
@@ -165,14 +165,14 @@ const TitleText = styled.Text`
 `;
 const EditBtn = styled.Text`
   font-size: 10px;
-  color: #cdd800;
+  color: #0cbd71;
   font-weight: bold;
   text-align: center;
   width: 40px;
   height: 16px;
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 10px;
-  border: 1px solid #cdd800;
+  border: 1px solid #0cbd71;
 `;
 
 const GoalBarContainer = styled.View`
@@ -195,7 +195,7 @@ interface RealGoalBarProps {
 const RealGoalBar = styled.View<RealGoalBarProps>`
   width: ${props => props.progress}%;
   height: 100%;
-  background-color: #ff9292;
+  background-color: #0cbd71;
   border-radius: 20px;
   transition: width 0.3s ease;
 `;
@@ -207,7 +207,7 @@ const GoalProgress = styled.Text`
 const GoalSetButton = styled.TouchableOpacity`
   width: 50%;
   height: 40px;
-  background-color: #cdd800;
+  background-color: #0cbd71;
   border-radius: 50px;
   justify-content: center;
   align-items: center;
@@ -238,7 +238,7 @@ const CharacterContainer = styled.View`
 const StartButton = styled.TouchableOpacity`
   width: 200px;
   height: 60px;
-  background-color: #efe833e6;
+  background-color: #00f48a;
   border: 3px solid #ffffff;
   border-radius: 50px;
   justify-content: center;

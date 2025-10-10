@@ -74,7 +74,7 @@ const Wrapper = styled.View`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 18px;
   padding: 20px 20px;
   font-family: 'Pretendard';
@@ -104,8 +104,8 @@ const LvUpContainer = styled.View`
 const LvUpButton = styled.TouchableOpacity<{isDisabled: boolean}>`
   width: 150px;
   height: 50px;
-  background-color: ${({isDisabled}) => (isDisabled ? '#d79300' : '#feae00')};
-  border: 3px solid #a26f00;
+  background-color: ${({isDisabled}) => (isDisabled ? '#09804d' : '#17db86')};
+  border: 3px solid ${({isDisabled}) => (isDisabled ? '#0da563' : '#0da563')};
   justify-content: center;
   align-items: center;
   border-radius: 50px;

@@ -98,7 +98,7 @@ const ProfileImage = styled.Image<ImageProps>`
   width: ${props => (props.isFirst ? '100px' : '80px')};
   height: ${props => (props.isFirst ? '100px' : '80px')};
   border-radius: 100px;
-  border: 1px solid #93a7c9;
+  border: 1.5px solid #086a40;
 `;
 
 const ProfileName = styled.Text`
@@ -119,7 +119,7 @@ const Km = styled.Text`
 const NoProfileContainer = styled.View`
   width: 80px;
   height: 80px;
-  border: 1px solid #4d596d;
+  border: 1px solid #086a40;
   justify-content: center;
   align-items: center;
   border-radius: 100px;
@@ -127,7 +127,7 @@ const NoProfileContainer = styled.View`
 
 const NoProfileText = styled.Text`
   font-size: 10px;
-  color: #8b9cbb;
+  color: #0da563;
   text-align: center;
   padding: 5px;
 `;

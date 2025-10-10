@@ -169,7 +169,7 @@ const Wrapper = styled.View`
   height: 100%;
   justify-content: space-between;
   align-items: center;
-  background-color: #222831;
+  background-color: #1a1a1a;
 `;
 
 const Header = styled.View`
@@ -189,7 +189,7 @@ const Main = styled.ScrollView`
   width: 95%;
   height: 90%;
   padding: 30px 20px;
-  background-color: #393e46;
+  background-color: #393939;
   border-radius: 18px;
 `;
 

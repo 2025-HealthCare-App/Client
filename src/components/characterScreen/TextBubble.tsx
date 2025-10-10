@@ -47,7 +47,7 @@ const Arrow = styled.View`
 
 const Text = styled.Text`
   font-size: 13px;
-  color: #222831;
+  color: #1a1a1a;
   font-family: 'Pretendard';
   /* font-weight: bold; */
 `;
