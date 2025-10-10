@@ -8,24 +8,29 @@ import {
   launchImageLibrary,
   ImagePickerResponse,
 } from 'react-native-image-picker';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useResetRecoilState} from 'recoil';
 import {userInfoAtom} from '../recoil/atom';
 import {formatGender} from '../utils/util';
+import {authState} from '../recoil/authState';
 
 const MyPageScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [originImage, setOriginImage] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
-
+  const [auth, setAuth] = useRecoilState(authState);
   const navigation = useNavigation();
+
+  // Recoil 상태 초기화 함수들
+  const resetUserInfo = useResetRecoilState(userInfoAtom);
+  const resetAuth = useResetRecoilState(authState);
 
   // 뒤로가기
   const goBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  // 프로필 이미지 업로드
+  // 프로필 이미지 업로드 함수
   const handleImageUpload = useCallback(() => {
     launchImageLibrary(
       {
@@ -89,6 +94,21 @@ const MyPageScreen = () => {
     }
   };
 
+  // 로그아웃 함수
+  const handleLogout = () => {
+    try {
+      // Recoil 상태 초기화
+      resetUserInfo();
+      resetAuth();
+      setAuth({isLoggedIn: false});
+      Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
+      // 필요시 추가적인 로그아웃 처리 (예: AsyncStorage 정리 등)
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      Alert.alert('오류', '로그아웃 중 오류가 발생했습니다.');
+    }
+  };
+
   // 최초 렌더링 및 userInfo.profileImage 변경 시 원본/미리보기 이미지 동기화
   useEffect(() => {
     if (userInfo.profileImage) {
@@ -146,7 +166,9 @@ const MyPageScreen = () => {
         </Row>
         <Row>
           <Category />
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <TouchableOpacity onPress={() => handleLogout()}>
+            <LogoutBtn>로그아웃</LogoutBtn>
+          </TouchableOpacity>
         </Row>
       </InfoContainer>
       <LevelModal
@@ -159,7 +181,6 @@ const MyPageScreen = () => {
 
 export default MyPageScreen;
 
-// 스타일 컴포넌트 (불필요한 중복/순서 정리)
 const Wrapper = styled.View`
   height: 100%;
   width: 100%;
