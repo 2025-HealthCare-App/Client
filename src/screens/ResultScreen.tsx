@@ -312,7 +312,7 @@ const BtnsContainer = styled.View`
 `;
 
 const DeleteBtn = styled.TouchableOpacity`
-  background-color: #c5cf00;
+  background-color: #17db86;
   padding: 10px 20px;
   border-radius: 5px;
   align-items: center;

@@ -304,12 +304,12 @@ const Titlecontainer = styled.View`
 `;
 const EditTitleBtn = styled.Text`
   font-size: 11px;
-  color: #02adb5;
+  color: #09804d;
   text-align: center;
   font-weight: bold;
   padding: 5px 7px;
   border-radius: 5px;
-  background-color: #f0f0f0;
+  border: 1px solid #09804d;
   transition: background-color 0.3s ease;
 `;
 const ResultTitle = styled.Text`

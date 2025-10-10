@@ -486,7 +486,7 @@ const RecordsContainer = styled.View<{isRunning: boolean}>`
   z-index: 1;
   flex-direction: row;
   justify-content: space-between;
-  background-color: ${({isRunning}) => (isRunning ? '#ffffff' : '#171b21')};
+  background-color: ${({isRunning}) => (isRunning ? '#ffffff' : '#1a1a1a')};
   justify-content: center;
   align-items: center;
 `;
@@ -498,13 +498,13 @@ const Category = styled.View`
 `;
 const Value = styled.Text<{isRunning: boolean}>`
   font-size: 27px;
-  color: ${({isRunning}) => (isRunning ? '#171b21' : '#ffffff')};
+  color: ${({isRunning}) => (isRunning ? '#1a1a1a' : '#ffffff')};
   font-weight: bold;
   text-align: center;
 `;
 const CategoryText = styled.Text<{isRunning: boolean}>`
   font-size: 15px;
-  color: ${({isRunning}) => (isRunning ? '#171b21' : '#ffffff')};
+  color: ${({isRunning}) => (isRunning ? '#1a1a1a' : '#ffffff')};
   text-align: center;
 `;
 
@@ -529,7 +529,7 @@ const Time = styled.Text<{isRunning: boolean}>`
   font-style: italic;
   font-weight: bold;
   text-align: center;
-  color: ${({isRunning}) => (isRunning ? '#ff5664' : '#171b21')};
+  color: ${({isRunning}) => (isRunning ? '#00f48a' : '#1a1a1a')};
 `;
 
 const ButtonContainer = styled.View`

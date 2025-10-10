@@ -31,7 +31,7 @@ const Wrapper = styled.TouchableOpacity<{option: 'pause' | 'start' | 'stop'}>`
   background-color: ${({option}) => {
     const colorMap = {
       pause: '#1a1a1a',
-      start: '#CDD800',
+      start: '#0da563',
       stop: '#1a1a1a',
     };
     return colorMap[option];

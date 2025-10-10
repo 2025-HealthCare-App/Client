@@ -102,11 +102,11 @@ const StatisticsScreen = () => {
             <SemiTitle>주간 그래프</SemiTitle>
             <LegendContainer>
               <Legend>
-                <LegendDot color="#E91E63" />
+                <LegendDot color="#17db86" />
                 <LegendText>나의 기록</LegendText>
               </Legend>
               <Legend>
-                <LegendDot color="#CDDC39" />
+                <LegendDot color="#375b4c" />
                 <LegendText>사용자 평균 기록</LegendText>
               </Legend>
             </LegendContainer>
@@ -132,11 +132,11 @@ const StatisticsScreen = () => {
                     <BarsWrapper>
                       <Bar
                         height={(data.myDistance / maxDistance) * 100}
-                        color="#E91E63"
+                        color="#17db86"
                       />
                       <Bar
                         height={(data.avgDistance / maxDistance) * 100}
-                        color="#CDDC39"
+                        color="#375b4c"
                       />
                     </BarsWrapper>
                     <DayLabel>{data.day}</DayLabel>
@@ -253,7 +253,7 @@ const YAxisContainer = styled.View`
 
 const YAxisLabel = styled.Text`
   font-size: 10px;
-  color: #687b97;
+  color: #818181;
 `;
 
 const ChartArea = styled.View`
@@ -272,7 +272,7 @@ const GridLines = styled.View`
 const GridLine = styled.View`
   width: 100%;
   height: 0.5px;
-  background-color: #687b97;
+  background-color: #818181;
 `;
 
 const ActivitiesContainer = styled.View`
