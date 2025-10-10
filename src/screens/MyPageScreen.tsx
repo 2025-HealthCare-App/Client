@@ -144,6 +144,10 @@ const MyPageScreen = () => {
           <Category>누적 달린 거리</Category>
           <Value>{(userInfo.totalDistance / 1000).toLocaleString()} km</Value>
         </Row>
+        <Row>
+          <Category />
+          <LogoutBtn>로그아웃</LogoutBtn>
+        </Row>
       </InfoContainer>
       <LevelModal
         modalVisible={modalVisible}
@@ -271,5 +275,15 @@ const Value = styled.Text`
   font-size: 14px;
   justify-content: center;
   align-items: center;
+  text-align: center;
+`;
+
+const LogoutBtn = styled.Text`
+  background-color: #f08e8e;
+  width: 80px;
+  padding: 11px 0;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #fff;
   text-align: center;
 `;
