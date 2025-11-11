@@ -1,16 +1,19 @@
 import React, {useCallback, useState} from 'react';
-import {Image} from 'react-native';
+import {Alert, Image} from 'react-native';
 import styled from 'styled-components/native';
 import QuestModal from '../common/QuestModal';
 import {useNavigation} from '@react-navigation/native';
 import {getMyUserInfoAPI} from '../../apis/user/userInfoAPI';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import {userInfoAtom} from '../../recoil/atom';
 import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {authState} from '../../recoil/authState';
 
 const UserBar = () => {
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom); // Recoil 상태에서 유저 정보 가져오기
+  const setAuthState = useSetRecoilState(authState); // 👈 로그인 상태 변경 함수
 
   const navigation = useNavigation();
 
@@ -51,9 +54,19 @@ const UserBar = () => {
           });
         })
         .catch(error => {
-          console.error('유저 정보 조회 실패:', error);
+          console.error('유저 정보 조회 실패 (토큰 만료로 추정):', error);
+          Alert.alert(
+            '세션 만료',
+            '로그인 정보가 만료되었습니다. 다시 로그인 해주세요.',
+          );
+
+          // --- 여기가 핵심 수정 부분입니다 ---
+          // 1. 저장된 토큰을 삭제합니다.
+          AsyncStorage.removeItem('token');
+          // 2. 전역 로그인 상태를 false로 변경합니다.
+          setAuthState({isLoggedIn: false});
         });
-    }, [setUserInfo]),
+    }, [setUserInfo, setAuthState]),
   );
 
   return (

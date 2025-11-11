@@ -8,7 +8,7 @@ import {setupPlayer} from './src/utils/trackPlayerUtil';
 
 import LoginScreen from './src/screens/LoginScreen';
 import MainTabNavigator from './src/navigators/MainTabNavigator';
-import {View, ActivityIndicator} from 'react-native'; // 로딩 화면을 위해 추가
+import {View, ActivityIndicator, Alert} from 'react-native'; // 로딩 화면을 위해 추가
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +28,8 @@ function AppNavigator() {
         }
       } catch (e) {
         console.error('토큰 확인 실패:', e);
+        Alert.alert('토큰 확인 실패', '다시 로그인 해주세요.');
+        setAuth({isLoggedIn: false});
       } finally {
         // 확인이 끝나면 로딩 상태 해제
         setIsChecking(false);

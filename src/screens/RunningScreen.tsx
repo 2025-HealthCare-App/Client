@@ -14,7 +14,7 @@ import MapView, {
   Region,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
-import {map, filter} from 'rxjs/operators';
+import {map, filter, throttleTime} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {
@@ -153,7 +153,7 @@ const RunningScreen = () => {
   const [steps, setSteps] = useState(0);
   const [kcal, setKcal] = useState(0); // kcal
   const [distance, setDistance] = useState(0); // meters
-  const [prevLocation, setPrevLocation] = useState<{
+  const prevLocation = useRef<{
     latitude: number;
     longitude: number;
   } | null>(null);
@@ -186,17 +186,19 @@ const RunningScreen = () => {
           return;
         }
 
-        // ✅ getCurrentPosition 제거
-
         // 걸음 센서
-        setUpdateIntervalForType(SensorTypes.accelerometer, 400);
+        // 1. 업데이트 간격을 400ms -> 100ms로 줄여 반응 속도를 높임
+        setUpdateIntervalForType(SensorTypes.accelerometer, 100);
         const sensorSub = accelerometer
           .pipe(
             map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
-            filter(mag => mag > 12),
+            // 2. 민감도를 12 -> 11.5로 낮춰 더 작은 충격도 감지
+            filter(mag => mag > 11.5),
+            // 3. 350ms(0.35초) 이내의 중복 클릭(신호)은 무시하여 이중 카운트 방지
+            throttleTime(350),
           )
           .subscribe(() => {
-            setSteps(prev => prev + 1); // 이렇게!
+            setSteps(prev => prev + 1);
           });
 
         // ✅ 위치 추적 & 초기 위치 설정
@@ -213,7 +215,7 @@ const RunningScreen = () => {
                 latitudeDelta: 0.001,
                 longitudeDelta: 0.001,
               });
-              setPrevLocation({latitude, longitude});
+              prevLocation.current = {latitude, longitude}; // 👈 setPrevLocation 대신 .current 사용
               setRoute([{latitude, longitude}]);
 
               // 📍 첫 위치에서 지도 카메라 이동
@@ -232,17 +234,18 @@ const RunningScreen = () => {
               return;
             } // 오차 10m 이상 무시
 
-            if (prevLocation) {
+            // 👇 prevLocation.current를 읽도록 수정
+            if (prevLocation.current) {
               const d = getDistance(
-                prevLocation.latitude,
-                prevLocation.longitude,
+                prevLocation.current.latitude, // 👈 .current 추가
+                prevLocation.current.longitude, // 👈 .current 추가
                 latitude,
                 longitude,
               );
               setDistance(prev => prev + d);
             }
 
-            setPrevLocation({latitude, longitude});
+            prevLocation.current = {latitude, longitude}; // 👈 setPrevLocation 대신 .current 사용
             setRoute(prev => [...prev, {latitude, longitude}]);
 
             // 📍 실시간 지도 이동
@@ -372,7 +375,7 @@ const RunningScreen = () => {
         setDistance(0);
         setSteps(0);
         setRoute([]);
-        setPrevLocation(null);
+        // setPrevLocation(null);
         pausedTimeAccum.current = 0;
         pauseStartTime.current = null;
 
