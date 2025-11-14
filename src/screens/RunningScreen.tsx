@@ -429,9 +429,7 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>
-            {addComma(Number(kcal.toFixed(1)))}
-          </Value>
+          <Value isRunning={isRunning}>{kcal.toFixed(2)}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
       </RecordsContainer>
