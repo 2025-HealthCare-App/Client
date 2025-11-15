@@ -1,3 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
+
 //천 단위로 콤마 붙이는 함수
 export const addComma = (value: number) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -78,4 +81,10 @@ export const formatDate = (createdAt: string) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+// //토큰을 삭제하는 테스트 함수
+export const handleClearToken = async () => {
+  await AsyncStorage.removeItem('token');
+  Alert.alert('테스트', 'AsyncStorage의 토큰이 삭제되었습니다.');
 };

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from 'styled-components/native';
 import CharacterComment from '../components/StatisticsScreen/CharacterComment';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -10,6 +10,11 @@ import {
   getWeekAvgDistanceAPI,
 } from '../apis/week-ex/weekExApi';
 import dayjs from 'dayjs';
+import {Alert, Button} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSetRecoilState} from 'recoil';
+import {authState} from '../recoil/authState';
+import {handleClearToken} from '../utils/util';
 
 type weeklyDataType = {
   day: string;
@@ -41,6 +46,7 @@ const StatisticsScreen = () => {
   const [recentExercises, setRecentExercises] = useState<ExerciseType[]>([]);
   const [weeklyData, setWeeklyData] = useState<weeklyDataType[]>([]);
   const [maxDistance, setMaxDistance] = useState<number>(1);
+  const setAuthState = useSetRecoilState(authState); // 👈 로그인 상태 변경 함수
   const navigation = useNavigation();
 
   // 📌 주간 데이터 + 최대 거리 계산
@@ -86,8 +92,18 @@ const StatisticsScreen = () => {
         })
         .catch(error => {
           console.error('나의 운동 데이터 가져오기 실패:', error);
+          //로그인 관련 에러이면, 로그인 페이지로 이동시킴
+          Alert.alert(
+            '세션 만료',
+            '로그인 정보가 만료되었습니다. 다시 로그인 해주세요.',
+          );
+
+          // 1. 저장된 토큰을 삭제합니다.
+          AsyncStorage.removeItem('token');
+          // 2. 전역 로그인 상태를 false로 변경합니다.
+          setAuthState({isLoggedIn: false});
         });
-    }, []),
+    }, [setAuthState]),
   );
 
   return (

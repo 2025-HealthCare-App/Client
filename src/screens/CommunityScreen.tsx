@@ -5,11 +5,15 @@ import WriteButton from '../components/communityScreen/WriteButton';
 import PostsContainer from '../components/communityScreen/PostsContainer';
 import {checkTodayPost} from '../apis/community/postAPI';
 import {useFocusEffect} from '@react-navigation/native';
+import {Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSetRecoilState} from 'recoil';
+import {authState} from '../recoil/authState';
 
 const CommunityScreen = () => {
   const [isPosted, setIsPosted] = useState(false); //이거 기억하게 하기!!TODO
+  const setAuthState = useSetRecoilState(authState); // 👈 로그인 상태 변경 함수
 
-  // 👇 useEffect를 useFocusEffect로 변경합니다.
   useFocusEffect(
     useCallback(() => {
       // 이 코드는 CommunityScreen이 보일 때마다 실행됩니다.
@@ -24,12 +28,16 @@ const CommunityScreen = () => {
         })
         .catch(error => {
           console.error('오늘의 게시글 작성 여부 확인 중 오류 발생:', error);
-        });
+          Alert.alert(
+            '세션 만료',
+            '로그인 정보가 만료되었습니다. 다시 로그인 해주세요.',
+          );
 
-      // useFocusEffect는 cleanup 함수를 반환할 수 있습니다 (필요시 사용).
-      return () => {
-        // console.log('CommunityScreen unfocused');
-      };
+          // 1. 저장된 토큰을 삭제합니다.
+          AsyncStorage.removeItem('token');
+          // 2. 전역 로그인 상태를 false로 변경합니다.
+          setAuthState({isLoggedIn: false});
+        });
     }, []),
   );
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {Alert, Image, TouchableOpacity} from 'react-native';
+import {Alert, Button, Image, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import LevelModal from '../components/mypageScreen/LevelModal';
 import {useNavigation} from '@react-navigation/native';
@@ -10,7 +10,7 @@ import {
 } from 'react-native-image-picker';
 import {useRecoilState, useResetRecoilState} from 'recoil';
 import {userInfoAtom} from '../recoil/atom';
-import {formatGender} from '../utils/util';
+import {formatGender, handleClearToken} from '../utils/util';
 import {authState} from '../recoil/authState';
 
 const MyPageScreen = () => {
@@ -166,6 +166,11 @@ const MyPageScreen = () => {
         </Row>
         <Row>
           <Category />
+          <Button
+            title="[테스트] 토큰 강제 삭제"
+            onPress={handleClearToken}
+            color="#FF0000"
+          />
           <TouchableOpacity onPress={() => handleLogout()}>
             <LogoutBtn>로그아웃</LogoutBtn>
           </TouchableOpacity>

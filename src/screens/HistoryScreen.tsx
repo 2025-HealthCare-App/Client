@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {Calendar} from 'react-native-calendars';
-import {ScrollView} from 'react-native';
+import {Alert, Button, ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
 import {ExerciseType, toExerciseType} from '../types/exerciseType';
 import {
@@ -9,6 +9,10 @@ import {
   getExercisesByDateAPI,
 } from '../apis/history/dateExAPI';
 import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSetRecoilState} from 'recoil';
+import {authState} from '../recoil/authState';
+import {handleClearToken} from '../utils/util';
 
 const HistoryScreen = () => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -22,6 +26,7 @@ const HistoryScreen = () => {
       selectedColor?: string;
     };
   }>({});
+  const setAuthState = useSetRecoilState(authState); // 👈 로그인 상태 변경 함수
 
   // 날짜 눌렀을 때 함수
   const handleDayPress = (day: {dateString: string}) => {
@@ -45,6 +50,16 @@ const HistoryScreen = () => {
           })
           .catch(error => {
             console.error('운동 데이터 가져오기 실패:', error);
+            Alert.alert(
+              '세션 만료',
+              '로그인 정보가 만료되었습니다. 다시 로그인 해주세요.',
+            );
+
+            // --- 여기가 핵심 수정 부분입니다 ---
+            // 1. 저장된 토큰을 삭제합니다.
+            AsyncStorage.removeItem('token');
+            // 2. 전역 로그인 상태를 false로 변경합니다.
+            setAuthState({isLoggedIn: false});
           });
       }
     }, [selectedDate]),
@@ -102,6 +117,7 @@ const HistoryScreen = () => {
     <Wrapper>
       <Header>
         <Title>운동 기록</Title>
+        <Button onPress={handleClearToken} title="토큰 삭제" />
       </Header>
 
       <CalendarContainer>

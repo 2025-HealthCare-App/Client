@@ -1,7 +1,13 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AppState, PermissionsAndroid, Platform} from 'react-native';
+import {
+  Alert,
+  AppState,
+  Button,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -23,11 +29,13 @@ import {
   formatStartTime,
   formatTime,
   getDistance,
+  handleClearToken,
 } from '../utils/util';
 import Config from 'react-native-config';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {Reward} from '../types/rewardType';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getMyUserInfoAPI} from '../apis/user/userInfoAPI';
 type RootStackParamList = {
   Running: undefined;
   Result: {
@@ -85,6 +93,27 @@ const RunningScreen = () => {
           appState.current.match(/inactive|background/) &&
           nextState === 'active'
         ) {
+          // --- 👇 토큰 유효성 검사 로직 추가 ---
+          try {
+            // 토큰이 유효한지 테스트하기 위해 API 호출
+            await getMyUserInfoAPI();
+            console.log('토큰 유효, 달리기 재개');
+          } catch (error) {
+            // API 호출 실패 (토큰 만료로 간주)
+            console.error('백그라운드 복귀 중 토큰 만료 감지:', error);
+            // Axios 인터셉터가 자동으로 로그아웃 처리할 것입니다.
+            // 여기서는 달리기를 안전하게 중지시킵니다.
+            stopTimer();
+            setIsRunning(false);
+            Alert.alert(
+              '세션 만료',
+              '로그인 정보가 만료되어 달리기가 중지되었습니다.',
+            );
+            navigation.goBack(); // 또는 navigation.popToTop();
+            return; // 타이머 재시작 로직을 실행하지 않고 종료
+          }
+          // --- 🔼 검사 로직 끝 ---
+
           const savedStart = await AsyncStorage.getItem('running_start_time');
           const savedPaused = parseInt(
             (await AsyncStorage.getItem('running_paused_time')) || '0',
@@ -136,7 +165,7 @@ const RunningScreen = () => {
     );
 
     return () => subscription.remove();
-  }, [isRunning]);
+  }, [isRunning, navigation]);
 
   // 🚀 최초 실행 시 타이머 시작
   useEffect(() => {
@@ -166,7 +195,6 @@ const RunningScreen = () => {
   const [initialRegion, setInitialRegion] = useState<Region | undefined>(
     undefined,
   );
-
   // 1. 이동 관련 useEffect
   useEffect(() => {
     const requestPermissions = async () => {
@@ -432,6 +460,7 @@ const RunningScreen = () => {
           <Value isRunning={isRunning}>{kcal.toFixed(2)}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
+        <Button onPress={handleClearToken} title="토큰삭제" />
       </RecordsContainer>
       <Main>
         <TimeContainer>
