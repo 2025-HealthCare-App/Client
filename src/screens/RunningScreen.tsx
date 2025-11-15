@@ -174,7 +174,7 @@ const RunningScreen = () => {
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
   const [kcal, setKcal] = useState(0); // kcal
-  const [distance, setDistance] = useState(0); // meters
+  const [distance, setDistance] = useState(997); // meters
   const prevLocation = useRef<{
     latitude: number;
     longitude: number;
@@ -359,7 +359,7 @@ const RunningScreen = () => {
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
       ex_distance: distance,
-      ex_kcal: distance * 0.6,
+      ex_kcal: distance * 0.4,
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
         hour12: false,
@@ -404,7 +404,7 @@ const RunningScreen = () => {
           distance,
           steps,
           elapsedSec,
-          Kcal: distance * 0.6,
+          Kcal: distance * 0.4,
           startTime: formattedStartTime,
           staticMapUrl,
           rewards: receivedRewards,
@@ -434,7 +434,9 @@ const RunningScreen = () => {
 
   //steps 변화에 따라 실시간으로 kcal도 변화하도록
   useEffect(() => {
-    const newKcal = Math.floor(distance * 0.6);
+    //소수점 버림
+    // const newKcal = Math.floor(distance * 0.4);
+    const newKcal = distance * 0.4;
     setKcal(newKcal);
   }, [distance]);
 
@@ -442,15 +444,21 @@ const RunningScreen = () => {
     <Wrapper isRunning={isRunning}>
       <RecordsContainer isRunning={isRunning}>
         <Category>
-          <Value isRunning={isRunning}>{(distance / 1000).toFixed(2)}</Value>
-          <CategoryText isRunning={isRunning}>Km</CategoryText>
+          <Value isRunning={isRunning}>
+            {distance < 1000
+              ? distance.toFixed(0)
+              : (distance / 1000).toFixed(2)}
+          </Value>
+          <CategoryText isRunning={isRunning}>
+            {distance < 1000 ? 'm' : 'Km'}
+          </CategoryText>
         </Category>
         <Category>
           <Value isRunning={isRunning}>{addComma(steps)}</Value>
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{kcal.toFixed(2)}</Value>
+          <Value isRunning={isRunning}>{kcal}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
         {/* <Button onPress={handleClearToken} title="토큰삭제" /> */}
