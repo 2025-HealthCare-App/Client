@@ -1,13 +1,7 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  AppState,
-  Button,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
+import {Alert, AppState, PermissionsAndroid, Platform} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -29,7 +23,6 @@ import {
   formatStartTime,
   formatTime,
   getDistance,
-  handleClearToken,
 } from '../utils/util';
 import Config from 'react-native-config';
 import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
@@ -366,7 +359,7 @@ const RunningScreen = () => {
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
       ex_distance: distance,
-      ex_kcal: steps * 0.04,
+      ex_kcal: distance * 0.6,
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
         hour12: false,
@@ -411,7 +404,7 @@ const RunningScreen = () => {
           distance,
           steps,
           elapsedSec,
-          Kcal: steps * 0.04,
+          Kcal: distance * 0.6,
           startTime: formattedStartTime,
           staticMapUrl,
           rewards: receivedRewards,
@@ -441,9 +434,9 @@ const RunningScreen = () => {
 
   //steps 변화에 따라 실시간으로 kcal도 변화하도록
   useEffect(() => {
-    const newKcal = Math.floor(steps * 0.04);
+    const newKcal = Math.floor(distance * 0.6);
     setKcal(newKcal);
-  }, [steps]);
+  }, [distance]);
 
   return (
     <Wrapper isRunning={isRunning}>
@@ -460,7 +453,7 @@ const RunningScreen = () => {
           <Value isRunning={isRunning}>{kcal.toFixed(2)}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
-        <Button onPress={handleClearToken} title="토큰삭제" />
+        {/* <Button onPress={handleClearToken} title="토큰삭제" /> */}
       </RecordsContainer>
       <Main>
         <TimeContainer>
