@@ -174,7 +174,7 @@ const RunningScreen = () => {
   ////지도 부분///////
   const [steps, setSteps] = useState(0);
   const [kcal, setKcal] = useState(0); // kcal
-  const [distance, setDistance] = useState(997); // meters
+  const [distance, setDistance] = useState(0); // meters
   const prevLocation = useRef<{
     latitude: number;
     longitude: number;
