@@ -1,7 +1,14 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AppState, PermissionsAndroid, Platform} from 'react-native';
+import {
+  Alert,
+  AppState,
+  BackHandler,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -192,20 +199,77 @@ const RunningScreen = () => {
   useEffect(() => {
     const requestPermissions = async () => {
       if (Platform.OS === 'android') {
-        const activityPermission = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
-        );
-        const locationPermission = await PermissionsAndroid.request(
+        // ---------------- [단계 1] 기본 권한 요청 (위치, 활동, 알림) ----------------
+        const permissionsToRequest = [
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
+        ];
+
+        // 안드로이드 13(API 33) 이상은 알림 권한 필수
+        if (Platform.Version >= 33) {
+          permissionsToRequest.push(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+          );
+        }
+
+        const granted = await PermissionsAndroid.requestMultiple(
+          permissionsToRequest,
         );
 
-        if (
-          activityPermission !== PermissionsAndroid.RESULTS.GRANTED ||
-          locationPermission !== PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          console.warn('Permission denied');
+        const isLocationGranted =
+          granted[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION] ===
+          PermissionsAndroid.RESULTS.GRANTED;
+
+        if (!isLocationGranted) {
+          Alert.alert(
+            '권한 부족',
+            '위치 권한을 허용해야 러닝을 기록할 수 있습니다.',
+          );
+          navigation.goBack();
           return;
         }
+
+        // ---------------- [단계 2] 백그라운드 위치 권한 요청 ("항상 허용") ----------------
+        // 안드로이드 10(API 29) 이상에서만 필요
+        if (Platform.Version >= 29) {
+          console.log('@@@@Platform.Version:', Platform.Version);
+          const backgroundPermission =
+            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION;
+
+          const hasBackgroundPermission = await PermissionsAndroid.check(
+            backgroundPermission,
+          );
+
+          if (hasBackgroundPermission) {
+            console.log('@@@이미 백그라운드 위치 권한이 있습니다.');
+          }
+          if (!hasBackgroundPermission) {
+            // 사용자에게 설명 후 요청
+            Alert.alert(
+              '백그라운드 위치 권한 필요',
+              '앱을 끄고도 운동 경로를 기록하려면 위치 권한을 "항상 허용"으로 설정해주세요.',
+              [
+                {text: '취소', style: 'cancel'},
+                {
+                  text: '설정하러 가기',
+                  onPress: async () => {
+                    // 안드로이드 11부터는 request() 호출 시 바로 설정창으로 안 갈 수도 있어서
+                    // 명시적으로 앱 설정 화면을 띄우는 것이 가장 확실합니다.
+                    try {
+                      await PermissionsAndroid.request(backgroundPermission);
+                      // 만약 request가 자동으로 설정창을 안 띄워주면 아래 Linking으로 강제 이동
+                      // Linking.openSettings();
+                    } catch (err) {
+                      console.warn(err);
+                      Linking.openSettings();
+                    }
+                  },
+                },
+              ],
+            );
+          }
+        }
+        // ---------------- [단계 3] 위치 추적 시작 ----------------
 
         // 걸음 센서
         // 1. 업데이트 간격을 400ms -> 100ms로 줄여 반응 속도를 높임
@@ -222,11 +286,16 @@ const RunningScreen = () => {
             setSteps(prev => prev + 1);
           });
 
-        // ✅ 위치 추적 & 초기 위치 설정
+        // 위치 추적 & 초기 위치 설정
         let firstLocationSet = false;
         watchId.current = Geolocation.watchPosition(
           position => {
             const {latitude, longitude, accuracy} = position.coords;
+
+            // 👇 [JS 로그] Logcat에서 "ReactNativeJS" 태그로 검색하면 보입니다.
+            console.log(
+              `[Background_Test] 위도: ${latitude}, 경도: ${longitude}, 시간: ${new Date().toTimeString()}`,
+            );
 
             if (!firstLocationSet) {
               firstLocationSet = true;
@@ -281,7 +350,7 @@ const RunningScreen = () => {
             );
           },
           error => {
-            console.warn('Location error:', error);
+            console.error('[Background_Test] 에러 발생:', error);
           },
           {
             enableHighAccuracy: true,
@@ -289,6 +358,18 @@ const RunningScreen = () => {
             interval: 3000,
             fastestInterval: 2000,
             showsBackgroundLocationIndicator: true,
+            //포그라운드 추가
+            forceRequestLocation: true,
+            foregroundService: {
+              notificationTitle: '운동 기록 중',
+              notificationText: '백그라운드에서 거리를 측정하고 있습니다.',
+              notificationId: 123456,
+              channelId: 'geolocation_service_channel',
+              // 👇 [추가] 아이콘 이름을 정확히 지정해야 합니다.
+              // 안드로이드 기본 런처 아이콘 이름이 보통 'ic_launcher' 입니다.
+              // (android/app/src/main/res/mipmap 폴더에 있는 파일명)
+              notificationIcon: 'ic_launcher',
+            },
           },
         );
 
@@ -302,7 +383,7 @@ const RunningScreen = () => {
     };
 
     requestPermissions();
-  }, []); // ✅ prevLocation 의존성 제거
+  }, [navigation]); // ✅ prevLocation 의존성 제거
 
   // pause 상태 시작 시
   const handleRunningButtonPress = async () => {
@@ -432,13 +513,53 @@ const RunningScreen = () => {
       });
   };
 
-  //steps 변화에 따라 실시간으로 kcal도 변화하도록
+  //distance 변화에 따라 실시간으로 kcal도 변화하도록
   useEffect(() => {
     //소수점 버림
     // const newKcal = Math.floor(distance * 0.4);
     const newKcal = distance * 0.4;
     setKcal(newKcal);
   }, [distance]);
+
+  // 👇 뒤로가기 버튼 제어 (운동 중 실수로 종료 방지)
+  useEffect(() => {
+    const backAction = () => {
+      if (isRunning) {
+        Alert.alert(
+          '운동 종료',
+          '운동 기록이 저장되지 않습니다.\n정말 종료하시겠습니까?',
+          [
+            {
+              text: '취소',
+              onPress: () => null, // 아무 동작 안 함
+              style: 'cancel',
+            },
+            {
+              text: '종료',
+              onPress: () => {
+                // 필요한 정리 작업 후 뒤로 가기
+                // (예: ReactNativeForegroundService.stop() 등은 useEffect cleanup에서 처리됨)
+                navigation.goBack();
+              },
+              style: 'destructive',
+            },
+          ],
+        );
+        return true; // true를 반환해야 뒤로가기 동작을 막습니다 (이벤트 소비)
+      }
+      // 운동 중이 아니면 기본 뒤로가기 동작 허용 (false 반환)
+      return false;
+    };
+
+    // 리스너 등록
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    // 컴포넌트가 사라질 때 리스너 제거 (필수)
+    return () => backHandler.remove();
+  }, [isRunning, navigation]);
 
   return (
     <Wrapper isRunning={isRunning}>
