@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   return (
     <Wrapper>
-      <Title>STEP BREW</Title>
+      <Title>STEP BREW 1.5</Title>
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>
@@ -49,7 +49,7 @@ const LoginScreen = () => {
                 console.error('로그인 실패:', error);
                 Alert.alert(
                   '로그인 실패',
-                  '아이디 또는 비밀번호가 잘못되었습니다.',
+                  '로그인에 실패했습니다. 다시 시도해주세요.',
                 );
               });
           }}>

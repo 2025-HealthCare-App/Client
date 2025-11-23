@@ -117,7 +117,7 @@ const HistoryScreen = () => {
     <Wrapper>
       <Header>
         <Title>운동 기록</Title>
-        <Button onPress={handleClearToken} title="토큰 삭제" />
+        {/* <Button onPress={handleClearToken} title="토큰 삭제" /> */}
       </Header>
 
       <CalendarContainer>

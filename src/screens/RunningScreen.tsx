@@ -1,26 +1,13 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  AppState,
-  BackHandler,
-  Linking,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
+import {Alert, AppState, BackHandler} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
   accelerometer,
 } from 'react-native-sensors';
-import Geolocation from 'react-native-geolocation-service';
-import MapView, {
-  // Polyline,
-  // Marker,
-  Region,
-  PROVIDER_GOOGLE,
-} from 'react-native-maps';
+import MapView, {Region, PROVIDER_GOOGLE} from 'react-native-maps';
 import {map, filter, throttleTime} from 'rxjs/operators';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -36,6 +23,9 @@ import {postMyExercisesAPI} from '../apis/exercise/exerciseAPI';
 import {Reward} from '../types/rewardType';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getMyUserInfoAPI} from '../apis/user/userInfoAPI';
+import BackgroundGeolocation, {
+  Subscription,
+} from 'react-native-background-geolocation';
 type RootStackParamList = {
   Running: undefined;
   Result: {
@@ -195,219 +185,176 @@ const RunningScreen = () => {
   const [initialRegion, setInitialRegion] = useState<Region | undefined>(
     undefined,
   );
-  // 1. 이동 관련 useEffect
+
+  // ... (상단 state 선언부 그대로 유지)
+  // 1. 이동 및 위치 추적 관련 useEffect
   useEffect(() => {
-    const requestPermissions = async () => {
-      if (Platform.OS === 'android') {
-        // ---------------- [단계 1] 기본 권한 요청 (위치, 활동, 알림) ----------------
-        const permissionsToRequest = [
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
-        ];
+    let onLocation: Subscription;
 
-        // 안드로이드 13(API 33) 이상은 알림 권한 필수
-        if (Platform.Version >= 33) {
-          permissionsToRequest.push(
-            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-          );
-        }
+    const initGeolocation = async () => {
+      // ---------------- [1] 위치 이벤트 리스너 ----------------
+      onLocation = BackgroundGeolocation.onLocation(
+        location => {
+          const {latitude, longitude} = location.coords;
+          const accuracy = location.coords.accuracy;
 
-        const granted = await PermissionsAndroid.requestMultiple(
-          permissionsToRequest,
-        );
-
-        const isLocationGranted =
-          granted[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION] ===
-          PermissionsAndroid.RESULTS.GRANTED;
-
-        if (!isLocationGranted) {
-          Alert.alert(
-            '권한 부족',
-            '위치 권한을 허용해야 러닝을 기록할 수 있습니다.',
-          );
-          navigation.goBack();
-          return;
-        }
-
-        // ---------------- [단계 2] 백그라운드 위치 권한 요청 ("항상 허용") ----------------
-        // 안드로이드 10(API 29) 이상에서만 필요
-        if (Platform.Version >= 29) {
-          console.log('@@@@Platform.Version:', Platform.Version);
-          const backgroundPermission =
-            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION;
-
-          const hasBackgroundPermission = await PermissionsAndroid.check(
-            backgroundPermission,
-          );
-
-          if (hasBackgroundPermission) {
-            console.log('@@@이미 백그라운드 위치 권한이 있습니다.');
+          // 정확도 필터 (30m)
+          if (accuracy > 30) {
+            return;
           }
-          if (!hasBackgroundPermission) {
-            // 사용자에게 설명 후 요청
-            Alert.alert(
-              '백그라운드 위치 권한 필요',
-              '앱을 끄고도 운동 경로를 기록하려면 위치 권한을 "항상 허용"으로 설정해주세요.',
-              [
-                {text: '취소', style: 'cancel'},
-                {
-                  text: '설정하러 가기',
-                  onPress: async () => {
-                    // 안드로이드 11부터는 request() 호출 시 바로 설정창으로 안 갈 수도 있어서
-                    // 명시적으로 앱 설정 화면을 띄우는 것이 가장 확실합니다.
-                    try {
-                      await PermissionsAndroid.request(backgroundPermission);
-                      // 만약 request가 자동으로 설정창을 안 띄워주면 아래 Linking으로 강제 이동
-                      // Linking.openSettings();
-                    } catch (err) {
-                      console.warn(err);
-                      Linking.openSettings();
-                    }
-                  },
-                },
-              ],
-            );
-          }
-        }
-        // ---------------- [단계 3] 위치 추적 시작 ----------------
 
-        // 걸음 센서
-        // 1. 업데이트 간격을 400ms -> 100ms로 줄여 반응 속도를 높임
-        setUpdateIntervalForType(SensorTypes.accelerometer, 100);
-        const sensorSub = accelerometer
-          .pipe(
-            map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
-            // 2. 민감도를 12 -> 11.5로 낮춰 더 작은 충격도 감지
-            filter(mag => mag > 11.5),
-            // 3. 350ms(0.35초) 이내의 중복 클릭(신호)은 무시하여 이중 카운트 방지
-            throttleTime(350),
-          )
-          .subscribe(() => {
-            setSteps(prev => prev + 1);
-          });
+          // 1. 첫 위치 설정
+          if (!prevLocation.current) {
+            console.log('[GPS] 첫 위치 설정');
+            setInitialRegion({
+              latitude,
+              longitude,
+              latitudeDelta: 0.002,
+              longitudeDelta: 0.002,
+            });
+            prevLocation.current = {latitude, longitude};
+            setRoute([{latitude, longitude}]);
 
-        // 위치 추적 & 초기 위치 설정
-        let firstLocationSet = false;
-        watchId.current = Geolocation.watchPosition(
-          position => {
-            const {latitude, longitude, accuracy} = position.coords;
-
-            // 👇 [JS 로그] Logcat에서 "ReactNativeJS" 태그로 검색하면 보입니다.
-            console.log(
-              `[Background_Test] 위도: ${latitude}, 경도: ${longitude}, 시간: ${new Date().toTimeString()}`,
-            );
-
-            if (!firstLocationSet) {
-              firstLocationSet = true;
-              setInitialRegion({
-                latitude,
-                longitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-              });
-              prevLocation.current = {latitude, longitude}; // 👈 setPrevLocation 대신 .current 사용
-              setRoute([{latitude, longitude}]);
-
-              // 📍 첫 위치에서 지도 카메라 이동
-              mapRef.current?.animateToRegion(
-                {
-                  latitude,
-                  longitude,
-                  latitudeDelta: 0.001,
-                  longitudeDelta: 0.001,
-                },
-                500,
-              );
-            }
-
-            if (accuracy > 10) {
-              return;
-            } // 오차 10m 이상 무시
-
-            // 👇 prevLocation.current를 읽도록 수정
-            if (prevLocation.current) {
-              const d = getDistance(
-                prevLocation.current.latitude, // 👈 .current 추가
-                prevLocation.current.longitude, // 👈 .current 추가
-                latitude,
-                longitude,
-              );
-              setDistance(prev => prev + d);
-            }
-
-            prevLocation.current = {latitude, longitude}; // 👈 setPrevLocation 대신 .current 사용
-            setRoute(prev => [...prev, {latitude, longitude}]);
-
-            // 📍 실시간 지도 이동
+            // 지도 이동
             mapRef.current?.animateToRegion(
               {
                 latitude,
                 longitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
               },
               500,
             );
-          },
-          error => {
-            console.error('[Background_Test] 에러 발생:', error);
-          },
-          {
-            enableHighAccuracy: true,
-            distanceFilter: 1,
-            interval: 3000,
-            fastestInterval: 2000,
-            showsBackgroundLocationIndicator: true,
-            //포그라운드 추가
-            forceRequestLocation: true,
-            foregroundService: {
-              notificationTitle: '운동 기록 중',
-              notificationText: '백그라운드에서 거리를 측정하고 있습니다.',
-              notificationId: 123456,
-              channelId: 'geolocation_service_channel',
-              // 👇 [추가] 아이콘 이름을 정확히 지정해야 합니다.
-              // 안드로이드 기본 런처 아이콘 이름이 보통 'ic_launcher' 입니다.
-              // (android/app/src/main/res/mipmap 폴더에 있는 파일명)
-              notificationIcon: 'ic_launcher',
-            },
-          },
-        );
-
-        return () => {
-          sensorSub.unsubscribe();
-          if (watchId.current) {
-            Geolocation.clearWatch(watchId.current);
+            return;
           }
-        };
+
+          // 2. 이동 중 로직
+          const d = getDistance(
+            prevLocation.current.latitude,
+            prevLocation.current.longitude,
+            latitude,
+            longitude,
+          );
+
+          // 0.5m 이상 이동 시 반영
+          if (d > 0.5) {
+            console.log(
+              `[GPS] 이동: +${d.toFixed(2)}m (총 ${distance.toFixed(2)}m)`,
+            );
+
+            setDistance(prev => prev + d);
+            setRoute(prev => [...prev, {latitude, longitude}]);
+            prevLocation.current = {latitude, longitude};
+
+            // ★ 지도 강제 이동 (화면 따라오기)
+            mapRef.current?.animateToRegion(
+              {
+                latitude,
+                longitude,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
+              },
+              500,
+            );
+          }
+        },
+        error => {
+          console.log('[Background] Location Error:', error);
+        },
+      );
+
+      // ---------------- [2] 라이브러리 설정 ----------------
+      try {
+        const state = await BackgroundGeolocation.ready({
+          reset: true,
+          desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+          distanceFilter: 5,
+          locationUpdateInterval: 1000,
+          fastestLocationUpdateInterval: 1000,
+
+          stopOnTerminate: false,
+          startOnBoot: false,
+          debug: false,
+          logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+
+          // 충돌 방지 설정
+          disableMotionActivityUpdates: true,
+          disableStopDetection: true,
+          locationAuthorizationRequest: 'WhenInUse',
+          disableLocationAuthorizationAlert: true,
+
+          notification: {
+            title: '러닝 기록 중',
+            text: '열심히 달리고 계시네요! 🏃',
+            smallIcon: 'ic_notification',
+            channelName: 'RunningLocationChannel_v2',
+          },
+        });
+
+        if (!state.enabled) {
+          await BackgroundGeolocation.start();
+
+          // ★ [추가] 강제로 "이동 상태(Moving)"로 전환
+          // 모션 감지를 껐기 때문에, 수동으로 "나 지금 움직인다!"고 알려줘야 GPS가 안 쉽니다.
+          await BackgroundGeolocation.changePace(true);
+          console.log('- 위치 추적 시작됨 (Moving 모드 강제 활성화)');
+        }
+      } catch (e) {
+        console.error('- 위치 서비스 에러:', e);
+        Alert.alert('오류', '위치 서비스를 시작할 수 없습니다.');
+        navigation.goBack();
       }
     };
 
-    requestPermissions();
-  }, [navigation]); // ✅ prevLocation 의존성 제거
+    // 센서 로직 (생략 - 기존 유지)
+    setUpdateIntervalForType(SensorTypes.accelerometer, 100);
+    const sensorSub = accelerometer
+      .pipe(
+        map(({x, y, z}) => Math.sqrt(x * x + y * y + z * z)),
+        filter(mag => mag > 11.5),
+        throttleTime(350),
+      )
+      .subscribe(() => setSteps(prev => prev + 1));
+
+    initGeolocation();
+
+    return () => {
+      onLocation?.remove();
+      sensorSub.unsubscribe();
+      BackgroundGeolocation.stop();
+    };
+
+    // ▼▼▼ [핵심 수정] route.length를 반드시 제거하세요! ▼▼▼
+  }, [navigation]);
 
   // pause 상태 시작 시
   const handleRunningButtonPress = async () => {
     if (isRunning) {
-      // 운동 → 일시정지
+      // [운동 → 일시정지]
       pauseStartTime.current = Date.now();
       await AsyncStorage.setItem(
         'running_pause_start',
         String(pauseStartTime.current),
       );
       stopTimer();
+
+      // ▼▼▼ [추가] 위치 추적 일시 중지 ▼▼▼
+      await BackgroundGeolocation.stop();
     } else {
-      // 일시정지 → 운동 재개
+      // [일시정지 → 운동 재개]
       const pauseStart =
         pauseStartTime.current ??
         parseInt(
           (await AsyncStorage.getItem('running_pause_start')) || '0',
           10,
         );
-      // 일시정지 해제 시
       if (pauseStart) {
         pausedTimeAccum.current += Math.floor((Date.now() - pauseStart) / 1000);
       }
       startTimer();
+
+      // ▼▼▼ [추가] 위치 추적 다시 시작 ▼▼▼
+      await BackgroundGeolocation.start();
     }
     setIsRunning(prev => !prev);
   };
@@ -415,6 +362,9 @@ const RunningScreen = () => {
   //!!운동 종료 처리하는 함수!!
   const apiKey = Config.MAPS_API_KEY;
   const handleStopButtonPress = () => {
+    // ▼▼▼ [추가] 위치 추적 완전 종료 ▼▼▼
+    BackgroundGeolocation.stop();
+
     // --- 구글 API의 URL 길이 제한(8,192자)---
     const MAX_POINTS = 300; // URL 길이를 고려한 최대 좌표 수 (조절 가능)
     let simplifiedRoute = route;
@@ -440,7 +390,7 @@ const RunningScreen = () => {
         startDate.getMinutes(),
       ).padStart(2, '0')} 의 운동`,
       ex_distance: distance,
-      ex_kcal: distance * 0.4,
+      ex_kcal: Math.round(distance * 0.05),
       ex_steps: steps,
       ex_start_time: new Date(startTime.current).toLocaleTimeString('en-GB', {
         hour12: false,
@@ -485,7 +435,7 @@ const RunningScreen = () => {
           distance,
           steps,
           elapsedSec,
-          Kcal: distance * 0.4,
+          Kcal: Math.round(distance * 0.05),
           startTime: formattedStartTime,
           staticMapUrl,
           rewards: receivedRewards,
@@ -506,6 +456,7 @@ const RunningScreen = () => {
               // 🔄 운동 재개 상태로 복원
               setIsRunning(true);
               startTimer();
+              BackgroundGeolocation.start();
             },
           },
         ]);
@@ -516,8 +467,7 @@ const RunningScreen = () => {
   //distance 변화에 따라 실시간으로 kcal도 변화하도록
   useEffect(() => {
     //소수점 버림
-    // const newKcal = Math.floor(distance * 0.4);
-    const newKcal = distance * 0.4;
+    const newKcal = Math.round(distance * 0.05);
     setKcal(newKcal);
   }, [distance]);
 
@@ -579,7 +529,7 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{kcal}</Value>
+          <Value isRunning={isRunning}>{kcal.toFixed(0)}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
         {/* <Button onPress={handleClearToken} title="토큰삭제" /> */}
