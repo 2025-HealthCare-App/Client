@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   return (
     <Wrapper>
-      <Title>STEP BREW 1.5</Title>
+      <Title>STEP BREW 2.3</Title>
       <LoginWrapper>
         <Row>
           <RowText>아이디</RowText>

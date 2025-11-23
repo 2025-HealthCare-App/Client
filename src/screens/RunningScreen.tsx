@@ -1,7 +1,13 @@
 import styled from 'styled-components/native';
 import RunningButton from '../components/runningScreen/RunningButton';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AppState, BackHandler} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  AppState,
+  BackHandler,
+  Text,
+} from 'react-native';
 import {
   SensorTypes,
   setUpdateIntervalForType,
@@ -42,9 +48,12 @@ type RootStackParamList = {
 
 const RunningScreen = () => {
   const [isRunning, setIsRunning] = useState(true);
+  // 🔴 [추가 1] 위치 수신 대기 상태 (True면 로딩 중)
+  const [isLocating, setIsLocating] = useState(true);
+
   ///타이머
   const [elapsedSec, setElapsedSec] = useState(0); // 총 초
-  const intervalRef = useRef<NodeJS.Timer | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   //시작 시각을 저장
@@ -55,11 +64,17 @@ const RunningScreen = () => {
   const pausedTimeAccum = useRef(0);
   // 마지막으로 일시정지 시작된 시각
   const pauseStartTime = useRef<number | null>(null);
+
   //  타이머 함수
   const startTimer = () => {
     if (intervalRef.current) {
       return;
     } // 이미 돌고 있으면 무시
+    // 🔴 [수정] 위치를 찾기 전(isLocating)이면 타이머 돌지 않음
+    if (isLocating) {
+      return;
+    }
+
     if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
         setElapsedSec(prev => prev + 1);
@@ -73,6 +88,15 @@ const RunningScreen = () => {
       intervalRef.current = null;
     }
   };
+
+  // 🚀 [추가] 위치를 찾으면(isLocating이 false가 되면) 그때 타이머 시작
+  useEffect(() => {
+    if (!isLocating && isRunning) {
+      // 시작 시간을 현재(위치 잡힌 시점)로 재설정하고 싶다면 여기서 startTime.current를 업데이트 할 수도 있음.
+      // 여기서는 단순히 타이머만 시작시킴.
+      startTimer();
+    }
+  }, [isLocating, isRunning]);
 
   // AppState 감지 (수정)
   useEffect(() => {
@@ -186,10 +210,15 @@ const RunningScreen = () => {
     undefined,
   );
 
-  // ... (상단 state 선언부 그대로 유지)
   // 1. 이동 및 위치 추적 관련 useEffect
   useEffect(() => {
     let onLocation: Subscription;
+
+    // 🔴 [수정 1] 시작할 때 무조건 초기화 (이전 운동 기억 삭제)
+    prevLocation.current = null;
+    setRoute([]);
+    setDistance(0);
+    setIsLocating(true);
 
     const initGeolocation = async () => {
       // ---------------- [1] 위치 이벤트 리스너 ----------------
@@ -198,14 +227,24 @@ const RunningScreen = () => {
           const {latitude, longitude} = location.coords;
           const accuracy = location.coords.accuracy;
 
+          // 🔴 [수정 2] 데이터의 신선도 체크 (Timestamp Filter)
+          // 위치 데이터의 시간과 현재 시간의 차이가 10초(10000ms) 이상이면 "옛날 데이터"로 보고 무시
+          const locationTime = new Date(location.timestamp).getTime();
+          const now = Date.now();
+          if (now - locationTime > 10000) {
+            console.log('[GPS] 너무 오래된 캐시 데이터라 무시함');
+            return;
+          }
+
           // 정확도 필터 (30m)
           if (accuracy > 30) {
             return;
           }
 
-          // 1. 첫 위치 설정
+          // 1. 첫 위치 설정 (로딩 해제)
           if (!prevLocation.current) {
-            console.log('[GPS] 첫 위치 설정');
+            console.log('[GPS] 첫 위치 확보 완료 -> 카운트 시작');
+
             setInitialRegion({
               latitude,
               longitude,
@@ -225,6 +264,9 @@ const RunningScreen = () => {
               },
               500,
             );
+
+            // 🔴 [핵심 1] 로딩 상태 해제 -> 이때부터 화면이 보이고 타이머가 돔
+            setIsLocating(false);
             return;
           }
 
@@ -236,7 +278,19 @@ const RunningScreen = () => {
             longitude,
           );
 
-          // 0.5m 이상 이동 시 반영
+          // 순간이동 방지 (50m)
+          if (d > 50) {
+            console.log(
+              `[GPS] 튀는 값(${d.toFixed(
+                2,
+              )}m) -> 기준점만 갱신하고 거리는 안 더함`,
+            );
+            // 🔴 기준점은 현재 위치로 잡아줘야, 다음번 계산 때 정상 거리가 나옵니다.
+            prevLocation.current = {latitude, longitude};
+            return;
+          }
+
+          // 0.5m 이상 이동 시 반영 (노이즈 필터)
           if (d > 0.5) {
             console.log(
               `[GPS] 이동: +${d.toFixed(2)}m (총 ${distance.toFixed(2)}m)`,
@@ -246,7 +300,6 @@ const RunningScreen = () => {
             setRoute(prev => [...prev, {latitude, longitude}]);
             prevLocation.current = {latitude, longitude};
 
-            // ★ 지도 강제 이동 (화면 따라오기)
             mapRef.current?.animateToRegion(
               {
                 latitude,
@@ -293,11 +346,8 @@ const RunningScreen = () => {
 
         if (!state.enabled) {
           await BackgroundGeolocation.start();
-
-          // ★ [추가] 강제로 "이동 상태(Moving)"로 전환
-          // 모션 감지를 껐기 때문에, 수동으로 "나 지금 움직인다!"고 알려줘야 GPS가 안 쉽니다.
-          await BackgroundGeolocation.changePace(true);
-          console.log('- 위치 추적 시작됨 (Moving 모드 강제 활성화)');
+          await BackgroundGeolocation.changePace(true); // 강제 이동 모드
+          console.log('- 위치 추적 시작됨');
         }
       } catch (e) {
         console.error('- 위치 서비스 에러:', e);
@@ -322,9 +372,9 @@ const RunningScreen = () => {
       onLocation?.remove();
       sensorSub.unsubscribe();
       BackgroundGeolocation.stop();
+      // 🔴 [수정 3] 클린업 시 변수 완전 초기화
+      prevLocation.current = null;
     };
-
-    // ▼▼▼ [핵심 수정] route.length를 반드시 제거하세요! ▼▼▼
   }, [navigation]);
 
   // pause 상태 시작 시
@@ -511,6 +561,29 @@ const RunningScreen = () => {
     return () => backHandler.remove();
   }, [isRunning, navigation]);
 
+  // 🔴 [UI 수정] 위치 찾기 전엔 로딩 화면 보여주기
+  if (isLocating) {
+    return (
+      <Wrapper
+        isRunning={true}
+        style={{justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#00f48a" />
+        <Text
+          style={{
+            marginTop: 20,
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#1a1a1a',
+          }}>
+          GPS 위치를 찾는 중입니다...
+        </Text>
+        <Text style={{marginTop: 10, color: '#777'}}>
+          잠시만 기다려주세요 🏃‍♂️
+        </Text>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper isRunning={isRunning}>
       <RecordsContainer isRunning={isRunning}>
@@ -529,7 +602,7 @@ const RunningScreen = () => {
           <CategoryText isRunning={isRunning}>Step</CategoryText>
         </Category>
         <Category>
-          <Value isRunning={isRunning}>{kcal.toFixed(0)}</Value>
+          <Value isRunning={isRunning}>{kcal}</Value>
           <CategoryText isRunning={isRunning}>Kcal</CategoryText>
         </Category>
         {/* <Button onPress={handleClearToken} title="토큰삭제" /> */}

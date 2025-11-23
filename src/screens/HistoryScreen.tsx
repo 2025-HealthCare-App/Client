@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {Calendar} from 'react-native-calendars';
-import {Alert, Button, ScrollView} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 import Exercise from '../components/StatisticsScreen/Exercise';
 import {ExerciseType, toExerciseType} from '../types/exerciseType';
 import {
@@ -12,7 +12,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSetRecoilState} from 'recoil';
 import {authState} from '../recoil/authState';
-import {handleClearToken} from '../utils/util';
 
 const HistoryScreen = () => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -62,7 +61,7 @@ const HistoryScreen = () => {
             setAuthState({isLoggedIn: false});
           });
       }
-    }, [selectedDate]),
+    }, [selectedDate, setAuthState]),
   );
 
   // 컴포넌트가 마운트될 때 현재 날짜로 초기화
